@@ -139,6 +139,7 @@
 	
 #Region "Left"
 	'Private LeftP As Boolean = False
+	Private LeftChanged As Boolean = True
 	Private LeftInput As InputData
 	Private LeftController As Integer
 	Private LeftIsControllerSwitch As Boolean = True
@@ -153,11 +154,17 @@
 			If Not LeftP Then
 				LeftP = True
 				lblLeft.BackColor = LeftDown
+				LeftChanged = True
+			Else
+				LeftChanged = False
 			End If
 		Else
 			If LeftP Then
 				LeftP = False
 				lblLeft.BackColor = Color.Silver
+				LeftChanged = True
+			Else
+				LeftChanged = False
 			End If
 		End If
 
@@ -168,17 +175,18 @@
 			m.MidiChannel = MidiOutput
 			m.Command = ChannelCommand.Controller
 			m.Data1 = LeftController
-			If LeftIsControllerSwitch Then
+			If LeftIsControllerSwitch And LeftChanged Then
 				If LeftP Then
 					m.Data2 = 127
 				Else
 					m.Data2 = 0
 				End If
-			Else
+				Send(m)
+			ElseIf Not LeftIsControllerSwitch Then
 				m.Data2 = Pos
+				Send(m)
 			End If
 
-			Send(m)
 
 
 		End If
@@ -194,6 +202,7 @@
 
 #Region "Middle"
 
+	Private MiddleChanged As Boolean
 	Private MiddleInput As InputData
 	Private MiddleController As Integer
 	Private MiddleIsControllerSwitch As Boolean = True
@@ -207,11 +216,17 @@
 			If Not MiddleP Then
 				MiddleP = True
 				lblMiddle.BackColor = MiddleDown
+				MiddleChanged = True
+			Else
+				MiddleChanged = False
 			End If
 		Else
 			If MiddleP Then
 				MiddleP = False
 				lblMiddle.BackColor = Color.Silver
+				MiddleChanged = True
+			Else
+				MiddleChanged = False
 			End If
 		End If
 
@@ -221,24 +236,25 @@
 			m.MidiChannel = MidiOutput
 			m.Command = ChannelCommand.Controller
 			m.Data1 = MiddleController
-			If MiddleIsControllerSwitch Then
+			If MiddleIsControllerSwitch And MiddleChanged Then
 				If MiddleP Then
 					m.Data2 = 127
 				Else
 					m.Data2 = 0
 				End If
-			Else
+				Send(m)
+			ElseIf Not MiddleIsControllerSwitch Then
 				m.Data2 = Pos
+				Send(m)
 			End If
-			Send(m)
+
 
 			
 
 		Else
 
 			If Pos <= MiddleInput.SwitchOn Then
-				If Not MiddleP Then
-					MiddleP = True
+				If MiddleChanged Then
 					'Check for down keys and set them to sostento.
 					Parallel.For(0, Note.Length - 1, Sub(n As Integer)
 														 If Note(n) = Notes.Pressed Or Note(n) = Notes.SustainPressed Then
@@ -250,8 +266,7 @@
 				End If
 
 			Else 'Release pedal.
-				If MiddleP Then
-					MiddleP = False
+				If MiddleChanged Then
 
 					Dim tmp As New ChannelMessageBuilder
 					tmp.Command = Midi.ChannelCommand.NoteOff
@@ -279,6 +294,7 @@
 
 #Region "Right"
 	'Private RightP As Boolean = False
+	Private RightChanged As Boolean = True
 	Private RightInput As InputData
 	Private RightController As Integer
 	Private RightIsControllerSwitch As Boolean = True
@@ -292,11 +308,17 @@
 			If Not RightP Then
 				RightP = True
 				lblRight.BackColor = RightDown
+				RightChanged = True
+			Else
+				RightChanged = False
 			End If
 		Else
 			If RightP Then
 				RightP = False
 				lblRight.BackColor = Color.Silver
+				RightChanged = True
+			Else
+				RightChanged = False
 			End If
 		End If
 
@@ -306,24 +328,26 @@
 			m.MidiChannel = MidiOutput
 			m.Command = ChannelCommand.Controller
 			m.Data1 = RightController
-			If RightIsControllerSwitch Then
+			If RightIsControllerSwitch And RightChanged Then
 				If RightP Then
 					m.Data2 = 127
 				Else
 					m.Data2 = 0
 				End If
-			Else
+				Send(m)
+			ElseIf Not RightIsControllerSwitch Then
 				m.Data2 = Pos
+				Send(m)
 			End If
 
-			Send(m)
 
-			
 
-		Else
 
-			If Pos >= RightInput.SwitchOn Then
-				If Not RightP Then
+
+			Else
+
+				If Pos >= RightInput.SwitchOn Then
+				If RightChanged Then
 					'Check for down keys and set them to sustain.
 					Parallel.For(0, Note.Length - 1, Sub(n)
 														 Note(n) = Notes.SustainPressed
@@ -333,7 +357,7 @@
 				End If
 
 			Else 'Release pedal.
-				If RightP Then
+				If RightChanged Then
 
 					Dim tmp As New ChannelMessageBuilder
 					tmp.Command = Midi.ChannelCommand.NoteOff
@@ -354,7 +378,7 @@
 			End If
 
 
-		End If
+			End If
 
 
 
