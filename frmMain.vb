@@ -45,12 +45,9 @@
 
 			SetControls(True, True, True, True, True, True)
 
-			RightID = 0
-			RightAxis = 5
-			MiddleID = 0
-			MiddleAxis = 1
-			LeftID = 0
-			LeftAxis = 6
+			LeftInput = New InputData(0, 6)
+			MiddleInput = New InputData(0, 1)
+			RightInput = New InputData(0, 5)
 		End If
 
 
@@ -129,94 +126,104 @@
 	
 #Region "Left"
 	'Private LeftP As Boolean = False
-	Private LeftID, LeftAxis, LeftConroller, LeftOldPos As Integer
+	Private LeftInput As InputData
+	Private LeftController As Integer
+	Private LeftIsControllerSwitch As Boolean = True
 	Private LeftDown As Color = Color.White
 	Private Sub DoLeft()
-		Dim Pos As Integer = GetAxis(leftID, leftAxis)
+		Dim Pos As Integer = LeftInput.GetAsisPosition
 
-		If Pos = leftOldPos Then Return
+		If Pos = LeftInput.OldPosition Then Return
+
+		'Press and release virtual pedal.
+		If Pos >= LeftInput.SwitchOn Then
+			If Not LeftP Then
+				LeftP = True
+				lblLeft.BackColor = LeftDown
+			End If
+		Else
+			If LeftP Then
+				LeftP = False
+				lblLeft.BackColor = Color.Silver
+			End If
+		End If
+
 
 		If radLeft.Checked Then
 
 			Dim m As New ChannelMessageBuilder
 			m.MidiChannel = MidiOutput
 			m.Command = ChannelCommand.Controller
-			m.Data1 = leftConroller
-			m.Data2 = (-Pos) + 127
-			Send(m)
-
-			If Pos < 64 Then
-				If Not leftP Then
-					leftP = True
-					lblLeft.BackColor = leftDown
+			m.Data1 = LeftController
+			If LeftIsControllerSwitch Then
+				If LeftP Then
+					m.Data2 = 127
+				Else
+					m.Data2 = 0
 				End If
 			Else
-				If leftP Then
-					leftP = False
-					lblLeft.BackColor = Color.Silver
-				End If
+				m.Data2 = Pos
 			End If
 
-		Else
-
-			If Pos = 0 Then
-				If Not leftP Then
-					leftP = True
-
-					lblLeft.BackColor = leftDown
-				End If
-
-			Else 'Release pedal.
-				If leftP Then
-					leftP = False
-
-					lblLeft.BackColor = Color.Silver
-				End If
-			End If
+			Send(m)
 
 
 		End If
 
 
 
-		leftOldPos = Pos
+
+
+		LeftInput.OldPosition = Pos
 	End Sub
 
 #End Region
 
 #Region "Middle"
 
-	Private MiddleID, MiddleAxis, MiddleConroller, MiddleOldPos As Integer
+	Private MiddleInput As InputData
+	Private MiddleController As Integer
+	Private MiddleIsControllerSwitch As Boolean = True
 	Private MiddleDown As Color = Color.White
 	Private Sub DoMiddle()
-		Dim Pos As Integer = GetAxis(MiddleID, MiddleAxis)
+		Dim Pos As Integer = MiddleInput.GetAsisPosition
 
-		If Pos = MiddleOldPos Then Return
+		If Pos = MiddleInput.OldPosition Then Return
+
+		If Pos >= MiddleInput.SwitchOn Then
+			If Not MiddleP Then
+				MiddleP = True
+				lblMiddle.BackColor = MiddleDown
+			End If
+		Else
+			If MiddleP Then
+				MiddleP = False
+				lblMiddle.BackColor = Color.Silver
+			End If
+		End If
 
 		If radMiddle.Checked Then
 
 			Dim m As New ChannelMessageBuilder
 			m.MidiChannel = MidiOutput
 			m.Command = ChannelCommand.Controller
-			m.Data1 = MiddleConroller
-			m.Data2 = (-Pos) + 127
-			Send(m)
-
-			If Pos < 64 Then
-				If Not MiddleP Then
-					MiddleP = True
-					lblMiddle.BackColor = MiddleDown
+			m.Data1 = MiddleController
+			If MiddleIsControllerSwitch Then
+				If MiddleP Then
+					m.Data2 = 127
+				Else
+					m.Data2 = 0
 				End If
 			Else
-				If MiddleP Then
-					MiddleP = False
-					lblMiddle.BackColor = Color.Silver
-				End If
+				m.Data2 = Pos
 			End If
+			Send(m)
+
+			
 
 		Else
 
-			If Pos = 0 Then
+			If Pos <= MiddleInput.SwitchOn Then
 				If Not MiddleP Then
 					MiddleP = True
 					'Check for down keys and set them to sostento.
@@ -226,8 +233,7 @@
 															 SostenutoList.Add(n)
 														 End If
 													 End Sub)
-					
-					lblMiddle.BackColor = MiddleDown
+
 				End If
 
 			Else 'Release pedal.
@@ -245,8 +251,6 @@
 					Next
 					SostenutoList.Clear()
 
-
-					lblMiddle.BackColor = Color.Silver
 				End If
 			End If
 
@@ -255,46 +259,58 @@
 
 
 
-		MiddleOldPos = Pos
+		MiddleInput.OldPosition = Pos
 	End Sub
 
 #End Region
 
 #Region "Right"
 	'Private RightP As Boolean = False
-	Private RightID, RightAxis, RightConroller, RightOldPos As Integer
+	Private RightInput As InputData
+	Private RightController As Integer
+	Private RightIsControllerSwitch As Boolean = True
 	Private RightDown As Color = Color.White
 	Private Sub DoRight()
-		Dim Pos As Integer = GetAxis(RightID, RightAxis)
+		Dim Pos As Integer = RightInput.GetAsisPosition
 
-		If Pos = RightOldPos Then Return
+		If Pos = RightInput.OldPosition Then Return
+
+		If Pos >= RightInput.SwitchOn Then
+			If Not RightP Then
+				RightP = True
+				lblRight.BackColor = RightDown
+			End If
+		Else
+			If RightP Then
+				RightP = False
+				lblRight.BackColor = Color.Silver
+			End If
+		End If
 
 		If radRight.Checked Then
 
 			Dim m As New ChannelMessageBuilder
 			m.MidiChannel = MidiOutput
 			m.Command = ChannelCommand.Controller
-			m.Data1 = RightConroller
-			m.Data2 = (-Pos) + 127
-			Send(m)
-
-			If Pos < 64 Then
-				If Not RightP Then
-					RightP = True
-					lblRight.BackColor = RightDown
+			m.Data1 = RightController
+			If RightIsControllerSwitch Then
+				If RightP Then
+					m.Data2 = 127
+				Else
+					m.Data2 = 0
 				End If
 			Else
-				If RightP Then
-					RightP = False
-					lblRight.BackColor = Color.Silver
-				End If
+				m.Data2 = Pos
 			End If
+
+			Send(m)
+
+			
 
 		Else
 
-			If Pos = 0 Then
+			If Pos >= RightInput.SwitchOn Then
 				If Not RightP Then
-					RightP = True
 					'Check for down keys and set them to sustain.
 					Parallel.For(0, Note.Length - 1, Sub(n)
 														 Note(n) = Notes.SustainPressed
@@ -305,7 +321,6 @@
 
 			Else 'Release pedal.
 				If RightP Then
-					RightP = False
 
 					Dim tmp As New ChannelMessageBuilder
 					tmp.Command = Midi.ChannelCommand.NoteOff
@@ -330,7 +345,7 @@
 
 
 
-		RightOldPos = Pos
+		RightInput.OldPosition = Pos
 	End Sub
 
 #End Region
@@ -373,31 +388,60 @@
 	End Sub
 
 	Private Sub comLeft_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comLeft.SelectedIndexChanged
-		LeftConroller = [Enum].Parse(GetType(Midi.ControllerType), sender.SelectedItem.ToString)
-	End Sub
-	Private Sub comRight_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comRight.SelectedIndexChanged
-		RightConroller = [Enum].Parse(GetType(Midi.ControllerType), sender.SelectedItem.ToString)
+		LeftController = [Enum].Parse(GetType(Midi.ControllerType), sender.SelectedItem.ToString)
+		LeftIsControllerSwitch = IsSwitch(LeftController)
 	End Sub
 	Private Sub comMiddle_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comMiddle.SelectedIndexChanged
-		MiddleConroller = [Enum].Parse(GetType(Midi.ControllerType), sender.SelectedItem.ToString)
+		MiddleController = [Enum].Parse(GetType(Midi.ControllerType), sender.SelectedItem.ToString)
+		MiddleIsControllerSwitch = IsSwitch(middleController)
 	End Sub
+	Private Sub comRight_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comRight.SelectedIndexChanged
+		RightController = [Enum].Parse(GetType(Midi.ControllerType), sender.SelectedItem.ToString)
+		RightIsControllerSwitch = IsSwitch(RightController)
+	End Sub
+	
+
+	Public Function IsSwitch(ByVal Controller As Integer) As Boolean
+		Select Case Controller
+			Case 64 'Hold1
+				Return True
+
+			Case 65 'Portmento
+				Return True
+
+			Case 66 'Sostenuto
+				Return True
+
+			Case 67 'Sift
+				Return True
+
+			Case 68 'Legato
+				Return True
+
+			Case 69 'Hold 2
+				Return True
+
+			Case 122 '[Channel Mode Message] Local Control On/Off 
+				Return True
+
+		End Select
+
+		Return False
+	End Function
 
 	Private Sub btnLeftInput_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLeftInput.Click
-		If frmInput.ShowDialog = System.Windows.Forms.DialogResult.OK Then
-			LeftID = frmInput.CurrentJoystick
-			LeftAxis = frmInput.CurrentAxis
+		If frmInput.ShowDialog(LeftInput) = System.Windows.Forms.DialogResult.OK Then
+			LeftInput = frmInput.CurrentJoystick
 		End If
 	End Sub
 	Private Sub btnMiddleInput_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMiddleInput.Click
-		If frmInput.ShowDialog = System.Windows.Forms.DialogResult.OK Then
-			MiddleID = frmInput.CurrentJoystick
-			MiddleAxis = frmInput.CurrentAxis
+		If frmInput.ShowDialog(MiddleInput) = System.Windows.Forms.DialogResult.OK Then
+			MiddleInput = frmInput.CurrentJoystick
 		End If
 	End Sub
 	Private Sub btnRightInput_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRightInput.Click
-		If frmInput.ShowDialog = System.Windows.Forms.DialogResult.OK Then
-			RightID = frmInput.CurrentJoystick
-			RightAxis = frmInput.CurrentAxis
+		If frmInput.ShowDialog(RightInput) = System.Windows.Forms.DialogResult.OK Then
+			RightInput = frmInput.CurrentJoystick
 		End If
 	End Sub
 
@@ -413,13 +457,13 @@
 
 	Private Sub tmr_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tmr.Tick
 
-		If LeftID > -1 Then
+		If LeftInput.ID > -1 Then
 			DoLeft()
 		End If
-		If MiddleID > -1 Then
+		If LeftInput.ID > -1 Then
 			DoMiddle()
 		End If
-		If RightID > -1 Then
+		If LeftInput.ID > -1 Then
 			DoRight()
 		End If
 

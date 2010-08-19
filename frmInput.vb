@@ -17,8 +17,7 @@ Public Class frmInput
 
 	'Private find As Boolean = False
 	Private Sub btnFind_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnFind.Click
-		CurrentAxis = -1
-		CurrentJoystick = -1
+		CurrentJoystick.SetData(-1, -1)
 
 		Dim i As Integer = -1
 		For Each joy As Joystick In Joystick
@@ -40,8 +39,10 @@ Public Class frmInput
 		tmr.Enabled = True
 	End Sub
 
-	Public CurrentJoystick As Integer = -1
-	Public CurrentAxis As Integer = -1
+	'Public CurrentJoystick As Integer = -1
+	'Public CurrentJoystick.Axis As Integer = -1
+	Public CurrentJoystick As New InputData
+	'Axis:
 	'0=x
 	'1=y
 	'2=z
@@ -56,33 +57,34 @@ Public Class frmInput
 	End Class
 
 	Private Sub tmr_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tmr.Tick
-		If CurrentAxis > -1 Then
+		If CurrentJoystick.Axis > -1 Then
 			OK_Button.Enabled = True
 
-			Joystick(CurrentJoystick).Poll()
-			Dim s As JoystickState = Joystick(CurrentJoystick).GetCurrentState
-			Select Case CurrentAxis
-				Case 0
-					lblAxis.Text = s.X
-				Case 1
-					lblAxis.Text = s.Y
-				Case 2
-					lblAxis.Text = s.Z
+			lblAxis.Text = CurrentJoystick.GetAsisPosition
+			'Joystick(CurrentJoystick.ID).Poll()
+			'Dim s As JoystickState = Joystick(CurrentJoystick.ID).GetCurrentState
+			'Select Case CurrentJoystick.Axis
+			'	Case 0
+			'		lblAxis.Text = s.X
+			'	Case 1
+			'		lblAxis.Text = s.Y
+			'	Case 2
+			'		lblAxis.Text = s.Z
 
-				Case 3
-					lblAxis.Text = s.RotationX
-				Case 4
-					lblAxis.Text = s.RotationY
-				Case 5
-					lblAxis.Text = s.RotationZ
+			'	Case 3
+			'		lblAxis.Text = s.RotationX
+			'	Case 4
+			'		lblAxis.Text = s.RotationY
+			'	Case 5
+			'		lblAxis.Text = s.RotationZ
 
-				Case 6
-					lblAxis.Text = s.GetSliders(0)
-				Case 7
-					lblAxis.Text = s.GetSliders(1)
+			'	Case 6
+			'		lblAxis.Text = s.GetSliders(0)
+			'	Case 7
+			'		lblAxis.Text = s.GetSliders(1)
 
 
-			End Select
+			'End Select
 
 		Else
 			Dim i As Integer = -1
@@ -91,31 +93,31 @@ Public Class frmInput
 				joy.Poll()
 				Dim s As JoystickState = joy.GetCurrentState
 				If oldJoy(i).X <> s.X Then
-					CurrentJoystick = i
-					CurrentAxis = 0
+					CurrentJoystick.ID = i
+					CurrentJoystick.Axis = 0
 				ElseIf oldJoy(i).Y <> s.Y Then
-					CurrentJoystick = i
-					CurrentAxis = 1
+					CurrentJoystick.ID = i
+					CurrentJoystick.Axis = 1
 				ElseIf oldJoy(i).Z <> s.Z Then
-					CurrentJoystick = i
-					CurrentAxis = 2
+					CurrentJoystick.ID = i
+					CurrentJoystick.Axis = 2
 
 				ElseIf oldJoy(i).rX <> s.RotationX Then
-					CurrentJoystick = i
-					CurrentAxis = 3
+					CurrentJoystick.ID = i
+					CurrentJoystick.Axis = 3
 				ElseIf oldJoy(i).rY <> s.RotationY Then
-					CurrentJoystick = i
-					CurrentAxis = 4
+					CurrentJoystick.ID = i
+					CurrentJoystick.Axis = 4
 				ElseIf oldJoy(i).rZ <> s.RotationZ Then
-					CurrentJoystick = i
-					CurrentAxis = 5
+					CurrentJoystick.ID = i
+					CurrentJoystick.Axis = 5
 
 				ElseIf oldJoy(i).s0 <> s.GetSliders(0) Then
-					CurrentJoystick = i
-					CurrentAxis = 6
+					CurrentJoystick.ID = i
+					CurrentJoystick.Axis = 6
 				ElseIf oldJoy(i).s1 <> s.GetSliders(1) Then
-					CurrentJoystick = i
-					CurrentAxis = 7
+					CurrentJoystick.ID = i
+					CurrentJoystick.Axis = 7
 				End If
 
 			Next
@@ -128,9 +130,26 @@ Public Class frmInput
 			'joy.Acquire()
 			joy.Poll()
 		Next
+
+		If CurrentJoystick.ID > -1 Then tmr.Enabled = True
 	End Sub
+
+	Public Overloads Function ShowDialog(ByVal Input As InputData) As DialogResult
+		CurrentJoystick = Input
+		chkRev.Checked = CurrentJoystick.Reverse
+		numSwitchOn.Value = CurrentJoystick.SwitchOn
+		Return MyBase.ShowDialog()
+	End Function
 
 	Private Sub frmInput_Shown(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Shown
 		'tmr.Enabled = True
+	End Sub
+
+	Private Sub chkRev_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkRev.CheckedChanged
+		CurrentJoystick.Reverse = chkRev.Checked
+	End Sub
+
+	Private Sub numSwitchOn_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numSwitchOn.ValueChanged
+		CurrentJoystick.SwitchOn = numSwitchOn.Value
 	End Sub
 End Class

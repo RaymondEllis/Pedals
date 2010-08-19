@@ -73,4 +73,47 @@
 		dInput.Dispose()
 	End Sub
 
+
+
 End Module
+
+
+Public Class InputData
+	Public Axis As Integer
+	Public ID As Integer
+	Public OldPosition As Integer
+
+	Public Reverse As Boolean = True
+
+
+	''' <summary>
+	''' If axis is less then or equals to SwitchOn then turn the switch on.
+	''' </summary>
+	Public SwitchOn As Integer
+
+	Public Sub New()
+	End Sub
+	Public Sub New(ByVal ID_ As Integer, ByVal Axis_ As Integer, Optional ByVal Reverse_ As Boolean = True, Optional ByVal SwitchOn_ As Integer = 127)
+		ID = ID
+		Axis = Axis_
+		Reverse = Reverse_
+		SwitchOn = SwitchOn_
+	End Sub
+
+	Public Sub SetData(ByVal ID_ As Integer, ByVal Axis_ As Integer, Optional ByVal Reverse_ As Boolean = True, Optional ByVal SwitchOn_ As Integer = 127)
+		ID = ID
+		Axis = Axis_
+		Reverse = Reverse_
+		SwitchOn = SwitchOn_
+	End Sub
+
+	Public Function GetAsisPosition() As Integer
+
+		If Reverse Then
+			Return (-GetAxis(ID, Axis)) + 127
+		End If
+
+		Return GetAxis(ID, Axis)
+	End Function
+
+End Class

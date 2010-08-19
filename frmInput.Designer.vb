@@ -31,7 +31,11 @@ Partial Class frmInput
 		Me.lblAxis = New System.Windows.Forms.Label()
 		Me.chkRev = New System.Windows.Forms.CheckBox()
 		Me.tmr = New System.Windows.Forms.Timer(Me.components)
+		Me.numSwitchOn = New System.Windows.Forms.NumericUpDown()
+		Me.Label2 = New System.Windows.Forms.Label()
+		Me.Label3 = New System.Windows.Forms.Label()
 		Me.TableLayoutPanel1.SuspendLayout()
+		CType(Me.numSwitchOn, System.ComponentModel.ISupportInitialize).BeginInit()
 		Me.SuspendLayout()
 		'
 		'TableLayoutPanel1
@@ -42,7 +46,7 @@ Partial Class frmInput
 		Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
 		Me.TableLayoutPanel1.Controls.Add(Me.OK_Button, 0, 0)
 		Me.TableLayoutPanel1.Controls.Add(Me.Cancel_Button, 1, 0)
-		Me.TableLayoutPanel1.Location = New System.Drawing.Point(124, 84)
+		Me.TableLayoutPanel1.Location = New System.Drawing.Point(262, 131)
 		Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
 		Me.TableLayoutPanel1.RowCount = 1
 		Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
@@ -91,17 +95,16 @@ Partial Class frmInput
 		'lblAxis
 		'
 		Me.lblAxis.AutoSize = True
-		Me.lblAxis.Location = New System.Drawing.Point(12, 86)
+		Me.lblAxis.Location = New System.Drawing.Point(86, 84)
 		Me.lblAxis.Name = "lblAxis"
-		Me.lblAxis.Size = New System.Drawing.Size(40, 13)
+		Me.lblAxis.Size = New System.Drawing.Size(52, 13)
 		Me.lblAxis.TabIndex = 3
-		Me.lblAxis.Text = "NoAxis"
+		Me.lblAxis.Text = "<NoAxis>"
 		'
 		'chkRev
 		'
 		Me.chkRev.AutoSize = True
-		Me.chkRev.Enabled = False
-		Me.chkRev.Location = New System.Drawing.Point(209, 61)
+		Me.chkRev.Location = New System.Drawing.Point(187, 84)
 		Me.chkRev.Name = "chkRev"
 		Me.chkRev.Size = New System.Drawing.Size(66, 17)
 		Me.chkRev.TabIndex = 4
@@ -112,13 +115,43 @@ Partial Class frmInput
 		'
 		Me.tmr.Interval = 50
 		'
+		'numSwitchOn
+		'
+		Me.numSwitchOn.Location = New System.Drawing.Point(196, 107)
+		Me.numSwitchOn.Maximum = New Decimal(New Integer() {127, 0, 0, 0})
+		Me.numSwitchOn.Name = "numSwitchOn"
+		Me.numSwitchOn.Size = New System.Drawing.Size(80, 20)
+		Me.numSwitchOn.TabIndex = 5
+		'
+		'Label2
+		'
+		Me.Label2.AutoSize = True
+		Me.Label2.Location = New System.Drawing.Point(12, 84)
+		Me.Label2.Name = "Label2"
+		Me.Label2.Size = New System.Drawing.Size(68, 13)
+		Me.Label2.TabIndex = 6
+		Me.Label2.Text = "Axis position:"
+		'
+		'Label3
+		'
+		Me.Label3.AutoSize = True
+		Me.Label3.Location = New System.Drawing.Point(12, 104)
+		Me.Label3.Name = "Label3"
+		Me.Label3.Size = New System.Drawing.Size(246, 52)
+		Me.Label3.TabIndex = 6
+		Me.Label3.Text = "If axis position is more then or equal to" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "then turn on the switch. " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "And show th" & _
+			"e virtual pedal as on." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Switches are things like pedals that just on and off."
+		'
 		'frmInput
 		'
 		Me.AcceptButton = Me.OK_Button
 		Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
 		Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
 		Me.CancelButton = Me.Cancel_Button
-		Me.ClientSize = New System.Drawing.Size(282, 125)
+		Me.ClientSize = New System.Drawing.Size(420, 172)
+		Me.Controls.Add(Me.numSwitchOn)
+		Me.Controls.Add(Me.Label3)
+		Me.Controls.Add(Me.Label2)
 		Me.Controls.Add(Me.chkRev)
 		Me.Controls.Add(Me.lblAxis)
 		Me.Controls.Add(Me.btnFind)
@@ -132,6 +165,7 @@ Partial Class frmInput
 		Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
 		Me.Text = "Get input"
 		Me.TableLayoutPanel1.ResumeLayout(False)
+		CType(Me.numSwitchOn, System.ComponentModel.ISupportInitialize).EndInit()
 		Me.ResumeLayout(False)
 		Me.PerformLayout()
 
@@ -144,5 +178,8 @@ Partial Class frmInput
 	Friend WithEvents lblAxis As System.Windows.Forms.Label
 	Friend WithEvents chkRev As System.Windows.Forms.CheckBox
 	Friend WithEvents tmr As System.Windows.Forms.Timer
+	Friend WithEvents numSwitchOn As System.Windows.Forms.NumericUpDown
+	Friend WithEvents Label2 As System.Windows.Forms.Label
+	Friend WithEvents Label3 As System.Windows.Forms.Label
 
 End Class
