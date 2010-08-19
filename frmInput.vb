@@ -2,10 +2,13 @@
 
 Public Class frmInput
 
-    Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
-        Me.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.Close()
-    End Sub
+	Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+		If CurrentJoystick.ID = -1 Then
+			CurrentJoystick = Nothing
+		End If
+		Me.DialogResult = System.Windows.Forms.DialogResult.OK
+		Me.Close()
+	End Sub
 
     Private Sub Cancel_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Cancel_Button.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.Cancel
@@ -13,7 +16,7 @@ Public Class frmInput
     End Sub
 
 
-	Private oldJoy(Joystick.Count - 1) As joyO
+	Private oldJoy() As Joy0
 
 	'Private find As Boolean = False
 	Private Sub btnFind_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnFind.Click
@@ -22,7 +25,7 @@ Public Class frmInput
 		Dim i As Integer = -1
 		For Each joy As Joystick In Joystick
 			i += 1
-			oldJoy(i) = New joyO
+			oldJoy(i) = New Joy0
 			'joy.Acquire()
 			joy.Poll()
 			Dim s As JoystickState = joy.GetCurrentState
@@ -41,7 +44,7 @@ Public Class frmInput
 
 	'Public CurrentJoystick As Integer = -1
 	'Public CurrentJoystick.Axis As Integer = -1
-	Public CurrentJoystick As New InputData
+	Public CurrentJoystick As  InputData
 	'Axis:
 	'0=x
 	'1=y
@@ -52,39 +55,14 @@ Public Class frmInput
 	'6=s0
 	'7=s1
 
-	Private Class joyO
-		Public X, Y, Z, rX, rY, rZ, s0, s1 As Integer
-	End Class
 
 	Private Sub tmr_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tmr.Tick
+		If CurrentJoystick Is Nothing Then Return
+
 		If CurrentJoystick.Axis > -1 Then
 			OK_Button.Enabled = True
 
 			lblAxis.Text = CurrentJoystick.GetAsisPosition
-			'Joystick(CurrentJoystick.ID).Poll()
-			'Dim s As JoystickState = Joystick(CurrentJoystick.ID).GetCurrentState
-			'Select Case CurrentJoystick.Axis
-			'	Case 0
-			'		lblAxis.Text = s.X
-			'	Case 1
-			'		lblAxis.Text = s.Y
-			'	Case 2
-			'		lblAxis.Text = s.Z
-
-			'	Case 3
-			'		lblAxis.Text = s.RotationX
-			'	Case 4
-			'		lblAxis.Text = s.RotationY
-			'	Case 5
-			'		lblAxis.Text = s.RotationZ
-
-			'	Case 6
-			'		lblAxis.Text = s.GetSliders(0)
-			'	Case 7
-			'		lblAxis.Text = s.GetSliders(1)
-
-
-			'End Select
 
 		Else
 			Dim i As Integer = -1
@@ -131,13 +109,22 @@ Public Class frmInput
 			joy.Poll()
 		Next
 
-		If CurrentJoystick.ID > -1 Then tmr.Enabled = True
+		ReDim oldJoy(Joystick.Count - 1)
+		'For n As Integer = 0 To oldJoy.Length - 1
+		'	oldJoy(n) = New Joy0
+		'Next
+
+		If CurrentJoystick IsNot Nothing Then tmr.Enabled = True
 	End Sub
 
 	Public Overloads Function ShowDialog(ByVal Input As InputData) As DialogResult
+		If Input Is Nothing Then
+			Input = New InputData(-1, -1)
+		End If
 		CurrentJoystick = Input
 		chkRev.Checked = CurrentJoystick.Reverse
 		numSwitchOn.Value = CurrentJoystick.SwitchOn
+
 		Return MyBase.ShowDialog()
 	End Function
 
@@ -152,4 +139,12 @@ Public Class frmInput
 	Private Sub numSwitchOn_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numSwitchOn.ValueChanged
 		CurrentJoystick.SwitchOn = numSwitchOn.Value
 	End Sub
+
+	Private Structure Joy0
+		Public X, Y, Z, rX, rY, rZ, s0, s1 As Integer
+	End Structure
+
+	'Private Class joyO
+	'	Public X, Y, Z, rX, rY, rZ, s0, s1 As Integer
+	'End Class
 End Class

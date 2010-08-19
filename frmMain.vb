@@ -5,25 +5,36 @@
 
 	Private Playing As Boolean = False
 
-	Private ContinueLoading As Boolean = True
+	Public ContinueLoading As Boolean = True
 
 #Region "Loading and closing"
 
-	Private Sub frmMain_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
-		tmr.Enabled = False
-		Status("Closeing...")
+	Private Sub frmMain_FormClosed(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
+		Status("Closing... Done!")
+	End Sub
 
+	Private Sub frmMain_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+		Status("Closing...")
+		tmr.Enabled = False
+
+		DistroyInput()
 		If OutDevice IsNot Nothing Then
+			Status("Closing midi output device...")
 			OutDevice.Close()
 			OutDevice.Dispose()
+			Status("Closing midi output device... Done!")
 		End If
 		If InDevice IsNot Nothing Then
+			Status("Closing midi input device...")
 			InDevice.Close()
 			InDevice.Dispose()
+			Status("Closing midi input device... Done")
 		End If
-		DistroyInput()
+
+
 	End Sub
 	Private Sub frmMain_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+
 		'Fill boxs.
 		GetDevices()
 
@@ -45,12 +56,12 @@
 
 			SetControls(True, True, True, True, True, True)
 
-			LeftInput = New InputData(0, 6)
-			MiddleInput = New InputData(0, 1)
-			RightInput = New InputData(0, 5)
+			'LeftInput = New InputData(0, 6)
+			'MiddleInput = New InputData(0, 1)
+			'RightInput = New InputData(0, 5)
 		End If
 
-
+		Status("Loading... Done!")
 	End Sub
 
 	Public Sub SetControls(ByVal Value As Boolean, Optional ByVal StartB As Boolean = False, Optional ByVal Devices As Boolean = False, Optional ByVal Pedals As Boolean = False, Optional ByVal Misc As Boolean = False, Optional ByVal Debug As Boolean = False)
@@ -77,8 +88,9 @@
 			Next
 			comOutput.SelectedIndex = OutDeviceID
 		Else
-			Status("No output devices!", True)
+			Status("No output midi devices!", True)
 			ContinueLoading = False
+			Close()
 		End If
 
 
@@ -88,8 +100,9 @@
 			Next
 			comInput.SelectedIndex = InDeviceID
 		Else
-			Status("No input devices!", True)
+			Status("No input midi devices!", True)
 			ContinueLoading = False
+			Close()
 		End If
 
 	End Sub
@@ -457,13 +470,13 @@
 
 	Private Sub tmr_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tmr.Tick
 
-		If LeftInput.ID > -1 Then
+		If LeftInput IsNot Nothing Then
 			DoLeft()
 		End If
-		If LeftInput.ID > -1 Then
+		If MiddleInput IsNot Nothing Then
 			DoMiddle()
 		End If
-		If LeftInput.ID > -1 Then
+		If RightInput IsNot Nothing Then
 			DoRight()
 		End If
 
@@ -508,6 +521,7 @@
 			tmr.Enabled = False
 			SetControls(True, , True)
 
+			Status("Stoped recording")
 		End If
 	End Sub
 #End Region

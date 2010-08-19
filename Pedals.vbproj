@@ -8,11 +8,11 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{8DBACAEA-EAD8-4318-809F-9C899625E415}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>Pedals.My.MyApplication</StartupObject>
+    <StartupObject>Pedals.Misc</StartupObject>
     <RootNamespace>Pedals</RootNamespace>
     <AssemblyName>Pedals</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>WindowsForms</MyType>
+    <MyType>WindowsFormsWithCustomSubMain</MyType>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
@@ -49,7 +49,6 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.VisualBasic.PowerPacks.Vs, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Sanford.Multimedia">
       <HintPath>..\..\..\..\C#\CSharpMidiToolkitV5_demo\Sanford.Multimedia.Midi\bin\Debug\Sanford.Multimedia.dll</HintPath>
     </Reference>

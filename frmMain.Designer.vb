@@ -59,9 +59,6 @@ Partial Class frmMain
 		Me.Label4 = New System.Windows.Forms.Label()
 		Me.btnSS = New System.Windows.Forms.Button()
 		Me.lblStatus = New System.Windows.Forms.Label()
-		Me.ShapeContainer1 = New Microsoft.VisualBasic.PowerPacks.ShapeContainer()
-		Me.LineShape2 = New Microsoft.VisualBasic.PowerPacks.LineShape()
-		Me.LineShape1 = New Microsoft.VisualBasic.PowerPacks.LineShape()
 		Me.tmr = New System.Windows.Forms.Timer(Me.components)
 		Me.chkMaxVolume = New System.Windows.Forms.CheckBox()
 		Me.grpMisc = New System.Windows.Forms.GroupBox()
@@ -451,32 +448,6 @@ Partial Class frmMain
 		Me.lblStatus.Text = "Status: Loading..."
 		Me.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
 		'
-		'ShapeContainer1
-		'
-		Me.ShapeContainer1.Location = New System.Drawing.Point(0, 0)
-		Me.ShapeContainer1.Margin = New System.Windows.Forms.Padding(0)
-		Me.ShapeContainer1.Name = "ShapeContainer1"
-		Me.ShapeContainer1.Shapes.AddRange(New Microsoft.VisualBasic.PowerPacks.Shape() {Me.LineShape2, Me.LineShape1})
-		Me.ShapeContainer1.Size = New System.Drawing.Size(793, 418)
-		Me.ShapeContainer1.TabIndex = 21
-		Me.ShapeContainer1.TabStop = False
-		'
-		'LineShape2
-		'
-		Me.LineShape2.Name = "LineShape2"
-		Me.LineShape2.X1 = 780
-		Me.LineShape2.X2 = 780
-		Me.LineShape2.Y1 = 108
-		Me.LineShape2.Y2 = 322
-		'
-		'LineShape1
-		'
-		Me.LineShape1.Name = "LineShape1"
-		Me.LineShape1.X1 = 704
-		Me.LineShape1.X2 = 704
-		Me.LineShape1.Y1 = 107
-		Me.LineShape1.Y2 = 223
-		'
 		'tmr
 		'
 		Me.tmr.Interval = 50
@@ -523,7 +494,6 @@ Partial Class frmMain
 		Me.Controls.Add(Me.lblRight)
 		Me.Controls.Add(Me.lblMiddle)
 		Me.Controls.Add(Me.lblLeft)
-		Me.Controls.Add(Me.ShapeContainer1)
 		Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
 		Me.MaximizeBox = False
 		Me.Name = "frmMain"
@@ -581,9 +551,6 @@ Partial Class frmMain
 	Friend WithEvents Label4 As System.Windows.Forms.Label
 	Friend WithEvents btnSS As System.Windows.Forms.Button
 	Friend WithEvents lblStatus As System.Windows.Forms.Label
-	Friend WithEvents ShapeContainer1 As Microsoft.VisualBasic.PowerPacks.ShapeContainer
-	Friend WithEvents LineShape1 As Microsoft.VisualBasic.PowerPacks.LineShape
-	Friend WithEvents LineShape2 As Microsoft.VisualBasic.PowerPacks.LineShape
 	Friend WithEvents tmr As System.Windows.Forms.Timer
 	Friend WithEvents numOutputChannel As System.Windows.Forms.NumericUpDown
 	Friend WithEvents Label5 As System.Windows.Forms.Label

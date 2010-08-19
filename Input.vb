@@ -2,7 +2,9 @@
 	Public Joystick As New List(Of Joystick)
 	Private dInput As DirectInput
 
+
 	Public Sub CreateInput()
+		Status("Creating joystick input...")
 		'Create direct input
 		dInput = New DirectInput
 
@@ -20,7 +22,9 @@
 			End Try
 		Next
 		If Joystick.Count = 0 Then
-			Status("No attached joysticks.")
+			Status("No attached joysticks." & vbNewLine & "Reload the program after you have pluged one in.")
+			frmMain.ContinueLoading = False
+			Close()
 		Else
 			For Each joy As Joystick In Joystick
 				joy.Acquire()
@@ -34,6 +38,7 @@
 		End If
 
 
+		Status("Creating joystick input... Done!")
 	End Sub
 
 	Public Function GetAxis(ByVal JoysitckID As Integer, ByVal Axis As Integer) As Integer
@@ -64,13 +69,22 @@
 	End Function
 
 	Public Sub DistroyInput()
-		For Each joy As Joystick In Joystick
-			joy.Unacquire()
-			joy.Dispose()
-		Next
 
+		Status("Distroying joystick input...")
+		If Joystick.Count > 0 Then
+			For Each j As Joystick In Joystick
+				If j IsNot Nothing Then
+					j.Unacquire()
+					j.Dispose()
+				End If
+			Next
+		End If
 
-		dInput.Dispose()
+		If dInput IsNot Nothing Then
+			dInput.Dispose()
+		End If
+
+		Status("Distroying joystick input... Done!")
 	End Sub
 
 
