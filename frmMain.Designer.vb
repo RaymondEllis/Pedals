@@ -29,17 +29,17 @@ Partial Class frmMain
 		Me.grpLeft = New System.Windows.Forms.GroupBox()
 		Me.btnLeftInput = New System.Windows.Forms.Button()
 		Me.comLeft = New System.Windows.Forms.ComboBox()
-		Me.RadioButton2 = New System.Windows.Forms.RadioButton()
+		Me.radLeft2 = New System.Windows.Forms.RadioButton()
 		Me.radLeft = New System.Windows.Forms.RadioButton()
 		Me.grpMiddle = New System.Windows.Forms.GroupBox()
 		Me.btnMiddleInput = New System.Windows.Forms.Button()
 		Me.comMiddle = New System.Windows.Forms.ComboBox()
-		Me.RadioButton1 = New System.Windows.Forms.RadioButton()
+		Me.radMiddle2 = New System.Windows.Forms.RadioButton()
 		Me.radMiddle = New System.Windows.Forms.RadioButton()
 		Me.grpRight = New System.Windows.Forms.GroupBox()
 		Me.btnRightInput = New System.Windows.Forms.Button()
 		Me.comRight = New System.Windows.Forms.ComboBox()
-		Me.RadioButton4 = New System.Windows.Forms.RadioButton()
+		Me.radRight2 = New System.Windows.Forms.RadioButton()
 		Me.radRight = New System.Windows.Forms.RadioButton()
 		Me.grpOutput = New System.Windows.Forms.GroupBox()
 		Me.numOutputChannel = New System.Windows.Forms.NumericUpDown()
@@ -62,6 +62,8 @@ Partial Class frmMain
 		Me.tmr = New System.Windows.Forms.Timer(Me.components)
 		Me.chkMaxVolume = New System.Windows.Forms.CheckBox()
 		Me.grpMisc = New System.Windows.Forms.GroupBox()
+		Me.chkNoteOut = New System.Windows.Forms.CheckBox()
+		Me.ToolTips = New System.Windows.Forms.ToolTip(Me.components)
 		Me.grpLeft.SuspendLayout()
 		Me.grpMiddle.SuspendLayout()
 		Me.grpRight.SuspendLayout()
@@ -108,7 +110,7 @@ Partial Class frmMain
 		Me.grpLeft.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
 		Me.grpLeft.Controls.Add(Me.btnLeftInput)
 		Me.grpLeft.Controls.Add(Me.comLeft)
-		Me.grpLeft.Controls.Add(Me.RadioButton2)
+		Me.grpLeft.Controls.Add(Me.radLeft2)
 		Me.grpLeft.Controls.Add(Me.radLeft)
 		Me.grpLeft.Enabled = False
 		Me.grpLeft.Location = New System.Drawing.Point(450, 112)
@@ -136,15 +138,15 @@ Partial Class frmMain
 		Me.comLeft.Size = New System.Drawing.Size(165, 21)
 		Me.comLeft.TabIndex = 1
 		'
-		'RadioButton2
+		'radLeft2
 		'
-		Me.RadioButton2.AutoSize = True
-		Me.RadioButton2.Location = New System.Drawing.Point(7, 43)
-		Me.RadioButton2.Name = "RadioButton2"
-		Me.RadioButton2.Size = New System.Drawing.Size(75, 17)
-		Me.RadioButton2.TabIndex = 0
-		Me.RadioButton2.Text = "Alter notes"
-		Me.RadioButton2.UseVisualStyleBackColor = True
+		Me.radLeft2.AutoSize = True
+		Me.radLeft2.Location = New System.Drawing.Point(7, 43)
+		Me.radLeft2.Name = "radLeft2"
+		Me.radLeft2.Size = New System.Drawing.Size(75, 17)
+		Me.radLeft2.TabIndex = 0
+		Me.radLeft2.Text = "Alter notes"
+		Me.radLeft2.UseVisualStyleBackColor = True
 		'
 		'radLeft
 		'
@@ -163,7 +165,7 @@ Partial Class frmMain
 		Me.grpMiddle.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
 		Me.grpMiddle.Controls.Add(Me.btnMiddleInput)
 		Me.grpMiddle.Controls.Add(Me.comMiddle)
-		Me.grpMiddle.Controls.Add(Me.RadioButton1)
+		Me.grpMiddle.Controls.Add(Me.radMiddle2)
 		Me.grpMiddle.Controls.Add(Me.radMiddle)
 		Me.grpMiddle.Enabled = False
 		Me.grpMiddle.Location = New System.Drawing.Point(526, 214)
@@ -191,15 +193,15 @@ Partial Class frmMain
 		Me.comMiddle.Size = New System.Drawing.Size(165, 21)
 		Me.comMiddle.TabIndex = 1
 		'
-		'RadioButton1
+		'radMiddle2
 		'
-		Me.RadioButton1.AutoSize = True
-		Me.RadioButton1.Location = New System.Drawing.Point(7, 43)
-		Me.RadioButton1.Name = "RadioButton1"
-		Me.RadioButton1.Size = New System.Drawing.Size(75, 17)
-		Me.RadioButton1.TabIndex = 0
-		Me.RadioButton1.Text = "Alter notes"
-		Me.RadioButton1.UseVisualStyleBackColor = True
+		Me.radMiddle2.AutoSize = True
+		Me.radMiddle2.Location = New System.Drawing.Point(7, 43)
+		Me.radMiddle2.Name = "radMiddle2"
+		Me.radMiddle2.Size = New System.Drawing.Size(75, 17)
+		Me.radMiddle2.TabIndex = 0
+		Me.radMiddle2.Text = "Alter notes"
+		Me.radMiddle2.UseVisualStyleBackColor = True
 		'
 		'radMiddle
 		'
@@ -218,7 +220,7 @@ Partial Class frmMain
 		Me.grpRight.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
 		Me.grpRight.Controls.Add(Me.btnRightInput)
 		Me.grpRight.Controls.Add(Me.comRight)
-		Me.grpRight.Controls.Add(Me.RadioButton4)
+		Me.grpRight.Controls.Add(Me.radRight2)
 		Me.grpRight.Controls.Add(Me.radRight)
 		Me.grpRight.Enabled = False
 		Me.grpRight.Location = New System.Drawing.Point(602, 316)
@@ -246,15 +248,15 @@ Partial Class frmMain
 		Me.comRight.Size = New System.Drawing.Size(165, 21)
 		Me.comRight.TabIndex = 1
 		'
-		'RadioButton4
+		'radRight2
 		'
-		Me.RadioButton4.AutoSize = True
-		Me.RadioButton4.Location = New System.Drawing.Point(7, 43)
-		Me.RadioButton4.Name = "RadioButton4"
-		Me.RadioButton4.Size = New System.Drawing.Size(75, 17)
-		Me.RadioButton4.TabIndex = 0
-		Me.RadioButton4.Text = "Alter notes"
-		Me.RadioButton4.UseVisualStyleBackColor = True
+		Me.radRight2.AutoSize = True
+		Me.radRight2.Location = New System.Drawing.Point(7, 43)
+		Me.radRight2.Name = "radRight2"
+		Me.radRight2.Size = New System.Drawing.Size(75, 17)
+		Me.radRight2.TabIndex = 0
+		Me.radRight2.Text = "Alter notes"
+		Me.radRight2.UseVisualStyleBackColor = True
 		'
 		'radRight
 		'
@@ -270,6 +272,7 @@ Partial Class frmMain
 		'
 		'grpOutput
 		'
+		Me.grpOutput.Controls.Add(Me.chkNoteOut)
 		Me.grpOutput.Controls.Add(Me.numOutputChannel)
 		Me.grpOutput.Controls.Add(Me.Label5)
 		Me.grpOutput.Controls.Add(Me.comOutput)
@@ -476,6 +479,20 @@ Partial Class frmMain
 		Me.grpMisc.TabStop = False
 		Me.grpMisc.Text = "Misc"
 		'
+		'chkNoteOut
+		'
+		Me.chkNoteOut.AutoSize = True
+		Me.chkNoteOut.Checked = True
+		Me.chkNoteOut.CheckState = System.Windows.Forms.CheckState.Checked
+		Me.chkNoteOut.Location = New System.Drawing.Point(131, 46)
+		Me.chkNoteOut.Name = "chkNoteOut"
+		Me.chkNoteOut.Size = New System.Drawing.Size(82, 17)
+		Me.chkNoteOut.TabIndex = 24
+		Me.chkNoteOut.Text = "Note output"
+		Me.ToolTips.SetToolTip(Me.chkNoteOut, "Usefull for when you have the same output and input." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "So you don't get dubble not" & _
+				"es.")
+		Me.chkNoteOut.UseVisualStyleBackColor = True
+		'
 		'frmMain
 		'
 		Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -524,15 +541,15 @@ Partial Class frmMain
 	Friend WithEvents lblRight As System.Windows.Forms.Label
 	Friend WithEvents grpLeft As System.Windows.Forms.GroupBox
 	Friend WithEvents comLeft As System.Windows.Forms.ComboBox
-	Friend WithEvents RadioButton2 As System.Windows.Forms.RadioButton
+	Friend WithEvents radLeft2 As System.Windows.Forms.RadioButton
 	Friend WithEvents radLeft As System.Windows.Forms.RadioButton
 	Friend WithEvents grpMiddle As System.Windows.Forms.GroupBox
 	Friend WithEvents comMiddle As System.Windows.Forms.ComboBox
-	Friend WithEvents RadioButton1 As System.Windows.Forms.RadioButton
+	Friend WithEvents radMiddle2 As System.Windows.Forms.RadioButton
 	Friend WithEvents radMiddle As System.Windows.Forms.RadioButton
 	Friend WithEvents grpRight As System.Windows.Forms.GroupBox
 	Friend WithEvents comRight As System.Windows.Forms.ComboBox
-	Friend WithEvents RadioButton4 As System.Windows.Forms.RadioButton
+	Friend WithEvents radRight2 As System.Windows.Forms.RadioButton
 	Friend WithEvents radRight As System.Windows.Forms.RadioButton
 	Friend WithEvents grpOutput As System.Windows.Forms.GroupBox
 	Friend WithEvents comOutput As System.Windows.Forms.ComboBox
@@ -558,5 +575,7 @@ Partial Class frmMain
 	Friend WithEvents Label6 As System.Windows.Forms.Label
 	Friend WithEvents chkMaxVolume As System.Windows.Forms.CheckBox
 	Friend WithEvents grpMisc As System.Windows.Forms.GroupBox
+	Friend WithEvents chkNoteOut As System.Windows.Forms.CheckBox
+	Friend WithEvents ToolTips As System.Windows.Forms.ToolTip
 
 End Class

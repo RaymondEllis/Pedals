@@ -1,0 +1,7 @@
+
+1.4:
+Can now disable outputing notes. So you can use pedals on the same in/out device.  Does not work on mine may work on others.
+
+Beta1.3
+Fixed: Small bug with alter note on the sustain pedal.
+Fixed afew other things iv forgoten about.

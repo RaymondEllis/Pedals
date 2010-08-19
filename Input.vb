@@ -1,6 +1,6 @@
 ﻿Module Input
 	Public Joystick As New List(Of Joystick)
-	Private dInput As DirectInput
+	Public dInput As DirectInput
 
 
 	Public Sub CreateInput()
@@ -22,7 +22,7 @@
 			End Try
 		Next
 		If Joystick.Count = 0 Then
-			Status("No attached joysticks." & vbNewLine & "Reload the program after you have pluged one in.")
+			Status("No attached joysticks." & vbNewLine & "Reload the program after you have pluged one in.", True)
 			frmMain.ContinueLoading = False
 			Close()
 		Else

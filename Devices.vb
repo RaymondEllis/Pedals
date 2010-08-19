@@ -9,6 +9,7 @@
 
 	Public SetVolumeMax As Boolean = True
 	Public RemoveOldNotes As Boolean = True
+	Public NoteOut As Boolean = True
 
 
 	''' <summary>
@@ -29,7 +30,7 @@
 	End Sub
 
 	Private Sub InDevice_ChannelMessageReceived(ByVal sender As Object, ByVal e As Sanford.Multimedia.Midi.ChannelMessageEventArgs) Handles InDevice.ChannelMessageReceived
-
+		If Not NoteOut Then Return
 
 		'If the message is comeing from the selected midi channel.
 		If e.Message.MidiChannel = MidiInput Then

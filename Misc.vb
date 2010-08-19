@@ -2,6 +2,7 @@
 
 Module Misc
 	Public Debug As Boolean = False
+	Public Loaded As Boolean = False
 
 	Public Sub Status(ByVal Text As String, Optional ByVal ShowError As Boolean = False)
 		frmMain.lblStatus.Text = "Status: " & Text

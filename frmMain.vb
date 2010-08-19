@@ -7,6 +7,7 @@
 
 	Public ContinueLoading As Boolean = True
 
+
 #Region "Loading and closing"
 
 	Private Sub frmMain_FormClosed(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
@@ -17,7 +18,7 @@
 		Status("Closing...")
 		tmr.Enabled = False
 
-		DistroyInput()
+
 		If OutDevice IsNot Nothing Then
 			Status("Closing midi output device...")
 			OutDevice.Close()
@@ -31,8 +32,10 @@
 			Status("Closing midi input device... Done")
 		End If
 
+		DistroyInput()
 
 	End Sub
+
 	Private Sub frmMain_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
 		'Fill boxs.
@@ -61,7 +64,10 @@
 			'RightInput = New InputData(0, 5)
 		End If
 
+		Loaded = True
+		CheckNoteDisable()
 		Status("Loading... Done!")
+
 	End Sub
 
 	Public Sub SetControls(ByVal Value As Boolean, Optional ByVal StartB As Boolean = False, Optional ByVal Devices As Boolean = False, Optional ByVal Pedals As Boolean = False, Optional ByVal Misc As Boolean = False, Optional ByVal Debug As Boolean = False)
@@ -109,17 +115,33 @@
 
 	Private Sub comInput_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comInput.SelectedIndexChanged
 		InDeviceID = comInput.SelectedIndex
+		CheckNoteDisable()
 	End Sub
 	Private Sub comOutput_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comOutput.SelectedIndexChanged
 		OutDeviceID = comOutput.SelectedIndex
+		CheckNoteDisable()
 	End Sub
 
 
 	Private Sub numInputChannel_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numInputChannel.ValueChanged
 		MidiInput = sender.value
+		CheckNoteDisable()
 	End Sub
 	Private Sub numOutputChannel_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numOutputChannel.ValueChanged
 		MidiOutput = sender.value
+		CheckNoteDisable()
+	End Sub
+
+	Private Sub CheckNoteDisable()
+		If Not grpOutput.Enabled Or Not Loaded Then Return
+
+		'Is the input and output the same?
+		If comInput.SelectedItem = comOutput.SelectedItem Then
+			If numInputChannel.Value = numOutputChannel.Value Then
+				chkNoteOut.Checked = False
+
+			End If
+		End If
 	End Sub
 #End Region
 
@@ -136,7 +158,7 @@
 #End Region
 
 #Region "Pedals"
-	
+
 #Region "Left"
 	'Private LeftP As Boolean = False
 	Private LeftChanged As Boolean = True
@@ -249,7 +271,7 @@
 			End If
 
 
-			
+
 
 		Else
 
@@ -344,15 +366,18 @@
 
 
 
-			Else
+		Else
 
-				If Pos >= RightInput.SwitchOn Then
+			If Pos >= RightInput.SwitchOn Then
 				If RightChanged Then
 					'Check for down keys and set them to sustain.
 					Parallel.For(0, Note.Length - 1, Sub(n)
-														 Note(n) = Notes.SustainPressed
-														 SustainList.Add(n)
+														 If Note(n) = Notes.Pressed Then
+															 Note(n) = Notes.SustainPressed
+															 SustainList.Add(n)
+														 End If
 													 End Sub)
+
 					lblRight.BackColor = RightDown
 				End If
 
@@ -378,7 +403,7 @@
 			End If
 
 
-			End If
+		End If
 
 
 
@@ -430,32 +455,32 @@
 	End Sub
 	Private Sub comMiddle_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comMiddle.SelectedIndexChanged
 		MiddleController = [Enum].Parse(GetType(Midi.ControllerType), sender.SelectedItem.ToString)
-		MiddleIsControllerSwitch = IsSwitch(middleController)
+		MiddleIsControllerSwitch = IsSwitch(MiddleController)
 	End Sub
 	Private Sub comRight_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comRight.SelectedIndexChanged
 		RightController = [Enum].Parse(GetType(Midi.ControllerType), sender.SelectedItem.ToString)
 		RightIsControllerSwitch = IsSwitch(RightController)
 	End Sub
-	
+
 
 	Public Function IsSwitch(ByVal Controller As Integer) As Boolean
 		Select Case Controller
-			Case 64 'Hold1
+			Case 64	'Hold1
 				Return True
 
-			Case 65 'Portmento
+			Case 65	'Portmento
 				Return True
 
-			Case 66 'Sostenuto
+			Case 66	'Sostenuto
 				Return True
 
-			Case 67 'Sift
+			Case 67	'Sift
 				Return True
 
-			Case 68 'Legato
+			Case 68	'Legato
 				Return True
 
-			Case 69 'Hold 2
+			Case 69	'Hold 2
 				Return True
 
 			Case 122 '[Channel Mode Message] Local Control On/Off 
@@ -551,8 +576,8 @@
 #End Region
 
 
-	
-	
+
+
 
 #Region "Misc"
 	Private Sub chkMaxVolume_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkMaxVolume.CheckedChanged
@@ -563,4 +588,24 @@
 		RemoveOldNotes = sender.checked
 	End Sub
 #End Region
+
+	Private Sub chkNoteOut_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkNoteOut.CheckedChanged
+		If Not Loaded Then Return
+
+		NoteOut = chkNoteOut.Checked
+
+		grpMisc.Enabled = chkNoteOut.Checked
+
+		radLeft2.Enabled = chkNoteOut.Checked
+		radMiddle2.Enabled = chkNoteOut.Checked
+		radRight2.Enabled = chkNoteOut.Checked
+
+		If NoteOut = False Then
+
+			radLeft.Checked = True
+			radMiddle.Checked = True
+			radRight.Checked = True
+		End If
+
+	End Sub
 End Class
