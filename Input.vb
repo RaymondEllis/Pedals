@@ -1,7 +1,7 @@
 ﻿Module Input
 	Public Joystick As New List(Of Joystick)
 	Public dInput As DirectInput
-
+	Public EnableJoysticks As Boolean = False
 
 	Public Sub CreateInput()
 		Status("Creating joystick input...")
@@ -23,8 +23,8 @@
 		Next
 		If Joystick.Count = 0 Then
 			Status("No attached joysticks." & vbNewLine & "Reload the program after you have pluged one in.", True)
-			frmMain.ContinueLoading = False
-			Close()
+			'frmMain.ContinueLoading = False
+			'Close()
 		Else
 			For Each joy As Joystick In Joystick
 				joy.Acquire()
@@ -35,10 +35,12 @@
 					End If
 				Next
 			Next
+			EnableJoysticks = True
+			Status("Creating joystick input... Done!")
 		End If
 
 
-		Status("Creating joystick input... Done!")
+
 	End Sub
 
 	Public Function GetAxis(ByVal JoysitckID As Integer, ByVal Axis As Integer) As Integer

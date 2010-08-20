@@ -73,14 +73,7 @@ Module Misc
 		AddHandler AppDomain.CurrentDomain.UnhandledException, AddressOf CurrentDomain_UnhandledException
 
 
-		'Try
-		'	Throw New Exception("test")
-		'Catch ex As Exception
-		'	If ex IsNot Nothing Then
-
-		'	End If
-		'End Try
-
+		'Delete the old debug file.
 		If IO.File.Exists("debug.txt") Then IO.File.Delete("debug.txt")
 
 		Application.Run(frmMain)
@@ -100,8 +93,8 @@ Module Misc
 
 		Catch
 			Try
-				MessageBox.Show("Fatal Windows Forms Error", _
-				 "Fatal Windows Forms Error", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Stop)
+				MessageBox.Show("Fatal Windows Forms Error" & vbNewLine & "There may be more info in your debug file.", _
+	 "Fatal Windows Forms Error", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Stop)
 			Finally
 				Application.Exit()
 			End Try
@@ -125,8 +118,8 @@ Module Misc
 
 		Catch exc As Exception
 			Try
-				MessageBox.Show("Fatal Non-UI Error", "Fatal Non-UI Error. Could not write the error to the event log. " & _
-				 "Reason: " & exc.Message, MessageBoxButtons.OK, MessageBoxIcon.Stop)
+				MessageBox.Show("Fatal Non-UI Error", "Fatal Non-UI Error. Could not write the error to the debug file. " & _
+	 "Reason: " & exc.Message, MessageBoxButtons.OK, MessageBoxIcon.Stop)
 			Finally
 				Application.Exit()
 			End Try
@@ -135,7 +128,7 @@ Module Misc
 	End Sub
 
 	Public Function ExceptionToString(ByVal e As Exception) As String
-		Dim t As String = "Exception!"
+		Dim t As String = "You found a unhandled error!   Pleasereport it to http://code.google.com/p/pedals/issues/   With this file included."
 		t &= vbNewLine & "Message: " & e.Message
 		t &= vbNewLine & "StackTrace: " & e.StackTrace
 		Return t
@@ -143,11 +136,9 @@ Module Misc
 
 	' Creates the error message and displays it.
 	Private Function ShowThreadExceptionDialog(ByVal title As String, ByVal e As Exception) As DialogResult
-		Dim errorMsg As String = "An application error occurred. Please contact the adminstrator " & _
-		 "with the following information:" & ControlChars.Lf & ControlChars.Lf
-		errorMsg = errorMsg & e.Message & ControlChars.Lf & _
-		 ControlChars.Lf & "Stack Trace:" & ControlChars.Lf & e.StackTrace
-
+		Dim errorMsg As String = "An error occurred." & _
+		 " error message: " & ControlChars.Lf
+		errorMsg = errorMsg & e.Message & vbNewLine & vbNewLine & "More help about this is in your debug.txt file." & vbNewLine & "Note: if you keep getting the same error then end the task with taskmanager (ctrl + shift + esc)"
 		Return MessageBox.Show(errorMsg, title, MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Stop)
 	End Function
 #End Region

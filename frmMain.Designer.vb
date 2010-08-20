@@ -42,6 +42,7 @@ Partial Class frmMain
 		Me.radRight2 = New System.Windows.Forms.RadioButton()
 		Me.radRight = New System.Windows.Forms.RadioButton()
 		Me.grpOutput = New System.Windows.Forms.GroupBox()
+		Me.chkNoteOut = New System.Windows.Forms.CheckBox()
 		Me.numOutputChannel = New System.Windows.Forms.NumericUpDown()
 		Me.Label5 = New System.Windows.Forms.Label()
 		Me.comOutput = New System.Windows.Forms.ComboBox()
@@ -62,8 +63,9 @@ Partial Class frmMain
 		Me.tmr = New System.Windows.Forms.Timer(Me.components)
 		Me.chkMaxVolume = New System.Windows.Forms.CheckBox()
 		Me.grpMisc = New System.Windows.Forms.GroupBox()
-		Me.chkNoteOut = New System.Windows.Forms.CheckBox()
 		Me.ToolTips = New System.Windows.Forms.ToolTip(Me.components)
+		Me.btnTest = New System.Windows.Forms.Button()
+		Me.tmrTest = New System.Windows.Forms.Timer(Me.components)
 		Me.grpLeft.SuspendLayout()
 		Me.grpMiddle.SuspendLayout()
 		Me.grpRight.SuspendLayout()
@@ -84,6 +86,7 @@ Partial Class frmMain
 		Me.lblLeft.TabIndex = 3
 		Me.lblLeft.Text = "Left" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(Soft)"
 		Me.lblLeft.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+		Me.ToolTips.SetToolTip(Me.lblLeft, "Just a visual pedal for you to look at.")
 		'
 		'lblMiddle
 		'
@@ -94,6 +97,7 @@ Partial Class frmMain
 		Me.lblMiddle.TabIndex = 3
 		Me.lblMiddle.Text = "Middle" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(Sostenuto)"
 		Me.lblMiddle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+		Me.ToolTips.SetToolTip(Me.lblMiddle, "Just a visual pedal for you to look at.")
 		'
 		'lblRight
 		'
@@ -104,6 +108,7 @@ Partial Class frmMain
 		Me.lblRight.TabIndex = 3
 		Me.lblRight.Text = "Right" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(Sustain)"
 		Me.lblRight.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+		Me.ToolTips.SetToolTip(Me.lblRight, "Just a visual pedal for you to look at.")
 		'
 		'grpLeft
 		'
@@ -127,6 +132,7 @@ Partial Class frmMain
 		Me.btnLeftInput.Size = New System.Drawing.Size(75, 23)
 		Me.btnLeftInput.TabIndex = 2
 		Me.btnLeftInput.Text = "Set input"
+		Me.ToolTips.SetToolTip(Me.btnLeftInput, "Set the joystick axis.")
 		Me.btnLeftInput.UseVisualStyleBackColor = True
 		'
 		'comLeft
@@ -137,6 +143,7 @@ Partial Class frmMain
 		Me.comLeft.Name = "comLeft"
 		Me.comLeft.Size = New System.Drawing.Size(165, 21)
 		Me.comLeft.TabIndex = 1
+		Me.ToolTips.SetToolTip(Me.comLeft, "This is the MIDI controller to ouput to.")
 		'
 		'radLeft2
 		'
@@ -146,6 +153,7 @@ Partial Class frmMain
 		Me.radLeft2.Size = New System.Drawing.Size(75, 17)
 		Me.radLeft2.TabIndex = 0
 		Me.radLeft2.Text = "Alter notes"
+		Me.ToolTips.SetToolTip(Me.radLeft2, "Will alter the notes as they come in. To simulate pedals")
 		Me.radLeft2.UseVisualStyleBackColor = True
 		'
 		'radLeft
@@ -158,6 +166,7 @@ Partial Class frmMain
 		Me.radLeft.TabIndex = 0
 		Me.radLeft.TabStop = True
 		Me.radLeft.Text = "Use MIDI"
+		Me.ToolTips.SetToolTip(Me.radLeft, "Use MIDI controller in the drop down box below.")
 		Me.radLeft.UseVisualStyleBackColor = True
 		'
 		'grpMiddle
@@ -182,6 +191,7 @@ Partial Class frmMain
 		Me.btnMiddleInput.Size = New System.Drawing.Size(75, 23)
 		Me.btnMiddleInput.TabIndex = 2
 		Me.btnMiddleInput.Text = "Set input"
+		Me.ToolTips.SetToolTip(Me.btnMiddleInput, "Set the joystick axis.")
 		Me.btnMiddleInput.UseVisualStyleBackColor = True
 		'
 		'comMiddle
@@ -192,6 +202,7 @@ Partial Class frmMain
 		Me.comMiddle.Name = "comMiddle"
 		Me.comMiddle.Size = New System.Drawing.Size(165, 21)
 		Me.comMiddle.TabIndex = 1
+		Me.ToolTips.SetToolTip(Me.comMiddle, "This is the MIDI controller to ouput to.")
 		'
 		'radMiddle2
 		'
@@ -201,6 +212,7 @@ Partial Class frmMain
 		Me.radMiddle2.Size = New System.Drawing.Size(75, 17)
 		Me.radMiddle2.TabIndex = 0
 		Me.radMiddle2.Text = "Alter notes"
+		Me.ToolTips.SetToolTip(Me.radMiddle2, "Will alter the notes as they come in. To simulate pedals")
 		Me.radMiddle2.UseVisualStyleBackColor = True
 		'
 		'radMiddle
@@ -213,6 +225,7 @@ Partial Class frmMain
 		Me.radMiddle.TabIndex = 0
 		Me.radMiddle.TabStop = True
 		Me.radMiddle.Text = "Use MIDI"
+		Me.ToolTips.SetToolTip(Me.radMiddle, "Use MIDI controller in the drop down box below.")
 		Me.radMiddle.UseVisualStyleBackColor = True
 		'
 		'grpRight
@@ -237,6 +250,7 @@ Partial Class frmMain
 		Me.btnRightInput.Size = New System.Drawing.Size(75, 23)
 		Me.btnRightInput.TabIndex = 2
 		Me.btnRightInput.Text = "Set input"
+		Me.ToolTips.SetToolTip(Me.btnRightInput, "Set the joystick axis.")
 		Me.btnRightInput.UseVisualStyleBackColor = True
 		'
 		'comRight
@@ -247,6 +261,7 @@ Partial Class frmMain
 		Me.comRight.Name = "comRight"
 		Me.comRight.Size = New System.Drawing.Size(165, 21)
 		Me.comRight.TabIndex = 1
+		Me.ToolTips.SetToolTip(Me.comRight, "This is the MIDI controller to ouput to.")
 		'
 		'radRight2
 		'
@@ -256,6 +271,7 @@ Partial Class frmMain
 		Me.radRight2.Size = New System.Drawing.Size(75, 17)
 		Me.radRight2.TabIndex = 0
 		Me.radRight2.Text = "Alter notes"
+		Me.ToolTips.SetToolTip(Me.radRight2, "Will alter the notes as they come in. To simulate pedals")
 		Me.radRight2.UseVisualStyleBackColor = True
 		'
 		'radRight
@@ -268,6 +284,7 @@ Partial Class frmMain
 		Me.radRight.TabIndex = 0
 		Me.radRight.TabStop = True
 		Me.radRight.Text = "Use MIDI"
+		Me.ToolTips.SetToolTip(Me.radRight, "Use MIDI controller in the drop down box below.")
 		Me.radRight.UseVisualStyleBackColor = True
 		'
 		'grpOutput
@@ -283,6 +300,20 @@ Partial Class frmMain
 		Me.grpOutput.TabIndex = 5
 		Me.grpOutput.TabStop = False
 		Me.grpOutput.Text = "Output device"
+		'
+		'chkNoteOut
+		'
+		Me.chkNoteOut.AutoSize = True
+		Me.chkNoteOut.Checked = True
+		Me.chkNoteOut.CheckState = System.Windows.Forms.CheckState.Checked
+		Me.chkNoteOut.Location = New System.Drawing.Point(131, 46)
+		Me.chkNoteOut.Name = "chkNoteOut"
+		Me.chkNoteOut.Size = New System.Drawing.Size(82, 17)
+		Me.chkNoteOut.TabIndex = 24
+		Me.chkNoteOut.Text = "Note output"
+		Me.ToolTips.SetToolTip(Me.chkNoteOut, "Usefull for when you have the same output and input." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "So you don't get dubble not" & _
+				"es.")
+		Me.chkNoteOut.UseVisualStyleBackColor = True
 		'
 		'numOutputChannel
 		'
@@ -359,6 +390,7 @@ Partial Class frmMain
 		Me.chkOldNote.Size = New System.Drawing.Size(112, 17)
 		Me.chkOldNote.TabIndex = 16
 		Me.chkOldNote.Text = "Remove old notes"
+		Me.ToolTips.SetToolTip(Me.chkOldNote, "Will depress pressed notes with Altered notes.")
 		Me.chkOldNote.UseVisualStyleBackColor = True
 		'
 		'chkDebug
@@ -370,6 +402,7 @@ Partial Class frmMain
 		Me.chkDebug.Size = New System.Drawing.Size(58, 17)
 		Me.chkDebug.TabIndex = 17
 		Me.chkDebug.Text = "Debug"
+		Me.ToolTips.SetToolTip(Me.chkDebug, "Debug all commands going out.")
 		Me.chkDebug.UseVisualStyleBackColor = True
 		'
 		'panDebug
@@ -443,7 +476,7 @@ Partial Class frmMain
 		'
 		'lblStatus
 		'
-		Me.lblStatus.BackColor = System.Drawing.SystemColors.Info
+		Me.lblStatus.BackColor = System.Drawing.SystemColors.Control
 		Me.lblStatus.Location = New System.Drawing.Point(93, 388)
 		Me.lblStatus.Name = "lblStatus"
 		Me.lblStatus.Size = New System.Drawing.Size(434, 17)
@@ -453,7 +486,7 @@ Partial Class frmMain
 		'
 		'tmr
 		'
-		Me.tmr.Interval = 50
+		Me.tmr.Interval = 10
 		'
 		'chkMaxVolume
 		'
@@ -465,6 +498,7 @@ Partial Class frmMain
 		Me.chkMaxVolume.Size = New System.Drawing.Size(113, 17)
 		Me.chkMaxVolume.TabIndex = 22
 		Me.chkMaxVolume.Text = "Set volume to max"
+		Me.ToolTips.SetToolTip(Me.chkMaxVolume, "Set the volume of each note to 127(maxmum volume)")
 		Me.chkMaxVolume.UseVisualStyleBackColor = True
 		'
 		'grpMisc
@@ -479,25 +513,26 @@ Partial Class frmMain
 		Me.grpMisc.TabStop = False
 		Me.grpMisc.Text = "Misc"
 		'
-		'chkNoteOut
+		'btnTest
 		'
-		Me.chkNoteOut.AutoSize = True
-		Me.chkNoteOut.Checked = True
-		Me.chkNoteOut.CheckState = System.Windows.Forms.CheckState.Checked
-		Me.chkNoteOut.Location = New System.Drawing.Point(131, 46)
-		Me.chkNoteOut.Name = "chkNoteOut"
-		Me.chkNoteOut.Size = New System.Drawing.Size(82, 17)
-		Me.chkNoteOut.TabIndex = 24
-		Me.chkNoteOut.Text = "Note output"
-		Me.ToolTips.SetToolTip(Me.chkNoteOut, "Usefull for when you have the same output and input." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "So you don't get dubble not" & _
-				"es.")
-		Me.chkNoteOut.UseVisualStyleBackColor = True
+		Me.btnTest.Enabled = False
+		Me.btnTest.Location = New System.Drawing.Point(321, 135)
+		Me.btnTest.Name = "btnTest"
+		Me.btnTest.Size = New System.Drawing.Size(75, 23)
+		Me.btnTest.TabIndex = 24
+		Me.btnTest.Text = "Test"
+		Me.ToolTips.SetToolTip(Me.btnTest, "Will test the output device by playing a few notes.")
+		Me.btnTest.UseVisualStyleBackColor = True
+		'
+		'tmrTest
+		'
 		'
 		'frmMain
 		'
 		Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
 		Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
 		Me.ClientSize = New System.Drawing.Size(793, 418)
+		Me.Controls.Add(Me.btnTest)
 		Me.Controls.Add(Me.grpMisc)
 		Me.Controls.Add(Me.lblStatus)
 		Me.Controls.Add(Me.btnSS)
@@ -577,5 +612,7 @@ Partial Class frmMain
 	Friend WithEvents grpMisc As System.Windows.Forms.GroupBox
 	Friend WithEvents chkNoteOut As System.Windows.Forms.CheckBox
 	Friend WithEvents ToolTips As System.Windows.Forms.ToolTip
+	Friend WithEvents btnTest As System.Windows.Forms.Button
+	Friend WithEvents tmrTest As System.Windows.Forms.Timer
 
 End Class

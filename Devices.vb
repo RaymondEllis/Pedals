@@ -24,8 +24,9 @@
 		OutDevice.Send(message)
 
 		If Debug Then
-			frmMain.lstDebug.Items.Add(message.MidiChannel.ToString & vbTab & message.Command.ToString & vbTab & vbTab & message.Data1.ToString & vbTab & message.Data2.ToString)
-			frmMain.lstDebug.SelectedIndex = frmMain.lstDebug.Items.Count - 1
+			frmMain.AddMessageToDebug(message)
+			'frmMain.lstDebug.Items.Add(message.MidiChannel.ToString & vbTab & message.Command.ToString & vbTab & vbTab & message.Data1.ToString & vbTab & message.Data2.ToString)
+			'frmMain.lstDebug.SelectedIndex = frmMain.lstDebug.Items.Count - 1
 		End If
 	End Sub
 

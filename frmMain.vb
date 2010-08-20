@@ -57,18 +57,23 @@
 
 			CreateInput()
 
+			If EnableJoysticks Then
+				SetControls(True, True, True, True, True, True)
 
-			SetControls(True, True, True, True, True, True)
+				If System.Diagnostics.Debugger.IsAttached Then
+					LeftInput = New InputData(0, 6)
+					MiddleInput = New InputData(0, 1)
+					RightInput = New InputData(0, 5)
 
-
-			LeftInput = New InputData(0, 6)
-			MiddleInput = New InputData(0, 1)
-			RightInput = New InputData(0, 5)
+				End If
+			Else
+				SetControls(True, True, True, False, True, True)
+			End If
 		End If
 
-		Loaded = True
-		CheckNoteDisable()
-		Status("Loading... Done!")
+			Loaded = True
+			CheckNoteDisable()
+			Status("Loading... Done!")
 
 	End Sub
 
@@ -149,6 +154,17 @@
 
 
 #Region "Debug"
+	Delegate Sub AddMessageToDebugCallback(ByVal [Message] As ChannelMessage)
+	Public Sub AddMessageToDebug(ByVal [Message] As ChannelMessage)
+		If Me.lstDebug.InvokeRequired Then
+			Dim d As New AddMessageToDebugCallback(AddressOf AddMessageToDebug)
+			Me.Invoke(d, New Object() {[Message]})
+		Else
+			Me.lstDebug.Items.Add(Message.MidiChannel.ToString & vbTab & Message.Command.ToString & vbTab & vbTab & Message.Data1.ToString & vbTab & Message.Data2.ToString)
+			Me.lstDebug.SelectedIndex = Me.lstDebug.Items.Count - 1
+		End If
+	End Sub
+
 	Private Sub chkDebug_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkDebug.CheckedChanged
 		Debug = chkDebug.Checked
 		panDebug.Enabled = Debug
@@ -547,16 +563,20 @@
 	Public Sub StartStop()
 		If Not Playing Then
 			Playing = True
-			tmr.Enabled = True
+			tmr.Enabled = EnableJoysticks 'Will not enable the input timmer if there is no joysticks.
 			SetControls(False, , True)
 
 			InDevice = New InputDevice(InDeviceID)
 			InDevice.StartRecording()
 			OutDevice = New OutputDevice(OutDeviceID)
 
+			btnTest.Enabled = True
+
 			Status("Recording")
 
 		Else
+			btnTest.Enabled = False
+
 			InDevice.StopRecording()
 			InDevice.Close()
 			InDevice.Dispose()
@@ -608,7 +628,35 @@
 		End If
 
 	End Sub
+
+
 #End Region
 
-	
+#Region "Test"
+	Private Sub btnTest_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTest.Click
+		btnTest.Enabled = False
+		testL = 0
+		tmrTest.Enabled = True
+	End Sub
+
+	Dim testL As Integer
+	Private Sub tmrTest_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tmrTest.Tick
+		testL += 1
+		Dim m As New ChannelMessageBuilder
+		m.MidiChannel = MidiOutput
+		m.Command = ChannelCommand.NoteOn
+		m.Data1 = 72 + testL
+		m.Data2 = 127
+		Send(m)
+		Threading.Thread.Sleep(20)
+		m.Command = ChannelCommand.NoteOff
+		m.Data2 = 0
+		Send(m)
+		Threading.Thread.Sleep(100)
+		If testL > 11 Then
+			tmrTest.Enabled = False
+			btnTest.Enabled = True
+		End If
+	End Sub
+#End Region
 End Class

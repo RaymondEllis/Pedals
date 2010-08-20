@@ -1,4 +1,5 @@
-﻿Features I would like:
+﻿This is more like a to do list. But it works :)
 
 *Think of more feature to add.
-*Work on debuging
+*Work on debuging. Better unhandled error messages.
+*Add saving to save all the settings to a settings file.

@@ -20,6 +20,7 @@ Public Class frmInput
 
 	'Private find As Boolean = False
 	Private Sub btnFind_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnFind.Click
+		btnFind.Enabled = False
 		CurrentJoystick.SetData(-1, -1)
 
 		Dim i As Integer = -1
@@ -61,6 +62,7 @@ Public Class frmInput
 
 		If CurrentJoystick.Axis > -1 Then
 			OK_Button.Enabled = True
+			btnFind.Enabled = True
 
 			lblAxis.Text = CurrentJoystick.GetAsisPosition
 

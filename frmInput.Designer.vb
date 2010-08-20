@@ -34,6 +34,7 @@ Partial Class frmInput
 		Me.numSwitchOn = New System.Windows.Forms.NumericUpDown()
 		Me.Label2 = New System.Windows.Forms.Label()
 		Me.Label3 = New System.Windows.Forms.Label()
+		Me.ToolTips = New System.Windows.Forms.ToolTip(Me.components)
 		Me.TableLayoutPanel1.SuspendLayout()
 		CType(Me.numSwitchOn, System.ComponentModel.ISupportInitialize).BeginInit()
 		Me.SuspendLayout()
@@ -46,7 +47,7 @@ Partial Class frmInput
 		Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
 		Me.TableLayoutPanel1.Controls.Add(Me.OK_Button, 0, 0)
 		Me.TableLayoutPanel1.Controls.Add(Me.Cancel_Button, 1, 0)
-		Me.TableLayoutPanel1.Location = New System.Drawing.Point(262, 131)
+		Me.TableLayoutPanel1.Location = New System.Drawing.Point(274, 131)
 		Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
 		Me.TableLayoutPanel1.RowCount = 1
 		Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
@@ -90,6 +91,7 @@ Partial Class frmInput
 		Me.btnFind.Size = New System.Drawing.Size(75, 23)
 		Me.btnFind.TabIndex = 2
 		Me.btnFind.Text = "Find"
+		Me.ToolTips.SetToolTip(Me.btnFind, "Will wait for you to move an axis")
 		Me.btnFind.UseVisualStyleBackColor = True
 		'
 		'lblAxis
@@ -109,11 +111,12 @@ Partial Class frmInput
 		Me.chkRev.Size = New System.Drawing.Size(66, 17)
 		Me.chkRev.TabIndex = 4
 		Me.chkRev.Text = "Reverse"
+		Me.ToolTips.SetToolTip(Me.chkRev, "Reverse the axis.")
 		Me.chkRev.UseVisualStyleBackColor = True
 		'
 		'tmr
 		'
-		Me.tmr.Interval = 50
+		Me.tmr.Interval = 10
 		'
 		'numSwitchOn
 		'
@@ -122,6 +125,7 @@ Partial Class frmInput
 		Me.numSwitchOn.Name = "numSwitchOn"
 		Me.numSwitchOn.Size = New System.Drawing.Size(80, 20)
 		Me.numSwitchOn.TabIndex = 5
+		Me.ToolTips.SetToolTip(Me.numSwitchOn, "Switch on position.")
 		'
 		'Label2
 		'
@@ -148,7 +152,7 @@ Partial Class frmInput
 		Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
 		Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
 		Me.CancelButton = Me.Cancel_Button
-		Me.ClientSize = New System.Drawing.Size(420, 172)
+		Me.ClientSize = New System.Drawing.Size(432, 172)
 		Me.Controls.Add(Me.numSwitchOn)
 		Me.Controls.Add(Me.Label3)
 		Me.Controls.Add(Me.Label2)
@@ -181,5 +185,6 @@ Partial Class frmInput
 	Friend WithEvents numSwitchOn As System.Windows.Forms.NumericUpDown
 	Friend WithEvents Label2 As System.Windows.Forms.Label
 	Friend WithEvents Label3 As System.Windows.Forms.Label
+	Friend WithEvents ToolTips As System.Windows.Forms.ToolTip
 
 End Class
