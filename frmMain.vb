@@ -15,6 +15,7 @@
 	End Sub
 
 	Private Sub frmMain_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+		ContinueLoading = False
 		Status("Closing...")
 		tmr.Enabled = False
 
@@ -59,9 +60,10 @@
 
 			SetControls(True, True, True, True, True, True)
 
-			'LeftInput = New InputData(0, 6)
-			'MiddleInput = New InputData(0, 1)
-			'RightInput = New InputData(0, 5)
+
+			LeftInput = New InputData(0, 6)
+			MiddleInput = New InputData(0, 1)
+			RightInput = New InputData(0, 5)
 		End If
 
 		Loaded = True
@@ -132,7 +134,7 @@
 		CheckNoteDisable()
 	End Sub
 
-	Private Sub CheckNoteDisable()
+	Private Sub CheckNoteDisable() 'Used to disable alter notes and stuff.
 		If Not grpOutput.Enabled Or Not Loaded Then Return
 
 		'Is the input and output the same?
@@ -587,10 +589,9 @@
 	Private Sub chkOldNote_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkOldNote.CheckedChanged
 		RemoveOldNotes = sender.checked
 	End Sub
-#End Region
 
 	Private Sub chkNoteOut_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkNoteOut.CheckedChanged
-		If Not Loaded Then Return
+		If Not Loaded Then Return 'We don't need to change anything here until we are done loading.
 
 		NoteOut = chkNoteOut.Checked
 
@@ -601,11 +602,13 @@
 		radRight2.Enabled = chkNoteOut.Checked
 
 		If NoteOut = False Then
-
 			radLeft.Checked = True
 			radMiddle.Checked = True
 			radRight.Checked = True
 		End If
 
 	End Sub
+#End Region
+
+	
 End Class

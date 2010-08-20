@@ -1,0 +1,4 @@
+﻿Features I would like:
+
+*Think of more feature to add.
+*Work on debuging

@@ -30,11 +30,13 @@
 	End Sub
 
 	Private Sub InDevice_ChannelMessageReceived(ByVal sender As Object, ByVal e As Sanford.Multimedia.Midi.ChannelMessageEventArgs) Handles InDevice.ChannelMessageReceived
+		'If note output is false then return
 		If Not NoteOut Then Return
 
 		'If the message is comeing from the selected midi channel.
 		If e.Message.MidiChannel = MidiInput Then
 
+			'Create a message from the input device.
 			Dim Message As New Midi.ChannelMessageBuilder(e.Message)
 
 			'Is it a note on or off?
@@ -43,13 +45,13 @@
 				'Is the note on? (volume more then 0)
 				If Message.Data2 > 0 Then
 
-					If SetVolumeMax Then
-						Message.Data2 = 127
+					If SetVolumeMax Then 'Set the volume to max?
+						Message.Data2 = 127	'127 is the maximum Data2 can be. (0 is minimum)
 					End If
 
 					'If alter note for left pedal is checked then  if the pedal is down then lower the volume.
 					If Not frmMain.radLeft.Checked Then
-						If LeftP Then Message.Data2 = 20
+						If LeftP Then Message.Data2 = 40
 					End If
 
 					'Pedles
