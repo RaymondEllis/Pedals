@@ -3,3 +3,5 @@
 *Think of more feature to add.
 *Work on debuging. Better unhandled error messages.
 *Add saving to save all the settings to a settings file.
+*Add the ability to add more joystick to MIDI out
+*Allow you to use MIDI pedals like a joystick

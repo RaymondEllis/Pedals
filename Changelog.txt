@@ -1,3 +1,5 @@
+1.5:
+Fixed small bug: you could set the MIDI channle to 16 and would crash.
 
 1.4:
 Can now disable outputing notes. So you can use pedals on the same in/out device.  Does not work on mine may work on others.
