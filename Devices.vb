@@ -17,11 +17,6 @@
 	''' </summary>
 	''' <param name="message">message to send</param>
     Public Sub Send(ByVal message As Midi.ChannelMessageBuilder)
-        'For n As Integer = 0 To 15
-        '    message.MidiChannel = n
-        '    message.Build()
-        '    Send(message.Result)
-        'Next
         message.Build()
         Send(message.Result)
     End Sub

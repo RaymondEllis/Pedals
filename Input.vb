@@ -108,7 +108,10 @@ Public Class InputData
 	Public SwitchOn As Integer
 
 	Public Sub New()
-	End Sub
+    End Sub
+    Public Sub New(ByVal Data As String)
+        FromString(Data)
+    End Sub
 	Public Sub New(ByVal ID_ As Integer, ByVal Axis_ As Integer, Optional ByVal Reverse_ As Boolean = True, Optional ByVal SwitchOn_ As Integer = 127)
 		ID = ID
 		Axis = Axis_
@@ -132,4 +135,16 @@ Public Class InputData
 		Return GetAxis(ID, Axis)
 	End Function
 
+
+    Public Overrides Function ToString() As String
+        Return ID & "," & Axis & "," & Reverse & "," & SwitchOn
+    End Function
+
+    Public Sub FromString(ByVal Data As String)
+        Dim tmp() As String = Split(Data, ",")
+        ID = tmp(0)
+        Axis = tmp(1)
+        Reverse = tmp(2)
+        SwitchOn = tmp(3)
+    End Sub
 End Class

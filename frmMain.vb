@@ -15,7 +15,9 @@
 	End Sub
 
 	Private Sub frmMain_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
-		ContinueLoading = False
+        ContinueLoading = False
+
+        If Loaded Then Save()
 		Status("Closing...")
 		tmr.Enabled = False
 
@@ -60,12 +62,13 @@
 			If EnableJoysticks Then
 				SetControls(True, True, True, True, True, True)
 
-				If System.Diagnostics.Debugger.IsAttached Then
-					LeftInput = New InputData(0, 6)
-					MiddleInput = New InputData(0, 1)
-					RightInput = New InputData(0, 5)
+                'If System.Diagnostics.Debugger.IsAttached Then
+                '	LeftInput = New InputData(0, 6)
+                '	MiddleInput = New InputData(0, 1)
+                '	RightInput = New InputData(0, 5)
 
-				End If
+                'End If
+                Open()
 			Else
 				SetControls(True, True, True, False, True, True)
 			End If
@@ -91,6 +94,111 @@
 		If Debug Then chkDebug.Enabled = Value
 		If Misc Then grpMisc.Enabled = Value
 	End Sub
+#End Region
+
+#Region "Open/Save"
+
+    Public Sub Open()
+        If Not IO.File.Exists("Pedals.cfg") Then Return
+
+        Dim sr As New IO.StreamReader("Pedals.cfg")
+        sr.ReadLine()
+
+        Do
+            Dim CurrentLine As String = sr.ReadLine
+            Dim Equals As Integer = CurrentLine.IndexOf("=")
+            Dim Name As String = CurrentLine.Substring(0, Equals)
+            Dim Data As String = CurrentLine.Substring(Equals + 1)
+
+            Select Case LCase(Name)
+                'Input
+                Case "input device"
+                    comInput.SelectedItem = Data
+                Case "input channel"
+                    numInputChannel.Value = Data
+
+                    'Output
+                Case "output device"
+                    comOutput.SelectedItem = Data
+                Case "output channel"
+                    numInputChannel.Value = Data
+                Case "output notes"
+                    chkNoteOut.Checked = Data
+
+                    'Misc
+                Case "max volume"
+                    chkMaxVolume.Checked = Data
+                Case "remove old notes"
+                    chkOldNote.Checked = Data
+
+                    'Left pedal
+                Case "left midi"
+                    radLeft.Checked = Data
+                Case "left midi channel"
+                    comLeft.SelectedItem = Data
+                Case "left joystick"
+                    LeftInput = New InputData(Data)
+
+                    'Middle pedal
+                Case "middle midi"
+                    radMiddle.Checked = Data
+                Case "middle midi channel"
+                    comMiddle.SelectedItem = Data
+                Case "middle joystick"
+                    MiddleInput = New InputData(Data)
+
+                    'Right pedal
+                Case "right midi"
+                    radRight.Checked = Data
+                Case "right midi channel"
+                    comRight.SelectedItem = Data
+                Case "right joystick"
+                    RightInput = New InputData(Data)
+
+            End Select
+        Loop Until sr.EndOfStream
+        sr.Close()
+
+    End Sub
+
+    Public Sub Save()
+        Status("Saving...")
+        Dim tmp As String = "Pedals config file."
+
+        'Input
+        tmp &= vbNewLine & "Input device=" & comInput.SelectedItem
+        tmp &= vbNewLine & "Input channel=" & numInputChannel.Value
+
+        'Output
+        tmp &= vbNewLine & "Output device=" & comOutput.SelectedItem
+        tmp &= vbNewLine & "Output channel=" & numInputChannel.Value
+        tmp &= vbNewLine & "Output notes=" & chkNoteOut.Checked
+
+        'Misc
+        tmp &= vbNewLine & "Max volume=" & chkMaxVolume.Checked
+        tmp &= vbNewLine & "Remove old notes=" & chkOldNote.Checked
+
+
+        'Left pedal.
+        tmp &= vbNewLine & "Left MIDI=" & radLeft.Checked
+        tmp &= vbNewLine & "Left MIDI Channel=" & comLeft.SelectedItem
+        tmp &= vbNewLine & "Left joystick=" & LeftInput.ToString
+        'Middle pedal.
+        tmp &= vbNewLine & "Middle MIDI=" & radMiddle.Checked
+        tmp &= vbNewLine & "Middle MIDI Channel=" & comMiddle.SelectedItem
+        tmp &= vbNewLine & "Middle joystick=" & MiddleInput.ToString
+        'Right pedal.
+        tmp &= vbNewLine & "Right MIDI=" & radRight.Checked
+        tmp &= vbNewLine & "Right MIDI Channel=" & comRight.SelectedItem
+        tmp &= vbNewLine & "Right joystick=" & RightInput.ToString
+
+        Dim sw As New IO.StreamWriter("Pedals.cfg")
+        sw.Write(tmp)
+        sw.Close()
+
+        Status("Saved!")
+    End Sub
+
 #End Region
 
 #Region "Get Input/Output Devices"
@@ -432,10 +540,16 @@
 
 #Region "Controls"
 	Private Sub radLeft_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radLeft.CheckedChanged
-		comLeft.Enabled = sender.checked
+        comLeft.Enabled = sender.checked
+        If sender.checked = False Then
+            radLeft2.Checked = True
+        End If
 	End Sub
 	Private Sub radMiddle_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radMiddle.CheckedChanged
-		comMiddle.Enabled = sender.checked
+        comMiddle.Enabled = sender.checked
+        If sender.checked = False Then
+            radMiddle2.Checked = True
+        End If
 		If sender.checked And MiddleP Then
 			Dim tmp As New ChannelMessageBuilder
 			tmp.Command = Midi.ChannelCommand.NoteOff
@@ -450,7 +564,10 @@
 		End If
 	End Sub
 	Private Sub radRight_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radRight.CheckedChanged
-		comRight.Enabled = sender.checked
+        comRight.Enabled = sender.checked
+        If sender.checked = False Then
+            radRight2.Checked = True
+        End If
 		If sender.checked And RightP Then
 			Dim tmp As New ChannelMessageBuilder
 			tmp.Command = Midi.ChannelCommand.NoteOff
@@ -659,4 +776,5 @@
 		End If
 	End Sub
 #End Region
+
 End Class

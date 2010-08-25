@@ -613,6 +613,6 @@ Partial Class frmMain
 	Friend WithEvents chkNoteOut As System.Windows.Forms.CheckBox
 	Friend WithEvents ToolTips As System.Windows.Forms.ToolTip
 	Friend WithEvents btnTest As System.Windows.Forms.Button
-	Friend WithEvents tmrTest As System.Windows.Forms.Timer
+    Friend WithEvents tmrTest As System.Windows.Forms.Timer
 
 End Class
