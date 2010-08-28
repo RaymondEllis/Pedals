@@ -183,15 +183,15 @@
         'Left pedal.
         tmp &= vbNewLine & "Left MIDI=" & radLeft.Checked
         tmp &= vbNewLine & "Left MIDI Channel=" & comLeft.SelectedItem
-        tmp &= vbNewLine & "Left joystick=" & LeftInput.ToString
+        If LeftInput IsNot Nothing Then tmp &= vbNewLine & "Left joystick=" & LeftInput.ToString
         'Middle pedal.
         tmp &= vbNewLine & "Middle MIDI=" & radMiddle.Checked
         tmp &= vbNewLine & "Middle MIDI Channel=" & comMiddle.SelectedItem
-        tmp &= vbNewLine & "Middle joystick=" & MiddleInput.ToString
+        If MiddleInput IsNot Nothing Then tmp &= vbNewLine & "Middle joystick=" & MiddleInput.ToString
         'Right pedal.
         tmp &= vbNewLine & "Right MIDI=" & radRight.Checked
         tmp &= vbNewLine & "Right MIDI Channel=" & comRight.SelectedItem
-        tmp &= vbNewLine & "Right joystick=" & RightInput.ToString
+        If RightInput IsNot Nothing Then tmp &= vbNewLine & "Right joystick=" & RightInput.ToString
 
         Dim sw As New IO.StreamWriter("Pedals.cfg")
         sw.Write(tmp)
