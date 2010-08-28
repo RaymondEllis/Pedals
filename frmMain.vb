@@ -40,6 +40,7 @@
 	End Sub
 
 	Private Sub frmMain_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        Me.Text = "Pedals v" & Application.ProductVersion.ToString
 
 		'Fill boxs.
 		GetDevices()

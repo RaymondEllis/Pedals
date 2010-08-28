@@ -9,7 +9,7 @@ Imports System.Runtime.InteropServices
 ' Review the values of the assembly attributes
 
 <Assembly: AssemblyTitle("Pedals")> 
-<Assembly: AssemblyDescription("")> 
+<Assembly: AssemblyDescription("Use a joystick as a MIDI device.")> 
 <Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("Pedals")> 
 <Assembly: AssemblyCopyright("Copyright ©  2010 Raymond Ellis")> 
@@ -30,6 +30,5 @@ Imports System.Runtime.InteropServices
 ' You can specify all the values or you can default the Build and Revision Numbers 
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
-
-<Assembly: AssemblyVersion("1.0.0.0")> 
-<Assembly: AssemblyFileVersion("1.0.0.0")> 
+<Assembly: AssemblyVersion("1.5.0")> 
+'<Assembly: AssemblyFileVersion("1.5.0")> 
