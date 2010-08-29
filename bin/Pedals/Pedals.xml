@@ -6,9 +6,14 @@ Pedals
 </name>
 </assembly>
 <members>
-<member name="F:Pedals.InputData.SwitchOn">
+<member name="M:Pedals.MidiDevice.Send(Sanford.Multimedia.Midi.ChannelMessageBuilder)">
 	<summary>
- If axis is less then or equals to SwitchOn then turn the switch on.
+ Will build and send a message.
+ </summary>
+	<param name="message">message to send</param>
+</member><member name="F:Pedals.InputData.SwitchOn">
+	<summary>
+ If an axis is less then or equals to SwitchOn then turn the switch on.
  </summary>
 </member><member name="P:Pedals.My.Resources.Resources.ResourceManager">
 	<summary>
@@ -23,11 +28,6 @@ Pedals
 	<summary>
   A strongly-typed resource class, for looking up localized strings, etc.
 </summary>
-</member><member name="M:Pedals.Devices.Send(Sanford.Multimedia.Midi.ChannelMessageBuilder)">
-	<summary>
- Will build and send a message.
- </summary>
-	<param name="message">message to send</param>
 </member>
 </members>
 </doc>

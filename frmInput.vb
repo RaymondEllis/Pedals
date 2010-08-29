@@ -4,8 +4,11 @@ Public Class frmInput
 
 	Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
 		If CurrentJoystick.ID = -1 Then
-			CurrentJoystick = Nothing
-		End If
+            CurrentJoystick = Nothing
+        Else
+            CurrentJoystick.ControllerType = [Enum].Parse(GetType(ControllerType0), comControllerType.SelectedItem.ToString)
+            CurrentJoystick.Controller = [Enum].Parse(GetType(Midi.ControllerType), comController.SelectedItem.ToString)
+        End If
 		Me.DialogResult = System.Windows.Forms.DialogResult.OK
 		Me.Close()
 	End Sub
@@ -64,7 +67,7 @@ Public Class frmInput
 			OK_Button.Enabled = True
 			btnFind.Enabled = True
 
-			lblAxis.Text = CurrentJoystick.GetAsisPosition
+            lblAxis.Text = CurrentJoystick.GetAxisPosition
 
 		Else
 			Dim i As Integer = -1
@@ -116,7 +119,8 @@ Public Class frmInput
 		'	oldJoy(n) = New Joy0
 		'Next
 
-		If CurrentJoystick IsNot Nothing Then tmr.Enabled = True
+        If CurrentJoystick IsNot Nothing Then tmr.Enabled = True
+
 	End Sub
 
 	Public Overloads Function ShowDialog(ByVal Input As InputData) As DialogResult
@@ -149,4 +153,20 @@ Public Class frmInput
 	'Private Class joyO
 	'	Public X, Y, Z, rX, rY, rZ, s0, s1 As Integer
 	'End Class
+
+    Private Sub radMIDI_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        ' If radMIDI.Checked Then
+        comController.Items.AddRange([Enum].GetNames(GetType(Midi.ControllerType)))
+        'Else
+        comController.Items.AddRange([Enum].GetNames(GetType(Midi.ControllerType)))
+        'End If
+    End Sub
+
+    Private Sub comControllerType_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comControllerType.SelectedIndexChanged
+        If comControllerType.SelectedItem = ControllerType0.MIDI.ToString Then
+            comController.Enabled = True
+        Else
+            comController.Enabled = False
+        End If
+    End Sub
 End Class

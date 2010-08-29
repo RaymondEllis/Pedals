@@ -3,6 +3,18 @@
 	Public dInput As DirectInput
 	Public EnableJoysticks As Boolean = False
 
+    Public Enum InputDevices
+        Joystick
+        Keyboard
+        MIDI
+    End Enum
+    Public Enum ControllerType0
+        MIDI
+        AlterSustain
+        AlterSostenuto
+        AlterSoft
+    End Enum
+
 	Public Sub CreateInput()
 		Status("Creating joystick input...")
 		'Create direct input
@@ -95,49 +107,68 @@ End Module
 
 
 Public Class InputData
-	Public Axis As Integer
-	Public ID As Integer
-	Public OldPosition As Integer
+    Public Device As MidiDevice
+    Public Input As Integer = InputDevices.Joystick
 
-	Public Reverse As Boolean = True
+    Public Axis As Integer = -1
+    Public ID As Integer = -1
+    Public OldPosition As Integer
+
+    Public Reverse As Boolean = True
 
 
-	''' <summary>
-	''' If axis is less then or equals to SwitchOn then turn the switch on.
-	''' </summary>
-	Public SwitchOn As Integer
+    ''' <summary>
+    ''' If an axis is less then or equals to SwitchOn then turn the switch on.
+    ''' </summary>
+    Public SwitchOn As Integer
 
-	Public Sub New()
+    Public Pressed, Changed As Boolean
+
+    'Output
+    Public Controller, ControllerType As Integer
+    Public IsControllerSwitch As Boolean = False
+
+
+    Public Sub New()
     End Sub
     Public Sub New(ByVal Data As String)
         FromString(Data)
     End Sub
-	Public Sub New(ByVal ID_ As Integer, ByVal Axis_ As Integer, Optional ByVal Reverse_ As Boolean = True, Optional ByVal SwitchOn_ As Integer = 127)
-		ID = ID
-		Axis = Axis_
-		Reverse = Reverse_
-		SwitchOn = SwitchOn_
-	End Sub
+    Public Sub New(ByVal ID_ As Integer, ByVal Axis_ As Integer, Optional ByVal Reverse_ As Boolean = True, Optional ByVal SwitchOn_ As Integer = 127)
+        ID = ID
+        Axis = Axis_
+        Reverse = Reverse_
+        SwitchOn = SwitchOn_
+    End Sub
 
-	Public Sub SetData(ByVal ID_ As Integer, ByVal Axis_ As Integer, Optional ByVal Reverse_ As Boolean = True, Optional ByVal SwitchOn_ As Integer = 127)
-		ID = ID
-		Axis = Axis_
-		Reverse = Reverse_
-		SwitchOn = SwitchOn_
-	End Sub
+    Public Sub SetData(ByVal ID_ As Integer, ByVal Axis_ As Integer, Optional ByVal Reverse_ As Boolean = True, Optional ByVal SwitchOn_ As Integer = 127)
+        ID = ID
+        Axis = Axis_
+        Reverse = Reverse_
+        SwitchOn = SwitchOn_
+    End Sub
 
-	Public Function GetAsisPosition() As Integer
+    Public Function GetAxisPosition() As Integer
+        Dim pos As Integer = 0
 
-		If Reverse Then
-			Return (-GetAxis(ID, Axis)) + 127
-		End If
+        Select Case Input
+            Case InputDevices.Joystick
+                pos = GetAxis(ID, Axis)
 
-		Return GetAxis(ID, Axis)
-	End Function
 
+        End Select
+
+
+
+        If Reverse Then
+            Return (-pos) + 127
+        Else
+            Return pos
+        End If
+    End Function
 
     Public Overrides Function ToString() As String
-        Return ID & "," & Axis & "," & Reverse & "," & SwitchOn
+        Return [Enum].Parse(GetType(InputDevices), Input) & "#" & ID & " Axis:" & Axis
     End Function
 
     Public Sub FromString(ByVal Data As String)
@@ -146,5 +177,75 @@ Public Class InputData
         Axis = tmp(1)
         Reverse = tmp(2)
         SwitchOn = tmp(3)
+    End Sub
+
+
+    Public Sub DoInput()
+        If ID = -1 Then Return
+        Dim Pos As Integer = GetAxisPosition()
+
+        'Is the current position the same as the old postion?
+        If Pos = OldPosition Then Return 'If so then we need to leave.
+
+        If Pos >= SwitchOn Then
+            If Not Pressed Then
+                Pressed = True
+                Changed = True
+            Else
+                Changed = False
+            End If
+        Else
+            If Pressed Then
+                Pressed = False
+                Changed = True
+            Else
+                Changed = False
+            End If
+        End If
+
+        'What should we control?
+        Select Case ControllerType
+            Case ControllerType0.MIDI
+                Dim m As New ChannelMessageBuilder
+                m.Command = ChannelCommand.Controller
+                m.Data1 = Controller
+                If IsControllerSwitch And Changed Then
+                    If Pressed Then
+                        m.Data2 = 127
+                    Else
+                        m.Data2 = 0
+                    End If
+                    CurrentDevice.Send(m)
+                ElseIf Not IsControllerSwitch Then
+                    m.Data2 = Pos
+                    CurrentDevice.Send(m)
+                End If
+
+            Case ControllerType0.AlterSustain
+                If Changed Then
+                    If Pressed Then
+                        Device.PressSustain()
+                    Else
+                        Device.ReleaseSustain()
+                    End If
+                End If
+                Device.SustainPressed = Pressed
+
+            Case ControllerType0.AlterSostenuto
+                If Changed Then
+                    If Pressed Then
+                        Device.PressSostenuto()
+                    Else
+                        Device.ReleaseSostenuto()
+                    End If
+                End If
+                Device.SostenutoPressed = Pressed
+
+            Case ControllerType0.AlterSoft
+                Device.SoftPressed = Pressed
+
+        End Select
+
+
     End Sub
 End Class
