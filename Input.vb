@@ -168,7 +168,7 @@ Public Class InputData
     End Function
 
     Public Overrides Function ToString() As String
-        Return [Enum].Parse(GetType(InputDevices), Input) & "#" & ID & " Axis:" & Axis
+        Return CType(Input, InputDevices).ToString & "#" & ID & " Axis:" & Axis
     End Function
 
     Public Sub FromString(ByVal Data As String)

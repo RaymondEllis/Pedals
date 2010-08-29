@@ -74,10 +74,12 @@
                 '	RightInput = New InputData(0, 5)
 
                 'End If
-                Open()
+
             Else
                 EnableControls(True, True, True, True, True)
             End If
+
+            Open()
         End If
 
         Loaded = True
@@ -100,7 +102,11 @@
 #Region "Open/Save"
 
     Public Sub Open()
-        If Not IO.File.Exists("Pedals.cfg") Then Return
+        If Not IO.File.Exists("Pedals.cfg") Then
+            AddDevice(0, 0, 0, 0)
+
+            Return
+        End If
 
 
 
@@ -145,14 +151,15 @@
 
     Private Sub comInput_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comInput.SelectedIndexChanged
         If Not Loaded Or CurrentDevice Is Nothing Then Return 'We don't need to change anything here until we are done loading.
-        CurrentDevice.InDeviceID = comInput.SelectedIndex
-        CurrentDevice.SetListItem()
+        'CurrentDevice.InDeviceID = comInput.SelectedIndex
+        UpdateDevice(comInput.SelectedIndex)
         CheckNoteDisable()
     End Sub
     Private Sub comOutput_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comOutput.SelectedIndexChanged
         If Not Loaded Or CurrentDevice Is Nothing Then Return 'We don't need to change anything here until we are done loading.
-        CurrentDevice.OutDeviceID = comOutput.SelectedIndex
-        CurrentDevice.SetListItem()
+        'CurrentDevice.OutDeviceID = comOutput.SelectedIndex
+        'CurrentDevice.SetListItem()
+        UpdateDevice(, comOutput.SelectedIndex)
         CheckNoteDisable()
     End Sub
 

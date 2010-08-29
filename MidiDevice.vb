@@ -32,24 +32,20 @@
         OutChannel = OutputChannel
     End Sub
 
-    Public Sub SetListItem()
-        frmMain.lstDevices.Items(Index) = ToString()
-    End Sub
 
     Public Overrides Function ToString() As String
         Return InputDevice.GetDeviceCapabilities(InDeviceID).name & vbTab & vbTab & OutputDevice.GetDeviceCapabilities(OutDeviceID).name
     End Function
 
     Public Sub Dispose()
-        Recording = False
+            Recording = False
+
         If InDevice IsNot Nothing Then
             InDevice.Close()
-            InDevice.Dispose()
             InDevice = Nothing
         End If
         If OutDevice IsNot Nothing Then
             OutDevice.Close()
-            OutDevice.Dispose()
             OutDevice = Nothing
         End If
     End Sub

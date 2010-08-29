@@ -5,17 +5,19 @@
     Public Sub AddDevice(ByVal InDeviceID As Integer, ByVal OutDeviceID As Integer, ByVal InChannel As Integer, ByVal OutChannel As Integer)
 
         Dim tmp As New MidiDevice(InChannel, OutChannel)
-
+        tmp.Index = Device.Count
 
         'Search to see if any others are using the same ID's
         For Each dev As MidiDevice In Device
-            If InDeviceID = dev.InDeviceID Then
-                tmp.InDevice = dev.InDevice
-                tmp.InDeviceID = InDeviceID
-            End If
-            If OutDeviceID = dev.OutDeviceID Then
-                tmp.OutDevice = dev.OutDevice
-                tmp.OutDeviceID = OutDeviceID
+            If Not dev.Index = tmp.Index Then
+                If InDeviceID = dev.InDeviceID Then
+                    tmp.InDevice = dev.InDevice
+                    tmp.InDeviceID = InDeviceID
+                End If
+                If OutDeviceID = dev.OutDeviceID Then
+                    tmp.OutDevice = dev.OutDevice
+                    tmp.OutDeviceID = OutDeviceID
+                End If
             End If
         Next
 
@@ -32,11 +34,45 @@
         End If
 
 
-        tmp.Index = Device.Count
+
         'Add it to the lists.
         Device.Add(tmp)
         frmMain.lstDevices.Items.Add(tmp.ToString)
         frmMain.lstDevices.SelectedIndex = tmp.Index
+    End Sub
+
+    Public Sub UpdateDevice(Optional ByVal InDeviceID As Integer = -1, Optional ByVal OutDeviceID As Integer = -1)
+        If InDeviceID = -1 Then InDeviceID = CurrentDevice.InDeviceID
+        If OutDeviceID = -1 Then OutDeviceID = CurrentDevice.OutDeviceID
+
+
+        'Search to see if any others are using the same ID's
+        For Each dev As MidiDevice In Device
+            If Not dev.Index = CurrentDevice.Index Then
+                If InDeviceID = dev.InDeviceID Then
+                    CurrentDevice.InDevice = dev.InDevice
+                    CurrentDevice.InDeviceID = InDeviceID
+                End If
+                If OutDeviceID = dev.OutDeviceID Then
+                    CurrentDevice.OutDevice = dev.OutDevice
+                    CurrentDevice.OutDeviceID = OutDeviceID
+                End If
+            End If
+        Next
+
+        'Did we find the devices.
+        If CurrentDevice.InDeviceID <> InDeviceID Then
+            'We did not find the input device.
+            CurrentDevice.InDevice = New InputDevice(InDeviceID)
+            CurrentDevice.InDeviceID = InDeviceID
+        End If
+        If CurrentDevice.OutDeviceID <> OutDeviceID Then
+            'We did not find the output device.
+            CurrentDevice.OutDevice = New OutputDevice(OutDeviceID)
+            CurrentDevice.OutDeviceID = OutDeviceID
+        End If
+
+        frmMain.lstDevices.Items(CurrentDevice.Index) = CurrentDevice.ToString()
     End Sub
 
     Public Sub AddInput(ByVal Input As InputData)

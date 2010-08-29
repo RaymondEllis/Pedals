@@ -8,6 +8,7 @@ Public Class frmInput
         Else
             CurrentJoystick.ControllerType = [Enum].Parse(GetType(ControllerType0), comControllerType.SelectedItem.ToString)
             CurrentJoystick.Controller = [Enum].Parse(GetType(Midi.ControllerType), comController.SelectedItem.ToString)
+            CurrentJoystick.IsControllerSwitch = IsSwitch(CurrentJoystick.Controller)
         End If
 		Me.DialogResult = System.Windows.Forms.DialogResult.OK
 		Me.Close()
