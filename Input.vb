@@ -56,6 +56,7 @@
 	End Sub
 
 	Public Function GetAxis(ByVal JoysitckID As Integer, ByVal Axis As Integer) As Integer
+        If Not EnableJoysticks Then Return 0
 
 		Dim State As JoystickState = Joystick(JoysitckID).GetCurrentState
 		Select Case Axis
@@ -95,7 +96,7 @@
 		End If
 
 		If dInput IsNot Nothing Then
-			dInput.Dispose()
+            dInput.Dispose()
 		End If
 
 		Status("Distroying joystick input... Done!")
@@ -181,6 +182,7 @@ Public Class InputData
 
 
     Public Sub DoInput()
+        If Not EnableJoysticks Then Return
         If ID = -1 Then Return
         Dim Pos As Integer = GetAxisPosition()
 

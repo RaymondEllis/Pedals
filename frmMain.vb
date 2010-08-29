@@ -14,6 +14,7 @@
 
 	Private Sub frmMain_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
         ContinueLoading = False
+        EnableJoysticks = False
 
         If Loaded Then Save()
 		Status("Closing...")
@@ -681,6 +682,14 @@
 
         If frmInput.ShowDialog(New InputData) = System.Windows.Forms.DialogResult.OK Then
             AddInput(frmInput.CurrentJoystick)
+            lstInput.SelectedIndex = lstInput.Items.Count - 1
+        End If
+    End Sub
+
+    Private Sub btnJoystickEdit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnJoystickEdit.Click
+        If frmInput.ShowDialog(lstInput.SelectedItem) = System.Windows.Forms.DialogResult.OK Then
+            CurrentDevice.Input(lstInput.SelectedIndex) = frmInput.CurrentJoystick
+            lstInput.Items(lstInput.SelectedIndex) = frmInput.CurrentJoystick
         End If
     End Sub
 End Class

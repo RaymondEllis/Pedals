@@ -104,7 +104,9 @@ Module Misc
 		'Delete the old debug file.
 		If IO.File.Exists("debug.txt") Then IO.File.Delete("debug.txt")
 
-		Application.Run(frmMain)
+        Application.Run(frmMain)
+
+        MsgBox("Closed")
 	End Sub
 
 #Region "Error handling"

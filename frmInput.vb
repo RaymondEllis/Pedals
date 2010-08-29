@@ -67,8 +67,15 @@ Public Class frmInput
 		If CurrentJoystick.Axis > -1 Then
 			OK_Button.Enabled = True
 			btnFind.Enabled = True
-
-            lblAxis.Text = CurrentJoystick.GetAxisPosition
+            Dim pos As Integer = CurrentJoystick.GetAxisPosition
+            lblAxis.Text = pos
+            If pos >= CurrentJoystick.SwitchOn Then
+                lblSwitch.Text = "Switch On"
+                lblSwitch.BackColor = Color.White
+            Else
+                lblSwitch.Text = "Switch Off"
+                lblSwitch.BackColor = Color.Silver
+            End If
 
 		Else
 			Dim i As Integer = -1
@@ -120,7 +127,15 @@ Public Class frmInput
 		'	oldJoy(n) = New Joy0
 		'Next
 
-        If CurrentJoystick IsNot Nothing Then tmr.Enabled = True
+        If CurrentJoystick IsNot Nothing Then
+            tmr.Enabled = True
+        Else
+            numSwitchOn.Value = CurrentJoystick.SwitchOn
+            comControllerType.SelectedIndex = CurrentJoystick.ControllerType
+            comController.SelectedIndex = CurrentJoystick.Controller
+            chkRev.Checked = CurrentJoystick.Reverse
+        End If
+
 
 	End Sub
 
@@ -164,10 +179,17 @@ Public Class frmInput
     End Sub
 
     Private Sub comControllerType_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comControllerType.SelectedIndexChanged
+        If Not Loaded Then Return
+        CurrentJoystick.ControllerType = comControllerType.SelectedIndex
         If comControllerType.SelectedItem = ControllerType0.MIDI.ToString Then
             comController.Enabled = True
         Else
             comController.Enabled = False
         End If
+    End Sub
+
+    Private Sub comController_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comController.SelectedIndexChanged
+        If Not Loaded Then Return
+        CurrentJoystick.Controller = comController.SelectedIndex
     End Sub
 End Class

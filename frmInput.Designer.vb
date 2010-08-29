@@ -37,6 +37,7 @@ Partial Class frmInput
         Me.ToolTips = New System.Windows.Forms.ToolTip(Me.components)
         Me.comController = New System.Windows.Forms.ComboBox()
         Me.comControllerType = New System.Windows.Forms.ComboBox()
+        Me.lblSwitch = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.numSwitchOn, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -164,6 +165,16 @@ Partial Class frmInput
         Me.comControllerType.Size = New System.Drawing.Size(185, 21)
         Me.comControllerType.TabIndex = 7
         '
+        'lblSwitch
+        '
+        Me.lblSwitch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblSwitch.Location = New System.Drawing.Point(264, 130)
+        Me.lblSwitch.Name = "lblSwitch"
+        Me.lblSwitch.Size = New System.Drawing.Size(50, 50)
+        Me.lblSwitch.TabIndex = 8
+        Me.lblSwitch.Text = "Switch Off"
+        Me.lblSwitch.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'frmInput
         '
         Me.AcceptButton = Me.OK_Button
@@ -171,6 +182,7 @@ Partial Class frmInput
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(595, 344)
+        Me.Controls.Add(Me.lblSwitch)
         Me.Controls.Add(Me.comControllerType)
         Me.Controls.Add(Me.comController)
         Me.Controls.Add(Me.numSwitchOn)
@@ -208,5 +220,6 @@ Partial Class frmInput
     Friend WithEvents ToolTips As System.Windows.Forms.ToolTip
     Friend WithEvents comController As System.Windows.Forms.ComboBox
     Friend WithEvents comControllerType As System.Windows.Forms.ComboBox
+    Friend WithEvents lblSwitch As System.Windows.Forms.Label
 
 End Class

@@ -55,6 +55,7 @@ Partial Class frmMain
         Me.lstInput = New System.Windows.Forms.ListBox()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.btnInputNew = New System.Windows.Forms.Button()
+        Me.btnJoystickEdit = New System.Windows.Forms.Button()
         Me.grpOutput.SuspendLayout()
         CType(Me.numOutputChannel, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.grpInput.SuspendLayout()
@@ -359,10 +360,19 @@ Partial Class frmMain
         '
         Me.btnInputNew.Location = New System.Drawing.Point(186, 230)
         Me.btnInputNew.Name = "btnInputNew"
-        Me.btnInputNew.Size = New System.Drawing.Size(75, 23)
+        Me.btnInputNew.Size = New System.Drawing.Size(44, 23)
         Me.btnInputNew.TabIndex = 27
         Me.btnInputNew.Text = "New"
         Me.btnInputNew.UseVisualStyleBackColor = True
+        '
+        'btnJoystickEdit
+        '
+        Me.btnJoystickEdit.Location = New System.Drawing.Point(186, 259)
+        Me.btnJoystickEdit.Name = "btnJoystickEdit"
+        Me.btnJoystickEdit.Size = New System.Drawing.Size(44, 23)
+        Me.btnJoystickEdit.TabIndex = 27
+        Me.btnJoystickEdit.Text = "Edit"
+        Me.btnJoystickEdit.UseVisualStyleBackColor = True
         '
         'frmMain
         '
@@ -371,6 +381,7 @@ Partial Class frmMain
         Me.ClientSize = New System.Drawing.Size(935, 547)
         Me.Controls.Add(Me.Label9)
         Me.Controls.Add(Me.lstInput)
+        Me.Controls.Add(Me.btnJoystickEdit)
         Me.Controls.Add(Me.btnInputNew)
         Me.Controls.Add(Me.btnDeviceNew)
         Me.Controls.Add(Me.Label8)
@@ -435,5 +446,6 @@ Partial Class frmMain
     Friend WithEvents lstInput As System.Windows.Forms.ListBox
     Friend WithEvents Label9 As System.Windows.Forms.Label
     Friend WithEvents btnInputNew As System.Windows.Forms.Button
+    Friend WithEvents btnJoystickEdit As System.Windows.Forms.Button
 
 End Class
