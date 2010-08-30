@@ -45,6 +45,7 @@
         'Fill boxs.
         GetDevices()
 
+
         frmInput.comController.Items.AddRange([Enum].GetNames(GetType(Midi.ControllerType)))
         frmInput.comController.SelectedItem = Midi.ControllerType.SoftPedal.ToString
 
@@ -62,7 +63,9 @@
     Private Sub frmMain_Shown(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Shown
         'Init devices.
 
+
         If ContinueLoading Then
+            
 
             CreateInput()
 

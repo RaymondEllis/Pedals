@@ -249,10 +249,12 @@
     Friend Sub PressSustain()
         'Check for down keys and set them to sustain.
         Parallel.For(0, CurrentDevice.Note.Length - 1, Sub(n)
+                                                           'For n As Integer = 0 To CurrentDevice.Note.Length - 1
                                                            If CurrentDevice.Note(n) = Notes.Pressed Then
                                                                CurrentDevice.Note(n) = Notes.SustainPressed
                                                                SustainList.Add(n)
                                                            End If
+                                                           'Next
                                                        End Sub)
     End Sub
     Friend Sub ReleaseSustain()

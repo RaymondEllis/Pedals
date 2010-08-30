@@ -18,8 +18,7 @@
 	Public Sub CreateInput()
 		Status("Creating joystick input...")
 		'Create direct input
-		dInput = New DirectInput
-
+        dInput = New DirectInput
 
 		'Search for the joysticks.
 		For Each Device As DeviceInstance In dInput.GetDevices(DeviceClass.GameController, DeviceEnumerationFlags.AttachedOnly)
@@ -56,7 +55,7 @@
 	End Sub
 
 	Public Function GetAxis(ByVal JoysitckID As Integer, ByVal Axis As Integer) As Integer
-        If Not EnableJoysticks Then Return 0
+        ' If Not EnableJoysticks Then Return 0
 
 		Dim State As JoystickState = Joystick(JoysitckID).GetCurrentState
 		Select Case Axis
@@ -129,6 +128,9 @@ Public Class InputData
     Public Controller, ControllerType As Integer
     Public IsControllerSwitch As Boolean = False
 
+    Public AutoName As Boolean = True
+    Friend _Name As String
+
 
     Public Sub New()
     End Sub
@@ -169,7 +171,10 @@ Public Class InputData
     End Function
 
     Public Overrides Function ToString() As String
-        Return CType(Input, InputDevices).ToString & "#" & ID & " Axis:" & Axis
+        If AutoName Then
+            Return "Joystick#" & ID & "  Axis:" & Axis
+        End If
+        Return _Name
     End Function
 
     Public Sub FromString(ByVal Data As String)

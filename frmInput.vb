@@ -116,16 +116,18 @@ Public Class frmInput
 
 	End Sub
 
-	Private Sub frmInput_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-		For Each joy As Joystick In Joystick
-			'joy.Acquire()
-			joy.Poll()
-		Next
+    Private Sub frmInput_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
-		ReDim oldJoy(Joystick.Count - 1)
-		'For n As Integer = 0 To oldJoy.Length - 1
-		'	oldJoy(n) = New Joy0
-		'Next
+
+        For Each joy As Joystick In Joystick
+            'joy.Acquire()
+            joy.Poll()
+        Next
+
+        ReDim oldJoy(Joystick.Count - 1)
+        'For n As Integer = 0 To oldJoy.Length - 1
+        '	oldJoy(n) = New Joy0
+        'Next
 
         If CurrentJoystick IsNot Nothing Then
             tmr.Enabled = True
@@ -137,7 +139,7 @@ Public Class frmInput
         End If
 
 
-	End Sub
+    End Sub
 
 	Public Overloads Function ShowDialog(ByVal Input As InputData) As DialogResult
 		If Input Is Nothing Then
@@ -145,7 +147,9 @@ Public Class frmInput
 		End If
 		CurrentJoystick = Input
 		chkRev.Checked = CurrentJoystick.Reverse
-		numSwitchOn.Value = CurrentJoystick.SwitchOn
+        numSwitchOn.Value = CurrentJoystick.SwitchOn
+        txtName.Text = CurrentJoystick._Name
+        chkAutoName.Checked = CurrentJoystick.AutoName
 
 		Return MyBase.ShowDialog()
 	End Function
@@ -191,5 +195,16 @@ Public Class frmInput
     Private Sub comController_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comController.SelectedIndexChanged
         If Not Loaded Then Return
         CurrentJoystick.Controller = comController.SelectedIndex
+    End Sub
+
+    Private Sub chkAutoName_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkAutoName.CheckedChanged
+        If Not Loaded Then Return
+        CurrentJoystick.AutoName = chkAutoName.Checked
+        txtName.Enabled = Not chkAutoName.Checked
+    End Sub
+
+    Private Sub txtName_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtName.TextChanged
+        If Not Loaded Then Return
+        CurrentJoystick._Name = txtName.Text
     End Sub
 End Class

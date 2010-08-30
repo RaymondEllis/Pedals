@@ -106,7 +106,7 @@ Module Misc
 
         Application.Run(frmMain)
 
-        MsgBox("Closed")
+        'MsgBox("Closed")
 	End Sub
 
 #Region "Error handling"

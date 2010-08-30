@@ -379,13 +379,10 @@ Partial Class frmMain
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(935, 547)
-        Me.Controls.Add(Me.Label9)
         Me.Controls.Add(Me.lstInput)
         Me.Controls.Add(Me.btnJoystickEdit)
         Me.Controls.Add(Me.btnInputNew)
         Me.Controls.Add(Me.btnDeviceNew)
-        Me.Controls.Add(Me.Label8)
-        Me.Controls.Add(Me.Label7)
         Me.Controls.Add(Me.lstDevices)
         Me.Controls.Add(Me.btnTest)
         Me.Controls.Add(Me.grpMisc)
@@ -395,6 +392,9 @@ Partial Class frmMain
         Me.Controls.Add(Me.panDebug)
         Me.Controls.Add(Me.grpInput)
         Me.Controls.Add(Me.grpOutput)
+        Me.Controls.Add(Me.Label9)
+        Me.Controls.Add(Me.Label8)
+        Me.Controls.Add(Me.Label7)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False
         Me.Name = "frmMain"
