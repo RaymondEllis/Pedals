@@ -67,12 +67,11 @@
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Sanford.Multimedia, Version=6.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\C#\CSharpMidiToolkitV5_demo\Sanford.Multimedia.Midi\bin\Debug\Sanford.Multimedia.dll</HintPath>
+    <Reference Include="Sanford.Multimedia">
+      <HintPath>..\..\..\..\C#\Sanford\Sanford.Multimedia.Midi.Slim\bin\Debug\Sanford.Multimedia.dll</HintPath>
     </Reference>
     <Reference Include="Sanford.Multimedia.Midi.Slim">
-      <HintPath>..\..\..\..\C#\Sanford.Multimedia.Midi.Slim\bin\Debug\Sanford.Multimedia.Midi.Slim.dll</HintPath>
+      <HintPath>..\..\..\..\C#\Sanford\Sanford.Multimedia.Midi.Slim\bin\Debug\Sanford.Multimedia.Midi.Slim.dll</HintPath>
     </Reference>
     <Reference Include="SlimDX, Version=4.0.10.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -86,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
+    <Import Include="Sanford" />
     <Import Include="Sanford.Multimedia" />
     <Import Include="Sanford.Multimedia.Midi" />
     <Import Include="SlimDX" />
