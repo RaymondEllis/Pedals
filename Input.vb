@@ -145,7 +145,7 @@ Public Class InputData
     End Sub
 
     Public Sub SetData(ByVal ID_ As Integer, ByVal Axis_ As Integer, Optional ByVal Reverse_ As Boolean = True, Optional ByVal SwitchOn_ As Integer = 127)
-        ID = ID
+        ID = ID_
         Axis = Axis_
         Reverse = Reverse_
         SwitchOn = SwitchOn_

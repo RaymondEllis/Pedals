@@ -25,7 +25,7 @@ Public Class frmInput
 	'Private find As Boolean = False
 	Private Sub btnFind_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnFind.Click
 		btnFind.Enabled = False
-		CurrentJoystick.SetData(-1, -1)
+        CurrentJoystick.SetData(-1, -1)
 
 		Dim i As Integer = -1
 		For Each joy As Joystick In Joystick
@@ -69,6 +69,7 @@ Public Class frmInput
 			btnFind.Enabled = True
             Dim pos As Integer = CurrentJoystick.GetAxisPosition
             lblAxis.Text = pos
+            CurrentJoystick.DoInput()
             If pos >= CurrentJoystick.SwitchOn Then
                 lblSwitch.Text = "Switch On"
                 lblSwitch.BackColor = Color.White
@@ -82,34 +83,29 @@ Public Class frmInput
 			For Each joy As Joystick In Joystick
 				i += 1
 				joy.Poll()
-				Dim s As JoystickState = joy.GetCurrentState
+                Dim s As JoystickState = joy.GetCurrentState
+                CurrentJoystick.ID = i
 				If oldJoy(i).X <> s.X Then
-					CurrentJoystick.ID = i
 					CurrentJoystick.Axis = 0
 				ElseIf oldJoy(i).Y <> s.Y Then
-					CurrentJoystick.ID = i
 					CurrentJoystick.Axis = 1
 				ElseIf oldJoy(i).Z <> s.Z Then
-					CurrentJoystick.ID = i
 					CurrentJoystick.Axis = 2
 
 				ElseIf oldJoy(i).rX <> s.RotationX Then
-					CurrentJoystick.ID = i
 					CurrentJoystick.Axis = 3
 				ElseIf oldJoy(i).rY <> s.RotationY Then
-					CurrentJoystick.ID = i
 					CurrentJoystick.Axis = 4
 				ElseIf oldJoy(i).rZ <> s.RotationZ Then
-					CurrentJoystick.ID = i
 					CurrentJoystick.Axis = 5
 
 				ElseIf oldJoy(i).s0 <> s.GetSliders(0) Then
-					CurrentJoystick.ID = i
 					CurrentJoystick.Axis = 6
 				ElseIf oldJoy(i).s1 <> s.GetSliders(1) Then
-					CurrentJoystick.ID = i
-					CurrentJoystick.Axis = 7
-				End If
+                    CurrentJoystick.Axis = 7
+                Else
+                    CurrentJoystick.ID = -1
+                End If
 
 			Next
 		End If
@@ -141,18 +137,18 @@ Public Class frmInput
 
     End Sub
 
-	Public Overloads Function ShowDialog(ByVal Input As InputData) As DialogResult
-		If Input Is Nothing Then
-			Input = New InputData(-1, -1)
-		End If
-		CurrentJoystick = Input
-		chkRev.Checked = CurrentJoystick.Reverse
+    Public Overloads Function ShowDialog(ByRef Input As InputData) As DialogResult
+        If Input Is Nothing Then
+            Input = New InputData(-1, -1)
+        End If
+        CurrentJoystick = Input
+        chkRev.Checked = CurrentJoystick.Reverse
         numSwitchOn.Value = CurrentJoystick.SwitchOn
         txtName.Text = CurrentJoystick._Name
         chkAutoName.Checked = CurrentJoystick.AutoName
 
-		Return MyBase.ShowDialog()
-	End Function
+        Return MyBase.ShowDialog()
+    End Function
 
 	Private Sub frmInput_Shown(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Shown
 		'tmr.Enabled = True
@@ -184,7 +180,7 @@ Public Class frmInput
 
     Private Sub comControllerType_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comControllerType.SelectedIndexChanged
         If Not Loaded Then Return
-        CurrentJoystick.ControllerType = comControllerType.SelectedIndex
+        CurrentJoystick.ControllerType = [Enum].Parse(GetType(ControllerType0), comControllerType.SelectedItem.ToString)
         If comControllerType.SelectedItem = ControllerType0.MIDI.ToString Then
             comController.Enabled = True
         Else
@@ -194,7 +190,8 @@ Public Class frmInput
 
     Private Sub comController_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comController.SelectedIndexChanged
         If Not Loaded Then Return
-        CurrentJoystick.Controller = comController.SelectedIndex
+        CurrentJoystick.Controller = [Enum].Parse(GetType(Midi.ControllerType), comController.SelectedItem.ToString)
+        CurrentJoystick.IsControllerSwitch = IsSwitch(CurrentJoystick.Controller)
     End Sub
 
     Private Sub chkAutoName_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkAutoName.CheckedChanged

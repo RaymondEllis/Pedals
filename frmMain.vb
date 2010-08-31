@@ -682,16 +682,16 @@
     End Sub
 
     Private Sub btnInputNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnInputNew.Click
-
-        If frmInput.ShowDialog(New InputData) = System.Windows.Forms.DialogResult.OK Then
-            AddInput(frmInput.CurrentJoystick)
+        Dim tmp As InputData = Nothing
+        If frmInput.ShowDialog(tmp) = System.Windows.Forms.DialogResult.OK Then
+            AddInput(tmp)
             lstInput.SelectedIndex = lstInput.Items.Count - 1
         End If
     End Sub
 
     Private Sub btnJoystickEdit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnJoystickEdit.Click
-        If frmInput.ShowDialog(lstInput.SelectedItem) = System.Windows.Forms.DialogResult.OK Then
-            CurrentDevice.Input(lstInput.SelectedIndex) = frmInput.CurrentJoystick
+        If frmInput.ShowDialog(CurrentDevice.Input(lstInput.SelectedIndex)) = System.Windows.Forms.DialogResult.OK Then
+            'CurrentDevice.Input(lstInput.SelectedIndex) = frmInput.CurrentJoystick
             lstInput.Items(lstInput.SelectedIndex) = frmInput.CurrentJoystick
         End If
     End Sub
