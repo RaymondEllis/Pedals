@@ -137,18 +137,18 @@ Public Class InputData
     Public Sub New(ByVal Data As String)
         FromString(Data)
     End Sub
-    Public Sub New(ByVal ID_ As Integer, ByVal Axis_ As Integer, Optional ByVal Reverse_ As Boolean = True, Optional ByVal SwitchOn_ As Integer = 127)
-        ID = ID
-        Axis = Axis_
-        Reverse = Reverse_
-        SwitchOn = SwitchOn_
+    Public Sub New(ByVal ID As Integer, ByVal Axis As Integer, Optional ByVal Reverse As Boolean = True, Optional ByVal SwitchOn As Integer = 127)
+        Me.ID = ID
+        Me.Axis = Axis
+        Me.Reverse = Reverse
+        Me.SwitchOn = SwitchOn
     End Sub
 
-    Public Sub SetData(ByVal ID_ As Integer, ByVal Axis_ As Integer, Optional ByVal Reverse_ As Boolean = True, Optional ByVal SwitchOn_ As Integer = 127)
-        ID = ID_
-        Axis = Axis_
-        Reverse = Reverse_
-        SwitchOn = SwitchOn_
+    Public Sub SetData(ByVal ID As Integer, ByVal Axis As Integer, Optional ByVal Reverse As Boolean = True, Optional ByVal SwitchOn As Integer = 127)
+        Me.ID = ID
+        Me.Axis = Axis
+        Me.Reverse = Reverse
+        Me.SwitchOn = SwitchOn
     End Sub
 
     Public Function GetAxisPosition() As Integer

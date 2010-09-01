@@ -187,6 +187,8 @@
 
 
                 Send(Message)
+            Else
+                Send(Message)
             End If
 
         ElseIf SendOtherChannels Then
