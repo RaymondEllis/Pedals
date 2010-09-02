@@ -52,6 +52,8 @@
 
             EnableControls(True, True, True, True, True)
 
+            tmrInput.Enabled = True
+
             Open()
         End If
 
@@ -532,14 +534,18 @@
 
     Public Sub StartStop()
         If Not CurrentDevice.Recording Then
-            tmrInput.Enabled = True 'Will not enable the input timmer if there is no joysticks.
-            EnableControls(False, , True)
+            
 
             CurrentDevice.StartRecording()
 
-            btnTest.Enabled = True
+            If CurrentDevice.Recording Then
+                'tmrInput.Enabled = True 'Will not enable the input timmer if there is no joysticks.
+                EnableControls(False, , True)
+                btnTest.Enabled = True
 
-            Status("Recording")
+                Status("Recording")
+            End If
+
 
         Else
             btnTest.Enabled = False
@@ -547,7 +553,7 @@
             CurrentDevice.StopRecording()
 
 
-            tmrInput.Enabled = False
+            'tmrInput.Enabled = False
             EnableControls(True, , True)
 
             Status("Stoped recording")

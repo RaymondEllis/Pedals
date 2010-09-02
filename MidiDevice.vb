@@ -42,9 +42,9 @@
     Public Overrides Function ToString() As String
         'If InDevice Is Nothing Or OutDevice Is Nothing Then Return "
 
-        Dim Input As String = InputDevice.GetDeviceCapabilities(InDeviceID).name
+        Dim Input As String = frmMain.comInput.Items(InDeviceID) 'InputDevice.GetDeviceCapabilities(InDeviceID).name
         Input = Input.PadRight(40, "_")
-        Return Input & vbTab & OutputDevice.GetDeviceCapabilities(OutDeviceID).name
+        Return Input & vbTab & frmMain.comOutput.Items(OutDeviceID) 'OutputDevice.GetDeviceCapabilities(OutDeviceID).name
     End Function
 
     Public Sub Dispose()
@@ -64,35 +64,59 @@
     Public Sub StartRecording()
         If Recording Then Return
 
+        'First lets check to see if we have any deviecs
+        If InDeviceID = -1 And OutDeviceID = -1 Then Return
+
         'Find the device and create one if there is none being used.
         'Search to see if any others are using the same IDs.
         Dim FoundInput As Boolean = False
         Dim FoundOutput As Boolean = False
-        For Each dev As MidiDevice In Device
-            If Not dev.Index = Index Then
-                If InDeviceID = dev.InDeviceID Then
-                    InDevice = dev.InDevice
-                    FoundInput = True
-                    'InDeviceID = InDeviceID
-                End If
-                If OutDeviceID = dev.OutDeviceID Then
-                    OutDevice = dev.OutDevice
-                    FoundOutput = True
-                    'OutDeviceID = OutDeviceID
-                End If
-            End If
-        Next
+        If InDevice IsNot Nothing Then If InDeviceID = InDevice.DeviceID Then FoundInput = True 'Do we already have a input device?
+        If OutDevice IsNot Nothing Then If OutDeviceID = OutDevice.DeviceID Then FoundOutput = True 'Do we have a output device?
 
-        'Did we find the devices.
-        If Not FoundInput Then
-            'We did not find the input device.
-            InDevice = New InputDevice(InDeviceID)
-            InDeviceID = InDeviceID
-        End If
-        If Not FoundOutput Then
-            'We did not find the output device.
-            OutDevice = New OutputDevice(OutDeviceID)
-            OutDeviceID = OutDeviceID
+        'If we don't have both devices then find them.
+        If Not FoundInput Or Not FoundOutput Then
+            For Each dev As MidiDevice In Device
+                If Not dev.Index = Index Then
+                    If InDeviceID = dev.InDeviceID And Not FoundInput Then
+                        'If nobuddy is using it then we will distroy it.
+                        If InDevice IsNot Nothing Then If InDevice.OthersUsing = 0 Then InDevice.Close()
+
+
+                        InDevice = dev.InDevice
+                        FoundInput = True
+                    End If
+                    If OutDeviceID = dev.OutDeviceID And Not FoundOutput Then
+                        'Close if nobuddy is using.
+                        If OutDevice IsNot Nothing Then If OutDevice.OthersUsing = 0 Then OutDevice.Close()
+                        OutDevice = dev.OutDevice
+                        OutDevice.OthersUsing += 1
+                        FoundOutput = True
+                    End If
+                End If
+            Next
+
+            'Did we find the devices.
+            If Not FoundInput Then
+                'We did not find the input device.
+                InDevice = New InputDevice(InDeviceID)
+                InDeviceID = InDeviceID
+            End If
+            If Not FoundOutput Then
+                If OutDevice IsNot Nothing Then
+                    If OutDevice.OthersUsing = 1 Then
+                        OutDevice.Close()
+                    Else
+                        OutDevice.OthersUsing -= 1
+                    End If
+                End If
+
+                'We did not find the output device.
+                OutDevice = New OutputDevice(OutDeviceID)
+                OutDevice.OthersUsing = 1
+                OutDeviceID = OutDeviceID
+            End If
+
         End If
 
 
