@@ -17,7 +17,9 @@
 
     Public Recording As Boolean = False
 
-    Public Sub New(ByVal OutputChannel As Integer, ByVal InputChannel As Integer)
+    Public Sub New(ByVal InputDeviceID As Integer, ByVal OutputDeviceID As Integer, ByVal InputChannel As Integer, ByVal OutputChannel As Integer)
+        InDeviceID = InputDeviceID
+        OutDeviceID = OutputDeviceID
         InChannel = InputChannel
         OutChannel = OutputChannel
     End Sub
@@ -32,9 +34,17 @@
         OutChannel = OutputChannel
     End Sub
 
+    Public Sub SetDeviceID(ByVal InputDeviceID As Integer, ByVal OutputDeviceID As Integer)
+        InDeviceID = InputDeviceID
+        OutDeviceID = OutputDeviceID
+    End Sub
 
     Public Overrides Function ToString() As String
-        Return InputDevice.GetDeviceCapabilities(InDeviceID).name & vbTab & vbTab & OutputDevice.GetDeviceCapabilities(OutDeviceID).name
+        'If InDevice Is Nothing Or OutDevice Is Nothing Then Return "
+
+        Dim Input As String = InputDevice.GetDeviceCapabilities(InDeviceID).name
+        Input = Input.PadRight(40, "_")
+        Return Input & vbTab & OutputDevice.GetDeviceCapabilities(OutDeviceID).name
     End Function
 
     Public Sub Dispose()
@@ -53,6 +63,38 @@
 
     Public Sub StartRecording()
         If Recording Then Return
+
+        'Find the device and create one if there is none being used.
+        'Search to see if any others are using the same IDs.
+        Dim FoundInput As Boolean = False
+        Dim FoundOutput As Boolean = False
+        For Each dev As MidiDevice In Device
+            If Not dev.Index = Index Then
+                If InDeviceID = dev.InDeviceID Then
+                    InDevice = dev.InDevice
+                    FoundInput = True
+                    'InDeviceID = InDeviceID
+                End If
+                If OutDeviceID = dev.OutDeviceID Then
+                    OutDevice = dev.OutDevice
+                    FoundOutput = True
+                    'OutDeviceID = OutDeviceID
+                End If
+            End If
+        Next
+
+        'Did we find the devices.
+        If Not FoundInput Then
+            'We did not find the input device.
+            InDevice = New InputDevice(InDeviceID)
+            InDeviceID = InDeviceID
+        End If
+        If Not FoundOutput Then
+            'We did not find the output device.
+            OutDevice = New OutputDevice(OutDeviceID)
+            OutDeviceID = OutDeviceID
+        End If
+
 
         'Are others recording?
         If InDevice.OthersUsing > 0 Then

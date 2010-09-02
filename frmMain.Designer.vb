@@ -210,7 +210,6 @@ Partial Class frmMain
         Me.lstDebug.FormattingEnabled = True
         Me.lstDebug.Location = New System.Drawing.Point(6, 32)
         Me.lstDebug.Name = "lstDebug"
-        Me.lstDebug.ScrollAlwaysVisible = True
         Me.lstDebug.Size = New System.Drawing.Size(288, 199)
         Me.lstDebug.TabIndex = 2
         '

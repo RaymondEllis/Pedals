@@ -150,10 +150,6 @@ Public Class frmInput
         Return MyBase.ShowDialog()
     End Function
 
-	Private Sub frmInput_Shown(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Shown
-		'tmr.Enabled = True
-	End Sub
-
 	Private Sub chkRev_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkRev.CheckedChanged
 		CurrentJoystick.Reverse = chkRev.Checked
 	End Sub
@@ -170,13 +166,6 @@ Public Class frmInput
 	'	Public X, Y, Z, rX, rY, rZ, s0, s1 As Integer
 	'End Class
 
-    Private Sub radMIDI_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        ' If radMIDI.Checked Then
-        comController.Items.AddRange([Enum].GetNames(GetType(Midi.ControllerType)))
-        'Else
-        comController.Items.AddRange([Enum].GetNames(GetType(Midi.ControllerType)))
-        'End If
-    End Sub
 
     Private Sub comControllerType_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comControllerType.SelectedIndexChanged
         If Not Loaded Then Return

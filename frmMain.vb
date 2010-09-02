@@ -22,18 +22,6 @@
 
         DisposeDevices()
 
-        'If OutDevice IsNot Nothing Then
-        '	Status("Closing midi output device...")
-        '	OutDevice.Close()
-        '	OutDevice.Dispose()
-        '	Status("Closing midi output device... Done!")
-        'End If
-        'If InDevice IsNot Nothing Then
-        '	Status("Closing midi input device...")
-        '	InDevice.Close()
-        '	InDevice.Dispose()
-        '	Status("Closing midi input device... Done")
-        'End If
 
         DistroyInput()
 
@@ -47,17 +35,10 @@
 
 
         frmInput.comController.Items.AddRange([Enum].GetNames(GetType(Midi.ControllerType)))
-        frmInput.comController.SelectedItem = Midi.ControllerType.SoftPedal.ToString
+        frmInput.comController.SelectedItem = Midi.ControllerType.HoldPedal1.ToString
 
         frmInput.comControllerType.Items.AddRange([Enum].GetNames(GetType(Input.ControllerType0)))
         frmInput.comControllerType.SelectedItem = ControllerType0.MIDI.ToString
-
-        'comLeft.Items.AddRange([Enum].GetNames(GetType(Midi.ControllerType)))
-        'comLeft.SelectedItem = Midi.ControllerType.SoftPedal.ToString
-        'comMiddle.Items.AddRange([Enum].GetNames(GetType(Midi.ControllerType)))
-        'comMiddle.SelectedItem = Midi.ControllerType.SustenutoPedal.ToString
-        'comRight.Items.AddRange([Enum].GetNames(GetType(Midi.ControllerType)))
-        'comRight.SelectedItem = Midi.ControllerType.HoldPedal1.ToString
     End Sub
 
     Private Sub frmMain_Shown(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Shown
@@ -69,19 +50,7 @@
 
             CreateInput()
 
-            If EnableJoysticks Then
-                EnableControls(True, True, True, True, True)
-
-                'If System.Diagnostics.Debugger.IsAttached Then
-                '	LeftInput = New InputData(0, 6)
-                '	MiddleInput = New InputData(0, 1)
-                '	RightInput = New InputData(0, 5)
-
-                'End If
-
-            Else
-                EnableControls(True, True, True, True, True)
-            End If
+            EnableControls(True, True, True, True, True)
 
             Open()
         End If
@@ -155,14 +124,11 @@
 
     Private Sub comInput_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comInput.SelectedIndexChanged
         If Not Loaded Or CurrentDevice Is Nothing Then Return 'We don't need to change anything here until we are done loading.
-        'CurrentDevice.InDeviceID = comInput.SelectedIndex
         UpdateDevice(comInput.SelectedIndex)
         CheckNoteDisable()
     End Sub
     Private Sub comOutput_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comOutput.SelectedIndexChanged
         If Not Loaded Or CurrentDevice Is Nothing Then Return 'We don't need to change anything here until we are done loading.
-        'CurrentDevice.OutDeviceID = comOutput.SelectedIndex
-        'CurrentDevice.SetListItem()
         UpdateDevice(, comOutput.SelectedIndex)
         CheckNoteDisable()
     End Sub
@@ -201,6 +167,9 @@
             Me.Invoke(d, New Object() {[Message]})
         Else
             Me.lstDebug.Items.Add(Message.MidiChannel.ToString & vbTab & Message.Command.ToString & vbTab & vbTab & Message.Data1.ToString & vbTab & Message.Data2.ToString)
+            If Me.lstDebug.Items.Count = 15 Then
+                Me.lstDebug.Items.RemoveAt(0)
+            End If
             Me.lstDebug.SelectedIndex = Me.lstDebug.Items.Count - 1
         End If
     End Sub
@@ -548,18 +517,6 @@
         For Each dev As MidiDevice In Device
             dev.DoInput()
         Next
-
-
-        'If LeftInput IsNot Nothing Then
-        '	DoLeft()
-        'End If
-        'If MiddleInput IsNot Nothing Then
-        '	DoMiddle()
-        'End If
-        'If RightInput IsNot Nothing Then
-        '	DoRight()
-        'End If
-
     End Sub
 #End Region
 
@@ -674,10 +631,18 @@
         chkOldNote.Checked = CurrentDevice.RemoveOldNotes
         chkNoteOut.Checked = CurrentDevice.NoteOut
 
+        'Add the input.
+        lstInput.Items.Clear()
+        lstInput.Items.AddRange(CurrentDevice.Input.ToArray)
+
         If CurrentDevice.Recording Then
             btnSS.Text = "Stop"
+            EnableControls(False, , True)
+            btnTest.Enabled = True
         Else
             btnSS.Text = "Start"
+            EnableControls(True, , True)
+            btnTest.Enabled = False
         End If
     End Sub
 
