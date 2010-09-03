@@ -23,12 +23,20 @@ Partial Class frmMain
 	<System.Diagnostics.DebuggerStepThrough()> _
 	Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Me.grpOutput = New System.Windows.Forms.GroupBox()
-        Me.chkNoteOut = New System.Windows.Forms.CheckBox()
+        Me.grpMidiOutput = New System.Windows.Forms.GroupBox()
+        Me.btnMidiRemove = New System.Windows.Forms.Button()
+        Me.lstMidiOutput = New System.Windows.Forms.ListBox()
+        Me.btnMidiOutputAdd = New System.Windows.Forms.Button()
         Me.numOutputChannel = New System.Windows.Forms.NumericUpDown()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.comOutput = New System.Windows.Forms.ComboBox()
-        Me.grpInput = New System.Windows.Forms.GroupBox()
+        Me.grpMidiInput = New System.Windows.Forms.GroupBox()
+        Me.chkMidiInputVolume = New System.Windows.Forms.CheckBox()
+        Me.btnMidiInputRemove = New System.Windows.Forms.Button()
+        Me.chkMidiInputChannels = New System.Windows.Forms.CheckBox()
+        Me.btnMidiInputAdd = New System.Windows.Forms.Button()
+        Me.lstMidiInput = New System.Windows.Forms.ListBox()
+        Me.chkMidiInputNotes = New System.Windows.Forms.CheckBox()
         Me.numInputChannel = New System.Windows.Forms.NumericUpDown()
         Me.comInput = New System.Windows.Forms.ComboBox()
         Me.Label6 = New System.Windows.Forms.Label()
@@ -43,58 +51,69 @@ Partial Class frmMain
         Me.btnSS = New System.Windows.Forms.Button()
         Me.lblStatus = New System.Windows.Forms.Label()
         Me.tmrInput = New System.Windows.Forms.Timer(Me.components)
-        Me.chkMaxVolume = New System.Windows.Forms.CheckBox()
         Me.grpMisc = New System.Windows.Forms.GroupBox()
         Me.ToolTips = New System.Windows.Forms.ToolTip(Me.components)
         Me.btnTest = New System.Windows.Forms.Button()
         Me.tmrTest = New System.Windows.Forms.Timer(Me.components)
-        Me.lstDevices = New System.Windows.Forms.ListBox()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.btnDeviceNew = New System.Windows.Forms.Button()
         Me.lstInput = New System.Windows.Forms.ListBox()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.btnInputNew = New System.Windows.Forms.Button()
-        Me.btnJoystickEdit = New System.Windows.Forms.Button()
-        Me.grpOutput.SuspendLayout()
+        Me.btnInputAdd = New System.Windows.Forms.Button()
+        Me.btnInputEdit = New System.Windows.Forms.Button()
+        Me.grpInput = New System.Windows.Forms.GroupBox()
+        Me.btnInputRemove = New System.Windows.Forms.Button()
+        Me.grpMidiOutput.SuspendLayout()
         CType(Me.numOutputChannel, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.grpInput.SuspendLayout()
+        Me.grpMidiInput.SuspendLayout()
         CType(Me.numInputChannel, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.panDebug.SuspendLayout()
         Me.grpMisc.SuspendLayout()
+        Me.grpInput.SuspendLayout()
         Me.SuspendLayout()
         '
-        'grpOutput
+        'grpMidiOutput
         '
-        Me.grpOutput.Controls.Add(Me.chkNoteOut)
-        Me.grpOutput.Controls.Add(Me.numOutputChannel)
-        Me.grpOutput.Controls.Add(Me.Label5)
-        Me.grpOutput.Controls.Add(Me.comOutput)
-        Me.grpOutput.Enabled = False
-        Me.grpOutput.Location = New System.Drawing.Point(243, 100)
-        Me.grpOutput.Name = "grpOutput"
-        Me.grpOutput.Size = New System.Drawing.Size(225, 70)
-        Me.grpOutput.TabIndex = 5
-        Me.grpOutput.TabStop = False
-        Me.grpOutput.Text = "Output device"
+        Me.grpMidiOutput.Controls.Add(Me.btnMidiRemove)
+        Me.grpMidiOutput.Controls.Add(Me.lstMidiOutput)
+        Me.grpMidiOutput.Controls.Add(Me.btnMidiOutputAdd)
+        Me.grpMidiOutput.Controls.Add(Me.numOutputChannel)
+        Me.grpMidiOutput.Controls.Add(Me.Label5)
+        Me.grpMidiOutput.Controls.Add(Me.comOutput)
+        Me.grpMidiOutput.Enabled = False
+        Me.grpMidiOutput.Location = New System.Drawing.Point(243, 11)
+        Me.grpMidiOutput.Name = "grpMidiOutput"
+        Me.grpMidiOutput.Size = New System.Drawing.Size(231, 167)
+        Me.grpMidiOutput.TabIndex = 5
+        Me.grpMidiOutput.TabStop = False
+        Me.grpMidiOutput.Text = "Output device"
         '
-        'chkNoteOut
+        'btnMidiRemove
         '
-        Me.chkNoteOut.AutoSize = True
-        Me.chkNoteOut.Checked = True
-        Me.chkNoteOut.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkNoteOut.Location = New System.Drawing.Point(131, 46)
-        Me.chkNoteOut.Name = "chkNoteOut"
-        Me.chkNoteOut.Size = New System.Drawing.Size(82, 17)
-        Me.chkNoteOut.TabIndex = 24
-        Me.chkNoteOut.Text = "Note output"
-        Me.ToolTips.SetToolTip(Me.chkNoteOut, "Usefull for when you have the same output and input." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "So you don't get dubble not" & _
-                "es.")
-        Me.chkNoteOut.UseVisualStyleBackColor = True
+        Me.btnMidiRemove.Location = New System.Drawing.Point(73, 93)
+        Me.btnMidiRemove.Name = "btnMidiRemove"
+        Me.btnMidiRemove.Size = New System.Drawing.Size(61, 20)
+        Me.btnMidiRemove.TabIndex = 30
+        Me.btnMidiRemove.Text = "Remove"
+        Me.btnMidiRemove.UseVisualStyleBackColor = True
+        '
+        'lstMidiOutput
+        '
+        Me.lstMidiOutput.FormattingEnabled = True
+        Me.lstMidiOutput.Location = New System.Drawing.Point(6, 18)
+        Me.lstMidiOutput.Name = "lstMidiOutput"
+        Me.lstMidiOutput.Size = New System.Drawing.Size(219, 69)
+        Me.lstMidiOutput.TabIndex = 30
+        '
+        'btnMidiOutputAdd
+        '
+        Me.btnMidiOutputAdd.Location = New System.Drawing.Point(6, 93)
+        Me.btnMidiOutputAdd.Name = "btnMidiOutputAdd"
+        Me.btnMidiOutputAdd.Size = New System.Drawing.Size(61, 20)
+        Me.btnMidiOutputAdd.TabIndex = 30
+        Me.btnMidiOutputAdd.Text = "Add"
+        Me.btnMidiOutputAdd.UseVisualStyleBackColor = True
         '
         'numOutputChannel
         '
-        Me.numOutputChannel.Location = New System.Drawing.Point(86, 43)
+        Me.numOutputChannel.Location = New System.Drawing.Point(86, 141)
         Me.numOutputChannel.Maximum = New Decimal(New Integer() {15, 0, 0, 0})
         Me.numOutputChannel.Name = "numOutputChannel"
         Me.numOutputChannel.Size = New System.Drawing.Size(39, 20)
@@ -103,7 +122,7 @@ Partial Class frmMain
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(6, 45)
+        Me.Label5.Location = New System.Drawing.Point(6, 143)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(74, 13)
         Me.Label5.TabIndex = 2
@@ -113,27 +132,98 @@ Partial Class frmMain
         '
         Me.comOutput.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.comOutput.FormattingEnabled = True
-        Me.comOutput.Location = New System.Drawing.Point(9, 21)
+        Me.comOutput.Location = New System.Drawing.Point(6, 119)
         Me.comOutput.Name = "comOutput"
-        Me.comOutput.Size = New System.Drawing.Size(209, 21)
+        Me.comOutput.Size = New System.Drawing.Size(219, 21)
         Me.comOutput.TabIndex = 1
         '
-        'grpInput
+        'grpMidiInput
         '
-        Me.grpInput.Controls.Add(Me.numInputChannel)
-        Me.grpInput.Controls.Add(Me.comInput)
-        Me.grpInput.Controls.Add(Me.Label6)
-        Me.grpInput.Enabled = False
-        Me.grpInput.Location = New System.Drawing.Point(12, 100)
-        Me.grpInput.Name = "grpInput"
-        Me.grpInput.Size = New System.Drawing.Size(225, 70)
-        Me.grpInput.TabIndex = 5
-        Me.grpInput.TabStop = False
-        Me.grpInput.Text = "Input device"
+        Me.grpMidiInput.Controls.Add(Me.chkMidiInputVolume)
+        Me.grpMidiInput.Controls.Add(Me.btnMidiInputRemove)
+        Me.grpMidiInput.Controls.Add(Me.chkMidiInputChannels)
+        Me.grpMidiInput.Controls.Add(Me.btnMidiInputAdd)
+        Me.grpMidiInput.Controls.Add(Me.lstMidiInput)
+        Me.grpMidiInput.Controls.Add(Me.chkMidiInputNotes)
+        Me.grpMidiInput.Controls.Add(Me.numInputChannel)
+        Me.grpMidiInput.Controls.Add(Me.comInput)
+        Me.grpMidiInput.Controls.Add(Me.Label6)
+        Me.grpMidiInput.Enabled = False
+        Me.grpMidiInput.Location = New System.Drawing.Point(12, 11)
+        Me.grpMidiInput.Name = "grpMidiInput"
+        Me.grpMidiInput.Size = New System.Drawing.Size(231, 200)
+        Me.grpMidiInput.TabIndex = 5
+        Me.grpMidiInput.TabStop = False
+        Me.grpMidiInput.Text = "Input device"
+        '
+        'chkMidiInputVolume
+        '
+        Me.chkMidiInputVolume.AutoSize = True
+        Me.chkMidiInputVolume.Checked = True
+        Me.chkMidiInputVolume.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkMidiInputVolume.Location = New System.Drawing.Point(112, 173)
+        Me.chkMidiInputVolume.Name = "chkMidiInputVolume"
+        Me.chkMidiInputVolume.Size = New System.Drawing.Size(113, 17)
+        Me.chkMidiInputVolume.TabIndex = 22
+        Me.chkMidiInputVolume.Text = "Set volume to max"
+        Me.ToolTips.SetToolTip(Me.chkMidiInputVolume, "Set the volume of each note to 127(maxmum volume)")
+        Me.chkMidiInputVolume.UseVisualStyleBackColor = True
+        '
+        'btnMidiInputRemove
+        '
+        Me.btnMidiInputRemove.Location = New System.Drawing.Point(76, 94)
+        Me.btnMidiInputRemove.Name = "btnMidiInputRemove"
+        Me.btnMidiInputRemove.Size = New System.Drawing.Size(61, 20)
+        Me.btnMidiInputRemove.TabIndex = 30
+        Me.btnMidiInputRemove.Text = "Remove"
+        Me.btnMidiInputRemove.UseVisualStyleBackColor = True
+        '
+        'chkMidiInputChannels
+        '
+        Me.chkMidiInputChannels.AutoSize = True
+        Me.chkMidiInputChannels.Location = New System.Drawing.Point(131, 147)
+        Me.chkMidiInputChannels.Name = "chkMidiInputChannels"
+        Me.chkMidiInputChannels.Size = New System.Drawing.Size(83, 17)
+        Me.chkMidiInputChannels.TabIndex = 26
+        Me.chkMidiInputChannels.Text = "All channels"
+        Me.ToolTips.SetToolTip(Me.chkMidiInputChannels, "Usefull for when you have the same output and input." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "So you don't get dubble not" & _
+                "es.")
+        Me.chkMidiInputChannels.UseVisualStyleBackColor = True
+        '
+        'btnMidiInputAdd
+        '
+        Me.btnMidiInputAdd.Location = New System.Drawing.Point(9, 94)
+        Me.btnMidiInputAdd.Name = "btnMidiInputAdd"
+        Me.btnMidiInputAdd.Size = New System.Drawing.Size(61, 20)
+        Me.btnMidiInputAdd.TabIndex = 30
+        Me.btnMidiInputAdd.Text = "Add"
+        Me.btnMidiInputAdd.UseVisualStyleBackColor = True
+        '
+        'lstMidiInput
+        '
+        Me.lstMidiInput.FormattingEnabled = True
+        Me.lstMidiInput.Location = New System.Drawing.Point(9, 19)
+        Me.lstMidiInput.Name = "lstMidiInput"
+        Me.lstMidiInput.Size = New System.Drawing.Size(216, 69)
+        Me.lstMidiInput.TabIndex = 30
+        '
+        'chkMidiInputNotes
+        '
+        Me.chkMidiInputNotes.AutoSize = True
+        Me.chkMidiInputNotes.Checked = True
+        Me.chkMidiInputNotes.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkMidiInputNotes.Location = New System.Drawing.Point(9, 173)
+        Me.chkMidiInputNotes.Name = "chkMidiInputNotes"
+        Me.chkMidiInputNotes.Size = New System.Drawing.Size(88, 17)
+        Me.chkMidiInputNotes.TabIndex = 25
+        Me.chkMidiInputNotes.Text = "Enable notes"
+        Me.ToolTips.SetToolTip(Me.chkMidiInputNotes, "Usefull for when you have the same output and input." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "So you don't get dubble not" & _
+                "es.")
+        Me.chkMidiInputNotes.UseVisualStyleBackColor = True
         '
         'numInputChannel
         '
-        Me.numInputChannel.Location = New System.Drawing.Point(86, 42)
+        Me.numInputChannel.Location = New System.Drawing.Point(86, 147)
         Me.numInputChannel.Maximum = New Decimal(New Integer() {15, 0, 0, 0})
         Me.numInputChannel.Name = "numInputChannel"
         Me.numInputChannel.Size = New System.Drawing.Size(39, 20)
@@ -143,15 +233,15 @@ Partial Class frmMain
         '
         Me.comInput.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.comInput.FormattingEnabled = True
-        Me.comInput.Location = New System.Drawing.Point(6, 15)
+        Me.comInput.Location = New System.Drawing.Point(6, 120)
         Me.comInput.Name = "comInput"
-        Me.comInput.Size = New System.Drawing.Size(212, 21)
+        Me.comInput.Size = New System.Drawing.Size(219, 21)
         Me.comInput.TabIndex = 1
         '
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(6, 44)
+        Me.Label6.Location = New System.Drawing.Point(6, 149)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(74, 13)
         Me.Label6.TabIndex = 2
@@ -174,7 +264,7 @@ Partial Class frmMain
         '
         Me.chkDebug.AutoSize = True
         Me.chkDebug.Enabled = False
-        Me.chkDebug.Location = New System.Drawing.Point(643, 11)
+        Me.chkDebug.Location = New System.Drawing.Point(190, 233)
         Me.chkDebug.Name = "chkDebug"
         Me.chkDebug.Size = New System.Drawing.Size(58, 17)
         Me.chkDebug.TabIndex = 17
@@ -191,7 +281,7 @@ Partial Class frmMain
         Me.panDebug.Controls.Add(Me.Label3)
         Me.panDebug.Controls.Add(Me.Label4)
         Me.panDebug.Enabled = False
-        Me.panDebug.Location = New System.Drawing.Point(624, 25)
+        Me.panDebug.Location = New System.Drawing.Point(171, 247)
         Me.panDebug.Name = "panDebug"
         Me.panDebug.Size = New System.Drawing.Size(303, 241)
         Me.panDebug.TabIndex = 18
@@ -243,7 +333,7 @@ Partial Class frmMain
         'btnSS
         '
         Me.btnSS.Enabled = False
-        Me.btnSS.Location = New System.Drawing.Point(474, 121)
+        Me.btnSS.Location = New System.Drawing.Point(480, 326)
         Me.btnSS.Name = "btnSS"
         Me.btnSS.Size = New System.Drawing.Size(75, 23)
         Me.btnSS.TabIndex = 19
@@ -252,10 +342,11 @@ Partial Class frmMain
         '
         'lblStatus
         '
-        Me.lblStatus.BackColor = System.Drawing.SystemColors.Control
-        Me.lblStatus.Location = New System.Drawing.Point(12, 521)
+        Me.lblStatus.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.lblStatus.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.lblStatus.Location = New System.Drawing.Point(0, 495)
         Me.lblStatus.Name = "lblStatus"
-        Me.lblStatus.Size = New System.Drawing.Size(434, 17)
+        Me.lblStatus.Size = New System.Drawing.Size(697, 19)
         Me.lblStatus.TabIndex = 20
         Me.lblStatus.Text = "Status: Loading..."
         Me.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -264,25 +355,11 @@ Partial Class frmMain
         '
         Me.tmrInput.Interval = 10
         '
-        'chkMaxVolume
-        '
-        Me.chkMaxVolume.AutoSize = True
-        Me.chkMaxVolume.Checked = True
-        Me.chkMaxVolume.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkMaxVolume.Location = New System.Drawing.Point(6, 19)
-        Me.chkMaxVolume.Name = "chkMaxVolume"
-        Me.chkMaxVolume.Size = New System.Drawing.Size(113, 17)
-        Me.chkMaxVolume.TabIndex = 22
-        Me.chkMaxVolume.Text = "Set volume to max"
-        Me.ToolTips.SetToolTip(Me.chkMaxVolume, "Set the volume of each note to 127(maxmum volume)")
-        Me.chkMaxVolume.UseVisualStyleBackColor = True
-        '
         'grpMisc
         '
-        Me.grpMisc.Controls.Add(Me.chkMaxVolume)
         Me.grpMisc.Controls.Add(Me.chkOldNote)
         Me.grpMisc.Enabled = False
-        Me.grpMisc.Location = New System.Drawing.Point(421, 176)
+        Me.grpMisc.Location = New System.Drawing.Point(561, 326)
         Me.grpMisc.Name = "grpMisc"
         Me.grpMisc.Size = New System.Drawing.Size(128, 66)
         Me.grpMisc.TabIndex = 23
@@ -292,7 +369,7 @@ Partial Class frmMain
         'btnTest
         '
         Me.btnTest.Enabled = False
-        Me.btnTest.Location = New System.Drawing.Point(474, 147)
+        Me.btnTest.Location = New System.Drawing.Point(480, 352)
         Me.btnTest.Name = "btnTest"
         Me.btnTest.Size = New System.Drawing.Size(75, 23)
         Me.btnTest.TabIndex = 24
@@ -303,119 +380,91 @@ Partial Class frmMain
         'tmrTest
         '
         '
-        'lstDevices
-        '
-        Me.lstDevices.FormattingEnabled = True
-        Me.lstDevices.Location = New System.Drawing.Point(12, 25)
-        Me.lstDevices.Name = "lstDevices"
-        Me.lstDevices.Size = New System.Drawing.Size(456, 69)
-        Me.lstDevices.TabIndex = 25
-        '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(12, 9)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(69, 13)
-        Me.Label7.TabIndex = 26
-        Me.Label7.Text = "Input device:"
-        '
-        'Label8
-        '
-        Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(249, 9)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(77, 13)
-        Me.Label8.TabIndex = 26
-        Me.Label8.Text = "Output device:"
-        '
-        'btnDeviceNew
-        '
-        Me.btnDeviceNew.Location = New System.Drawing.Point(474, 55)
-        Me.btnDeviceNew.Name = "btnDeviceNew"
-        Me.btnDeviceNew.Size = New System.Drawing.Size(75, 23)
-        Me.btnDeviceNew.TabIndex = 27
-        Me.btnDeviceNew.Text = "New"
-        Me.btnDeviceNew.UseVisualStyleBackColor = True
-        '
         'lstInput
         '
         Me.lstInput.FormattingEnabled = True
-        Me.lstInput.Location = New System.Drawing.Point(12, 230)
+        Me.lstInput.Location = New System.Drawing.Point(8, 18)
         Me.lstInput.Name = "lstInput"
-        Me.lstInput.Size = New System.Drawing.Size(168, 238)
+        Me.lstInput.Size = New System.Drawing.Size(195, 238)
         Me.lstInput.TabIndex = 28
         '
-        'Label9
+        'btnInputAdd
         '
-        Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(12, 214)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(34, 13)
-        Me.Label9.TabIndex = 29
-        Me.Label9.Text = "Input:"
+        Me.btnInputAdd.Location = New System.Drawing.Point(8, 262)
+        Me.btnInputAdd.Name = "btnInputAdd"
+        Me.btnInputAdd.Size = New System.Drawing.Size(61, 20)
+        Me.btnInputAdd.TabIndex = 27
+        Me.btnInputAdd.Text = "Add"
+        Me.btnInputAdd.UseVisualStyleBackColor = True
         '
-        'btnInputNew
+        'btnInputEdit
         '
-        Me.btnInputNew.Location = New System.Drawing.Point(186, 230)
-        Me.btnInputNew.Name = "btnInputNew"
-        Me.btnInputNew.Size = New System.Drawing.Size(44, 23)
-        Me.btnInputNew.TabIndex = 27
-        Me.btnInputNew.Text = "New"
-        Me.btnInputNew.UseVisualStyleBackColor = True
+        Me.btnInputEdit.Location = New System.Drawing.Point(75, 261)
+        Me.btnInputEdit.Name = "btnInputEdit"
+        Me.btnInputEdit.Size = New System.Drawing.Size(61, 21)
+        Me.btnInputEdit.TabIndex = 27
+        Me.btnInputEdit.Text = "Edit"
+        Me.btnInputEdit.UseVisualStyleBackColor = True
         '
-        'btnJoystickEdit
+        'grpInput
         '
-        Me.btnJoystickEdit.Location = New System.Drawing.Point(186, 259)
-        Me.btnJoystickEdit.Name = "btnJoystickEdit"
-        Me.btnJoystickEdit.Size = New System.Drawing.Size(44, 23)
-        Me.btnJoystickEdit.TabIndex = 27
-        Me.btnJoystickEdit.Text = "Edit"
-        Me.btnJoystickEdit.UseVisualStyleBackColor = True
+        Me.grpInput.Controls.Add(Me.btnInputRemove)
+        Me.grpInput.Controls.Add(Me.lstInput)
+        Me.grpInput.Controls.Add(Me.btnInputAdd)
+        Me.grpInput.Controls.Add(Me.btnInputEdit)
+        Me.grpInput.Location = New System.Drawing.Point(480, 11)
+        Me.grpInput.Name = "grpInput"
+        Me.grpInput.Size = New System.Drawing.Size(209, 295)
+        Me.grpInput.TabIndex = 30
+        Me.grpInput.TabStop = False
+        Me.grpInput.Text = "Input"
+        '
+        'btnInputRemove
+        '
+        Me.btnInputRemove.Location = New System.Drawing.Point(142, 262)
+        Me.btnInputRemove.Name = "btnInputRemove"
+        Me.btnInputRemove.Size = New System.Drawing.Size(61, 20)
+        Me.btnInputRemove.TabIndex = 30
+        Me.btnInputRemove.Text = "Remove"
+        Me.btnInputRemove.UseVisualStyleBackColor = True
         '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(935, 547)
-        Me.Controls.Add(Me.lstInput)
-        Me.Controls.Add(Me.btnJoystickEdit)
-        Me.Controls.Add(Me.btnInputNew)
-        Me.Controls.Add(Me.btnDeviceNew)
-        Me.Controls.Add(Me.lstDevices)
+        Me.ClientSize = New System.Drawing.Size(697, 514)
+        Me.Controls.Add(Me.grpInput)
         Me.Controls.Add(Me.btnTest)
         Me.Controls.Add(Me.grpMisc)
         Me.Controls.Add(Me.lblStatus)
         Me.Controls.Add(Me.btnSS)
         Me.Controls.Add(Me.chkDebug)
         Me.Controls.Add(Me.panDebug)
-        Me.Controls.Add(Me.grpInput)
-        Me.Controls.Add(Me.grpOutput)
-        Me.Controls.Add(Me.Label9)
-        Me.Controls.Add(Me.Label8)
-        Me.Controls.Add(Me.Label7)
+        Me.Controls.Add(Me.grpMidiInput)
+        Me.Controls.Add(Me.grpMidiOutput)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False
         Me.Name = "frmMain"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Pedals"
-        Me.grpOutput.ResumeLayout(False)
-        Me.grpOutput.PerformLayout()
+        Me.grpMidiOutput.ResumeLayout(False)
+        Me.grpMidiOutput.PerformLayout()
         CType(Me.numOutputChannel, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.grpInput.ResumeLayout(False)
-        Me.grpInput.PerformLayout()
+        Me.grpMidiInput.ResumeLayout(False)
+        Me.grpMidiInput.PerformLayout()
         CType(Me.numInputChannel, System.ComponentModel.ISupportInitialize).EndInit()
         Me.panDebug.ResumeLayout(False)
         Me.panDebug.PerformLayout()
         Me.grpMisc.ResumeLayout(False)
         Me.grpMisc.PerformLayout()
+        Me.grpInput.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents grpOutput As System.Windows.Forms.GroupBox
+    Friend WithEvents grpMidiOutput As System.Windows.Forms.GroupBox
     Friend WithEvents comOutput As System.Windows.Forms.ComboBox
-    Friend WithEvents grpInput As System.Windows.Forms.GroupBox
+    Friend WithEvents grpMidiInput As System.Windows.Forms.GroupBox
     Friend WithEvents comInput As System.Windows.Forms.ComboBox
     Friend WithEvents chkOldNote As System.Windows.Forms.CheckBox
     Friend WithEvents chkDebug As System.Windows.Forms.CheckBox
@@ -432,19 +481,23 @@ Partial Class frmMain
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents numInputChannel As System.Windows.Forms.NumericUpDown
     Friend WithEvents Label6 As System.Windows.Forms.Label
-    Friend WithEvents chkMaxVolume As System.Windows.Forms.CheckBox
+    Friend WithEvents chkMidiInputVolume As System.Windows.Forms.CheckBox
     Friend WithEvents grpMisc As System.Windows.Forms.GroupBox
-    Friend WithEvents chkNoteOut As System.Windows.Forms.CheckBox
     Friend WithEvents ToolTips As System.Windows.Forms.ToolTip
     Friend WithEvents btnTest As System.Windows.Forms.Button
     Friend WithEvents tmrTest As System.Windows.Forms.Timer
-    Friend WithEvents lstDevices As System.Windows.Forms.ListBox
-    Friend WithEvents Label7 As System.Windows.Forms.Label
-    Friend WithEvents Label8 As System.Windows.Forms.Label
-    Friend WithEvents btnDeviceNew As System.Windows.Forms.Button
     Friend WithEvents lstInput As System.Windows.Forms.ListBox
-    Friend WithEvents Label9 As System.Windows.Forms.Label
-    Friend WithEvents btnInputNew As System.Windows.Forms.Button
-    Friend WithEvents btnJoystickEdit As System.Windows.Forms.Button
+    Friend WithEvents btnInputAdd As System.Windows.Forms.Button
+    Friend WithEvents btnInputEdit As System.Windows.Forms.Button
+    Friend WithEvents chkMidiInputChannels As System.Windows.Forms.CheckBox
+    Friend WithEvents chkMidiInputNotes As System.Windows.Forms.CheckBox
+    Friend WithEvents lstMidiInput As System.Windows.Forms.ListBox
+    Friend WithEvents lstMidiOutput As System.Windows.Forms.ListBox
+    Friend WithEvents btnMidiRemove As System.Windows.Forms.Button
+    Friend WithEvents btnMidiOutputAdd As System.Windows.Forms.Button
+    Friend WithEvents btnMidiInputRemove As System.Windows.Forms.Button
+    Friend WithEvents btnMidiInputAdd As System.Windows.Forms.Button
+    Friend WithEvents grpInput As System.Windows.Forms.GroupBox
+    Friend WithEvents btnInputRemove As System.Windows.Forms.Button
 
 End Class

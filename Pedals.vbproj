@@ -93,6 +93,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Devices.vb" />
+    <Compile Include="Devices\MidiInput.vb" />
+    <Compile Include="Devices\MidiBaseDevice.vb" />
+    <Compile Include="Devices\MidiOutput.vb" />
     <Compile Include="frmInput.Designer.vb">
       <DependentUpon>frmInput.vb</DependentUpon>
     </Compile>
@@ -107,7 +110,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Input.vb" />
-    <Compile Include="MidiDevice.vb" />
     <Compile Include="Misc.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -179,6 +181,7 @@
     </Content>
     <Content Include="Roadmap.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

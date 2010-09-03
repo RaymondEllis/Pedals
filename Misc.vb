@@ -19,14 +19,10 @@ Module Misc
 
 	End Sub
 
-	'LeftP = LeftPedal(soft)
-    'Public LeftP As Boolean = False
-    'Public MiddleP As Boolean = False
-    'Public RightP As Boolean = False
-
-    'Public SostenutoList As New List(Of Integer)
-    'Public SustainList As New List(Of Integer)
-
+    ''' <summary>
+    ''' Is the controller a switch?
+    ''' </summary>
+    ''' <param name="Controller">Controller to check.</param>
     Public Function IsSwitch(ByVal Controller As Integer) As Boolean
         Select Case Controller
             Case 64 'Hold1
@@ -55,8 +51,11 @@ Module Misc
         Return False
     End Function
 
+    Public SostenutoList As New List(Of Integer)
+    Public SustainList As New List(Of Integer)
+    Public SustainPressed, SostenutoPressed, SoftPressed As Boolean
 #Region "Note holder"
-    'Public Note(127) As Integer
+    Public Note(127) As Integer
 
     Public Enum Notes
         Released = 0
@@ -66,29 +65,22 @@ Module Misc
         SustainReleased = 4
     End Enum
 
-    'Public Sub ResetNotes()
-    '	Parallel.ForEach(Note, Sub(n)
-    '							   n = 0
-    '							   'For Each n As Byte In Note
-    '							   '    n = 0
-    '							   'Next
-    '						   End Sub)
-    'End Sub
+    Public Sub ResetNotes()
+        Parallel.ForEach(Note, Sub(n)
+                                   n = 0
+                               End Sub)
+    End Sub
 
-    'Public Sub ReleaseNote(ByVal ID As Integer)
-    '	Dim tmp As New ChannelMessageBuilder
-    '	tmp.Command = Midi.ChannelCommand.NoteOn
-    '	tmp.MidiChannel = MidiOutput
-    '	tmp.Data1 = ID
-    '	tmp.Data2 = 0
-    '	Note(ID) = Notes.Released
-    '	Send(tmp)
-    'End Sub
+    Public Sub ReleaseNote(ByVal ID As Integer)
+        Dim tmp As New ChannelMessageBuilder
+        tmp.Command = Midi.ChannelCommand.NoteOn
+        tmp.Data1 = ID
+        tmp.Data2 = 0
+        Note(ID) = Notes.Released
+        Send(tmp)
+    End Sub
 #End Region
 
-	Public Sub Close()
-		frmMain.Close()
-	End Sub
 
 	Public Sub Main()
 
@@ -106,7 +98,6 @@ Module Misc
 
         Application.Run(frmMain)
 
-        'MsgBox("Closed")
 	End Sub
 
 #Region "Error handling"

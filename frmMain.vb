@@ -37,7 +37,7 @@
         frmInput.comController.Items.AddRange([Enum].GetNames(GetType(Midi.ControllerType)))
         frmInput.comController.SelectedItem = Midi.ControllerType.HoldPedal1.ToString
 
-        frmInput.comControllerType.Items.AddRange([Enum].GetNames(GetType(Input.ControllerType0)))
+        frmInput.comControllerType.Items.AddRange([Enum].GetNames(GetType(InputStuff.ControllerType0)))
         frmInput.comControllerType.SelectedItem = ControllerType0.MIDI.ToString
     End Sub
 
@@ -52,13 +52,14 @@
 
             EnableControls(True, True, True, True, True)
 
-            tmrInput.Enabled = True
+
 
             Open()
         End If
 
         Loaded = True
         CheckNoteDisable()
+        SetControls()
         Status("Loading... Done!")
 
     End Sub
@@ -66,8 +67,8 @@
     Public Sub EnableControls(ByVal Value As Boolean, Optional ByVal StartB As Boolean = False, Optional ByVal Devices As Boolean = False, Optional ByVal Misc As Boolean = False, Optional ByVal Debug As Boolean = False)
         If StartB Then btnSS.Enabled = Value
         If Devices Then
-            grpInput.Enabled = Value
-            grpOutput.Enabled = Value
+            grpMidiInput.Enabled = Value
+            grpMidiOutput.Enabled = Value
         End If
         If Debug Then chkDebug.Enabled = Value
         If Misc Then grpMisc.Enabled = Value
@@ -78,7 +79,9 @@
 
     Public Sub Open()
         If Not IO.File.Exists("Pedals.cfg") Then
-            AddDevice(0, 0, 0, 0)
+            AddInputDevice(0, 0)
+            AddOutputDevice(0, 0)
+
 
             Return
         End If
@@ -125,35 +128,35 @@
     End Sub
 
     Private Sub comInput_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comInput.SelectedIndexChanged
-        If Not Loaded Or CurrentDevice Is Nothing Then Return 'We don't need to change anything here until we are done loading.
-        UpdateDevice(comInput.SelectedIndex)
+        If Not Loaded Or CurrentMidiInput Is Nothing Then Return 'We don't need to change anything here until we are done loading.
+        UpdateInputDevice(comInput.SelectedIndex)
         CheckNoteDisable()
     End Sub
     Private Sub comOutput_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comOutput.SelectedIndexChanged
-        If Not Loaded Or CurrentDevice Is Nothing Then Return 'We don't need to change anything here until we are done loading.
-        UpdateDevice(, comOutput.SelectedIndex)
+        If Not Loaded Or CurrentMidiOutput Is Nothing Then Return 'We don't need to change anything here until we are done loading.
+        UpdateOutputDevice(comOutput.SelectedIndex)
         CheckNoteDisable()
     End Sub
 
 
     Private Sub numInputChannel_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numInputChannel.ValueChanged
-        If Not Loaded Or CurrentDevice Is Nothing Then Return 'We don't need to change anything here until we are done loading.
-        CurrentDevice.InChannel = sender.value
+        If Not Loaded Or CurrentMidiInput Is Nothing Then Return 'We don't need to change anything here until we are done loading.
+        CurrentMidiInput.Channel = sender.value
         CheckNoteDisable()
     End Sub
     Private Sub numOutputChannel_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numOutputChannel.ValueChanged
-        If Not Loaded Or CurrentDevice Is Nothing Then Return 'We don't need to change anything here until we are done loading.
-        CurrentDevice.OutChannel = sender.value
+        If Not Loaded Or CurrentMidiOutput Is Nothing Then Return 'We don't need to change anything here until we are done loading.
+        CurrentMidiOutput.Channel = sender.value
         CheckNoteDisable()
     End Sub
 
     Private Sub CheckNoteDisable() 'Used to disable alter notes and stuff.
-        If Not grpOutput.Enabled Or Not Loaded Then Return
+        If Not grpMidiOutput.Enabled Or Not Loaded Then Return
 
         'Is the input and output the same?
         If comInput.SelectedItem = comOutput.SelectedItem Then
             If numInputChannel.Value = numOutputChannel.Value Then
-                chkNoteOut.Checked = False
+                chkMidiInputNotes.Checked = False
 
             End If
         End If
@@ -516,16 +519,29 @@
 
 
     Private Sub tmrInput_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tmrInput.Tick
-        For Each dev As MidiDevice In Device
-            dev.DoInput()
-        Next
+        DoInput()
+    End Sub
+
+    Private Sub btnInputNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnInputAdd.Click
+        Dim tmp As InputData = Nothing
+        If frmInput.ShowDialog(tmp) = System.Windows.Forms.DialogResult.OK Then
+            AddInput(tmp)
+            lstInput.SelectedIndex = lstInput.Items.Count - 1
+        End If
+    End Sub
+
+    Private Sub btnInputEdit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnInputEdit.Click
+        If frmInput.ShowDialog(Input(lstInput.SelectedIndex)) = System.Windows.Forms.DialogResult.OK Then
+            'CurrentDevice.Input(lstInput.SelectedIndex) = frmInput.CurrentJoystick
+            lstInput.Items(lstInput.SelectedIndex) = frmInput.CurrentJoystick
+        End If
     End Sub
 #End Region
 
 #Region "StartStop"
     Private Sub btnSS_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSS.Click
         StartStop()
-        If CurrentDevice.Recording Then
+        If Recording Then
             btnSS.Text = "Stop"
         Else
             btnSS.Text = "Start"
@@ -533,27 +549,45 @@
     End Sub
 
     Public Sub StartStop()
-        If Not CurrentDevice.Recording Then
-            
+        If Not Recording Then
 
-            CurrentDevice.StartRecording()
+            Dim numInput As Integer
+            For Each dev As MidiInput In InDevices
+                If dev.StartRecording Then
+                    numInput += 1
+                End If
+            Next
+            Dim numOutput As Integer
+            For Each dev As MidiOutput In OutDevices
+                If dev.Start Then
+                    numOutput += 1
+                End If
+            Next
 
-            If CurrentDevice.Recording Then
+            If numInput > 0 And numOutput > 0 Then
                 'tmrInput.Enabled = True 'Will not enable the input timmer if there is no joysticks.
                 EnableControls(False, , True)
                 btnTest.Enabled = True
+                tmrInput.Enabled = True
 
                 Status("Recording")
             End If
-
+            Recording = True
 
         Else
+            tmrInput.Enabled = False
             btnTest.Enabled = False
 
-            CurrentDevice.StopRecording()
+            For Each dev As MidiInput In InDevices
+                dev.StopRecording()
+            Next
+
+            ResetNotes()
+            SustainList.Clear()
+            SostenutoList.Clear()
 
 
-            'tmrInput.Enabled = False
+            Recording = False
             EnableControls(True, , True)
 
             Status("Stoped recording")
@@ -566,82 +600,61 @@
 
 
 #Region "Misc"
-    Private Sub chkMaxVolume_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkMaxVolume.CheckedChanged
+    Private Sub chkMidiInputVolume_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkMidiInputVolume.CheckedChanged
         If Not Loaded Then Return 'We don't need to change anything here until we are done loading.
-        CurrentDevice.SetVolumeMax = sender.checked
+        CurrentMidiInput.SetVolumeMax = sender.checked
     End Sub
 
     Private Sub chkOldNote_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkOldNote.CheckedChanged
         If Not Loaded Then Return 'We don't need to change anything here until we are done loading.
-        CurrentDevice.RemoveOldNotes = sender.checked
+        CurrentMidiInput.RemoveOldNotes = sender.checked
     End Sub
-
-	Private Sub chkNoteOut_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkNoteOut.CheckedChanged
-        If Not Loaded Or CurrentDevice Is Nothing Then Return 'We don't need to change anything here until we are done loading.
-
-        CurrentDevice.NoteOut = chkNoteOut.Checked
-
-		grpMisc.Enabled = chkNoteOut.Checked
-
-
-	End Sub
 
 
 #End Region
 
 #Region "Test"
-	Private Sub btnTest_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTest.Click
-		btnTest.Enabled = False
-		testL = 0
-		tmrTest.Enabled = True
-	End Sub
+    Private Sub btnTest_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTest.Click
+        btnTest.Enabled = False
+        testL = 0
+        tmrTest.Enabled = True
+    End Sub
 
-	Dim testL As Integer
-	Private Sub tmrTest_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tmrTest.Tick
-		testL += 1
-		Dim m As New ChannelMessageBuilder
-		m.Command = ChannelCommand.NoteOn
-		m.Data1 = 72 + testL
-		m.Data2 = 127
-        CurrentDevice.Send(m)
-		Threading.Thread.Sleep(20)
-		m.Command = ChannelCommand.NoteOff
-		m.Data2 = 0
-        CurrentDevice.Send(m)
-		Threading.Thread.Sleep(100)
-		If testL > 11 Then
-			tmrTest.Enabled = False
-			btnTest.Enabled = True
-		End If
-	End Sub
+    Dim testL As Integer
+    Private Sub tmrTest_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tmrTest.Tick
+        testL += 1
+        Dim m As New ChannelMessageBuilder
+        m.Command = ChannelCommand.NoteOn
+        m.Data1 = 72 + testL
+        m.Data2 = 127
+        Send(m)
+        Threading.Thread.Sleep(20)
+        m.Command = ChannelCommand.NoteOff
+        m.Data2 = 0
+        Send(m)
+        Threading.Thread.Sleep(100)
+        If testL > 11 Then
+            tmrTest.Enabled = False
+            btnTest.Enabled = True
+        End If
+    End Sub
 #End Region
 
-    Private Sub btnDeviceNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDeviceNew.Click
-        AddDevice(comInput.SelectedIndex, comOutput.SelectedIndex, numInputChannel.Value, numOutputChannel.Value)
-    End Sub
-
-    Private Sub lstDevices_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lstDevices.SelectedIndexChanged
-        If lstDevices.SelectedIndex < 0 Then Return
-        CurrentDevice = Device(lstDevices.SelectedIndex)
-        SetControls()
-    End Sub
 
     Public Sub SetControls()
-        comInput.SelectedIndex = CurrentDevice.InDeviceID
-        comOutput.SelectedIndex = CurrentDevice.OutDeviceID
+        If Not Loaded Then Return
+        comInput.SelectedIndex = CurrentMidiInput.DeviceID
+        comOutput.SelectedIndex = CurrentMidiOutput.DeviceID
 
-        numInputChannel.Value = CurrentDevice.InChannel
-        numOutputChannel.Value = CurrentDevice.OutChannel
+        numInputChannel.Value = CurrentMidiInput.Channel
+        numOutputChannel.Value = CurrentMidiOutput.Channel
 
-        chkMaxVolume.Checked = CurrentDevice.SetVolumeMax
-        chkOldNote.Checked = CurrentDevice.RemoveOldNotes
-        chkNoteOut.Checked = CurrentDevice.NoteOut
+        chkMidiInputVolume.Checked = CurrentMidiInput.SetVolumeMax
+        chkOldNote.Checked = CurrentMidiInput.RemoveOldNotes
+        chkMidiInputNotes.Checked = CurrentMidiInput.EnableNotes
 
-        'Add the input.
-        lstInput.Items.Clear()
-        lstInput.Items.AddRange(CurrentDevice.Input.ToArray)
 
-        If CurrentDevice.Recording Then
+        If Recording Then
             btnSS.Text = "Stop"
             EnableControls(False, , True)
             btnTest.Enabled = True
@@ -652,18 +665,42 @@
         End If
     End Sub
 
-    Private Sub btnInputNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnInputNew.Click
-        Dim tmp As InputData = Nothing
-        If frmInput.ShowDialog(tmp) = System.Windows.Forms.DialogResult.OK Then
-            AddInput(tmp)
-            lstInput.SelectedIndex = lstInput.Items.Count - 1
-        End If
+
+#Region "Midi Input/Output"
+
+
+    Private Sub lstMidiInput_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lstMidiInput.SelectedIndexChanged
+        If sender.SelectedIndex < 0 Then Return
+        CurrentMidiInput = InDevices(lstMidiInput.SelectedIndex)
+        SetControls()
+    End Sub
+    Private Sub lstMidiOutput_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lstMidiOutput.SelectedIndexChanged
+        If sender.SelectedIndex < 0 Then Return
+        CurrentMidiOutput = OutDevices(lstMidiOutput.SelectedIndex)
+        SetControls()
     End Sub
 
-    Private Sub btnJoystickEdit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnJoystickEdit.Click
-        If frmInput.ShowDialog(CurrentDevice.Input(lstInput.SelectedIndex)) = System.Windows.Forms.DialogResult.OK Then
-            'CurrentDevice.Input(lstInput.SelectedIndex) = frmInput.CurrentJoystick
-            lstInput.Items(lstInput.SelectedIndex) = frmInput.CurrentJoystick
-        End If
+    Private Sub btnMidiInputAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMidiInputAdd.Click
+        AddInputDevice(comInput.SelectedIndex, numInputChannel.Value)
     End Sub
+    Private Sub btnMidiOutputAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMidiOutputAdd.Click
+        AddOutputDevice(comOutput.SelectedIndex, numOutputChannel.Value)
+    End Sub
+
+    Private Sub chkMidiInputNotes_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkMidiInputNotes.CheckedChanged
+        If Not Loaded Or CurrentMidiInput Is Nothing Then Return 'We don't need to change anything here until we are done loading.
+        CurrentMidiInput.EnableNotes = sender.Checked
+        grpMisc.Enabled = sender.Checked
+    End Sub
+
+    Private Sub chkMidiInputChannels_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkMidiInputChannels.CheckedChanged
+        If Not Loaded Or CurrentMidiInput Is Nothing Then Return
+        CurrentMidiInput.AllChannels = chkMidiInputChannels.Checked
+        numInputChannel.Enabled = Not chkMidiInputChannels.Checked
+    End Sub
+#End Region
+
+
+
+
 End Class

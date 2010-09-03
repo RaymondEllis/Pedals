@@ -6,11 +6,11 @@ Pedals
 </name>
 </assembly>
 <members>
-<member name="M:Pedals.MidiDevice.Send(Sanford.Multimedia.Midi.ChannelMessageBuilder)">
+<member name="M:Pedals.Misc.IsSwitch(System.Int32)">
 	<summary>
- Will build and send a message.
+ Is the controller a switch?
  </summary>
-	<param name="message">message to send</param>
+	<param name="Controller">Controller to check.</param>
 </member><member name="F:Pedals.InputData.SwitchOn">
 	<summary>
  If an axis is less then or equals to SwitchOn then turn the switch on.

@@ -1,7 +1,9 @@
-﻿Module Input
-	Public Joystick As New List(Of Joystick)
-	Public dInput As DirectInput
-	Public EnableJoysticks As Boolean = False
+﻿Module InputStuff
+    Public Input As New List(Of InputData)
+
+    Public Joystick As New List(Of Joystick)
+    Public dInput As DirectInput
+    Public EnableJoysticks As Boolean = False
 
     Public Enum InputDevices
         Joystick
@@ -15,91 +17,99 @@
         AlterSoft
     End Enum
 
-	Public Sub CreateInput()
-		Status("Creating joystick input...")
-		'Create direct input
+    Public Sub CreateInput()
+        Status("Creating joystick input...")
+        'Create direct input
         dInput = New DirectInput
 
-		'Search for the joysticks.
-		For Each Device As DeviceInstance In dInput.GetDevices(DeviceClass.GameController, DeviceEnumerationFlags.AttachedOnly)
+        'Search for the joysticks.
+        For Each Device As DeviceInstance In dInput.GetDevices(DeviceClass.GameController, DeviceEnumerationFlags.AttachedOnly)
 
-			'Try to create the device.
-			Try
-				Dim joy As New Joystick(dInput, Device.InstanceGuid)
-				joy.SetCooperativeLevel(frmMain, CooperativeLevel.Exclusive + CooperativeLevel.Background)
-				Joystick.Add(joy)
-			Catch ex As Exception
-				Status(ex.Message, True)
-			End Try
-		Next
-		If Joystick.Count = 0 Then
-			Status("No attached joysticks." & vbNewLine & "Reload the program after you have pluged one in.", True)
-			'frmMain.ContinueLoading = False
-			'Close()
-		Else
-			For Each joy As Joystick In Joystick
-				joy.Acquire()
+            'Try to create the device.
+            Try
+                Dim joy As New Joystick(dInput, Device.InstanceGuid)
+                joy.SetCooperativeLevel(frmMain, CooperativeLevel.Exclusive + CooperativeLevel.Background)
+                Joystick.Add(joy)
+            Catch ex As Exception
+                Status(ex.Message, True)
+            End Try
+        Next
+        If Joystick.Count = 0 Then
+            Status("No attached joysticks." & vbNewLine & "Reload the program after you have pluged one in.", True)
+            'frmMain.ContinueLoading = False
+            'Close()
+        Else
+            For Each joy As Joystick In Joystick
+                joy.Acquire()
 
-				For Each deviceObject As DeviceObjectInstance In joy.GetObjects()
-					If (deviceObject.ObjectType And ObjectDeviceType.Axis) <> 0 Then
-						joy.GetObjectPropertiesById(CInt(deviceObject.ObjectType)).SetRange(0, 127)
-					End If
-				Next
-			Next
-			EnableJoysticks = True
-			Status("Creating joystick input... Done!")
-		End If
+                For Each deviceObject As DeviceObjectInstance In joy.GetObjects()
+                    If (deviceObject.ObjectType And ObjectDeviceType.Axis) <> 0 Then
+                        joy.GetObjectPropertiesById(CInt(deviceObject.ObjectType)).SetRange(0, 127)
+                    End If
+                Next
+            Next
+            EnableJoysticks = True
+            Status("Creating joystick input... Done!")
+        End If
 
 
 
-	End Sub
+    End Sub
 
-	Public Function GetAxis(ByVal JoysitckID As Integer, ByVal Axis As Integer) As Integer
+    Public Sub DoInput()
+        If Not Recording Then Return 'If we are not recording then leave.
+
+        For Each inp As InputData In Input
+            inp.DoInput()
+        Next
+    End Sub
+
+    Public Function GetAxis(ByVal JoysitckID As Integer, ByVal Axis As Integer) As Integer
         ' If Not EnableJoysticks Then Return 0
 
-		Dim State As JoystickState = Joystick(JoysitckID).GetCurrentState
-		Select Case Axis
-			Case 0
-				Return State.X
-			Case 1
-				Return State.Y
-			Case 2
-				Return State.Z
+        Dim State As JoystickState = Joystick(JoysitckID).GetCurrentState
+        Select Case Axis
+            Case 0
+                Return State.X
+            Case 1
+                Return State.Y
+            Case 2
+                Return State.Z
 
-			Case 3
-				Return State.RotationX
-			Case 4
-				Return State.RotationY
-			Case 5
-				Return State.RotationZ
+            Case 3
+                Return State.RotationX
+            Case 4
+                Return State.RotationY
+            Case 5
+                Return State.RotationZ
 
-			Case 6
-				Return State.GetSliders(0)
-			Case 7
-				Return State.GetSliders(1)
-		End Select
+            Case 6
+                Return State.GetSliders(0)
+            Case 7
+                Return State.GetSliders(1)
+        End Select
 
-		Return 0
-	End Function
+        Return 0
+    End Function
 
-	Public Sub DistroyInput()
+    Public Sub DistroyInput()
 
-		Status("Distroying joystick input...")
-		If Joystick.Count > 0 Then
-			For Each j As Joystick In Joystick
-				If j IsNot Nothing Then
-					j.Unacquire()
-					j.Dispose()
-				End If
-			Next
-		End If
+        Status("Distroying joystick input...")
+        If Joystick.Count > 0 Then
+            For Each j As Joystick In Joystick
+                If j IsNot Nothing Then
+                    j.Unacquire()
+                    j.Dispose()
+                End If
+            Next
+        End If
 
-		If dInput IsNot Nothing Then
+        If dInput IsNot Nothing Then
             dInput.Dispose()
-		End If
+        End If
 
-		Status("Distroying joystick input... Done!")
-	End Sub
+        Status("Distroying joystick input... Done!")
+    End Sub
 
 
 
@@ -107,8 +117,8 @@ End Module
 
 
 Public Class InputData
-    Public Device As MidiDevice
-    Public Input As Integer = InputDevices.Joystick
+    Public Device As MidiInput
+    Private Input As Integer = InputDevices.Joystick
 
     Public Axis As Integer = -1
     Public ID As Integer = -1
@@ -222,10 +232,10 @@ Public Class InputData
                     Else
                         m.Data2 = 0
                     End If
-                    CurrentDevice.Send(m)
+                    Send(m)
                 ElseIf Not IsControllerSwitch Then
                     m.Data2 = Pos
-                    CurrentDevice.Send(m)
+                    Send(m)
                 End If
 
             Case ControllerType0.AlterSustain
@@ -236,7 +246,7 @@ Public Class InputData
                         Device.ReleaseSustain()
                     End If
                 End If
-                Device.SustainPressed = Pressed
+                SustainPressed = Pressed
 
             Case ControllerType0.AlterSostenuto
                 If Changed Then
@@ -246,10 +256,10 @@ Public Class InputData
                         Device.ReleaseSostenuto()
                     End If
                 End If
-                Device.SostenutoPressed = Pressed
+                SostenutoPressed = Pressed
 
             Case ControllerType0.AlterSoft
-                Device.SoftPressed = Pressed
+                SoftPressed = Pressed
 
         End Select
 

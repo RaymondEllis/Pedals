@@ -130,9 +130,6 @@ Public Class frmInput
         Next
 
         ReDim oldJoy(Joystick.Count - 1)
-        'For n As Integer = 0 To oldJoy.Length - 1
-        '	oldJoy(n) = New Joy0
-        'Next
 
         If CurrentJoystick IsNot Nothing Then
             tmr.Enabled = True

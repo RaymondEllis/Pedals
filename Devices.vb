@@ -1,40 +1,102 @@
 ﻿Module Devices
+    Public Recording As Boolean = False
 
-    Public Device As New List(Of MidiDevice)
-    Public CurrentDevice As MidiDevice
+    Public InDevices As New List(Of MidiInput)
+    Public OutDevices As New List(Of MidiOutput)
+    Public CurrentMidiInput As MidiInput
+    Public CurrentMidiOutput As MidiOutput
 
-    Public Sub AddDevice(ByVal InDeviceID As Integer, ByVal OutDeviceID As Integer, ByVal InChannel As Integer, ByVal OutChannel As Integer)
+    Public Sub AddInputDevice(ByVal DeviceID As Integer, ByVal Channel As Integer)
 
-        Dim tmp As New MidiDevice(InDeviceID, OutDeviceID, InChannel, OutChannel)
-        tmp.Index = Device.Count
+        Dim tmp As New MidiInput(DeviceID, Channel)
+        tmp.Index = InDevices.Count
 
         'Add it to the lists.
-        Device.Add(tmp)
-        frmMain.lstDevices.Items.Add(tmp.ToString)
-        frmMain.lstDevices.SelectedIndex = tmp.Index
+        InDevices.Add(tmp)
+        frmMain.lstMidiInput.Items.Add(tmp.ToString)
+        frmMain.lstMidiInput.SelectedIndex = tmp.Index
+    End Sub
+    Public Sub AddOutputDevice(ByVal DeviceID As Integer, ByVal Channel As Integer)
+
+        Dim tmp As New MidiOutput(DeviceID, Channel)
+        tmp.Index = OutDevices.Count
+
+        'Add it to the lists.
+        OutDevices.Add(tmp)
+        frmMain.lstMidiOutput.Items.Add(tmp.ToString)
+        frmMain.lstMidiOutput.SelectedIndex = tmp.Index
     End Sub
 
-    Public Sub UpdateDevice(Optional ByVal InDeviceID As Integer = -1, Optional ByVal OutDeviceID As Integer = -1)
-        If InDeviceID = -1 Then InDeviceID = CurrentDevice.InDeviceID
-        If OutDeviceID = -1 Then OutDeviceID = CurrentDevice.OutDeviceID
+    Public Sub UpdateInputDevice(ByVal DeviceID As Integer)
 
+        CurrentMidiInput.DeviceID = DeviceID
 
-        CurrentDevice.SetDeviceID(InDeviceID, OutDeviceID)
+        frmMain.lstMidiInput.Items(CurrentMidiInput.Index) = CurrentMidiInput.ToString()
+    End Sub
+    Public Sub UpdateOutputDevice(ByVal DeviceID As Integer)
 
-        frmMain.lstDevices.Items(CurrentDevice.Index) = CurrentDevice.ToString()
+        CurrentMidiOutput.DeviceID = DeviceID
+
+        frmMain.lstMidiOutput.Items(CurrentMidiOutput.Index) = CurrentMidiOutput.ToString()
     End Sub
 
-    Public Sub AddInput(ByVal Input As InputData)
-        Input.Device = CurrentDevice
-        CurrentDevice.Input.Add(Input)
-        frmMain.lstInput.Items.Add(Input)
+    Public Sub AddInput(ByVal Inp As InputData)
+        Inp.Device = CurrentMidiInput
+        Input.Add(Inp)
+        frmMain.lstInput.Items.Add(Inp)
     End Sub
 
     Public Sub DisposeDevices()
-        For Each dev As MidiDevice In Device
+        For Each dev As MidiInput In InDevices
+            dev.Dispose()
+        Next
+        For Each dev As MidiOutput In OutDevices
             dev.Dispose()
         Next
     End Sub
+
+
+#Region "Send"
+    Public Sub Send(ByVal message As Midi.ChannelMessageBuilder)
+
+        For Each dev As MidiOutput In OutDevices
+            message.MidiChannel = dev.Channel
+            message.Build()
+            dev.Send(message.Result)
+            If Debug Then
+                frmMain.AddMessageToDebug(message.Result)
+            End If
+        Next
+
+        
+    End Sub
+    Public Sub Send(ByVal message As Midi.ChannelMessage)
+        'If Not Recording Then Return 'If we are not recording then leave.
+
+        For Each dev As MidiOutput In OutDevices
+            dev.Send(message)
+        Next
+
+        If Debug Then
+            frmMain.AddMessageToDebug(message)
+        End If
+    End Sub
+    Public Sub Send(ByVal message As Midi.SysCommonMessage)
+        For Each dev As MidiOutput In OutDevices
+            dev.Send(message)
+        Next
+    End Sub
+    Public Sub Send(ByVal message As Midi.SysExMessage)
+        For Each dev As MidiOutput In OutDevices
+            dev.Send(message)
+        Next
+    End Sub
+    Public Sub Send(ByVal message As Midi.SysRealtimeMessage)
+        For Each dev As MidiOutput In OutDevices
+            dev.Send(message)
+        Next
+    End Sub
+#End Region
 
     'Public WithEvents OutDevice As OutputDevice
     'Public OutDeviceID As Integer = 0
