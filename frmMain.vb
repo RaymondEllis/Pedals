@@ -571,8 +571,9 @@
                 tmrInput.Enabled = True
 
                 Status("Recording")
+                Recording = True
             End If
-            Recording = True
+
 
         Else
             tmrInput.Enabled = False
