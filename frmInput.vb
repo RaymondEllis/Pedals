@@ -70,47 +70,56 @@ Public Class frmInput
             Dim pos As Integer = CurrentJoystick.GetAxisPosition
             lblAxis.Text = pos
             CurrentJoystick.DoInput()
-            If pos >= CurrentJoystick.SwitchOn Then
-                lblSwitch.Text = "Switch On"
-                lblSwitch.BackColor = Color.White
+
+            'If the controller is a switch then. we will display it as one.
+            If CurrentJoystick.IsControllerSwitch Then
+                If pos >= CurrentJoystick.SwitchOn Then
+                    lblSwitch.Text = "Switch On"
+                    lblSwitch.BackColor = Color.White
+                Else
+                    lblSwitch.Text = "Switch Off"
+                    lblSwitch.BackColor = Color.Black
+                End If
             Else
-                lblSwitch.Text = "Switch Off"
-                lblSwitch.BackColor = Color.Silver
+                lblSwitch.Text = "Position " & pos
+                Dim col As Integer = (pos / 127) * 255
+                lblSwitch.BackColor = Color.FromArgb(col, col, col)
+
             End If
 
-		Else
-			Dim i As Integer = -1
-			For Each joy As Joystick In Joystick
-				i += 1
-				joy.Poll()
+        Else
+            Dim i As Integer = -1
+            For Each joy As Joystick In Joystick
+                i += 1
+                joy.Poll()
                 Dim s As JoystickState = joy.GetCurrentState
                 CurrentJoystick.ID = i
-				If oldJoy(i).X <> s.X Then
-					CurrentJoystick.Axis = 0
-				ElseIf oldJoy(i).Y <> s.Y Then
-					CurrentJoystick.Axis = 1
-				ElseIf oldJoy(i).Z <> s.Z Then
-					CurrentJoystick.Axis = 2
+                If oldJoy(i).X <> s.X Then
+                    CurrentJoystick.Axis = 0
+                ElseIf oldJoy(i).Y <> s.Y Then
+                    CurrentJoystick.Axis = 1
+                ElseIf oldJoy(i).Z <> s.Z Then
+                    CurrentJoystick.Axis = 2
 
-				ElseIf oldJoy(i).rX <> s.RotationX Then
-					CurrentJoystick.Axis = 3
-				ElseIf oldJoy(i).rY <> s.RotationY Then
-					CurrentJoystick.Axis = 4
-				ElseIf oldJoy(i).rZ <> s.RotationZ Then
-					CurrentJoystick.Axis = 5
+                ElseIf oldJoy(i).rX <> s.RotationX Then
+                    CurrentJoystick.Axis = 3
+                ElseIf oldJoy(i).rY <> s.RotationY Then
+                    CurrentJoystick.Axis = 4
+                ElseIf oldJoy(i).rZ <> s.RotationZ Then
+                    CurrentJoystick.Axis = 5
 
-				ElseIf oldJoy(i).s0 <> s.GetSliders(0) Then
-					CurrentJoystick.Axis = 6
-				ElseIf oldJoy(i).s1 <> s.GetSliders(1) Then
+                ElseIf oldJoy(i).s0 <> s.GetSliders(0) Then
+                    CurrentJoystick.Axis = 6
+                ElseIf oldJoy(i).s1 <> s.GetSliders(1) Then
                     CurrentJoystick.Axis = 7
                 Else
                     CurrentJoystick.ID = -1
                 End If
 
-			Next
-		End If
+            Next
+        End If
 
-	End Sub
+    End Sub
 
     Private Sub frmInput_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
@@ -146,6 +155,7 @@ Public Class frmInput
         numSwitchOn.Value = CurrentJoystick.SwitchOn
         txtName.Text = CurrentJoystick._Name
         chkAutoName.Checked = CurrentJoystick.AutoName
+        chkSwitch.Checked = CurrentJoystick.IsControllerSwitch
 
         Return MyBase.ShowDialog()
     End Function
@@ -162,10 +172,6 @@ Public Class frmInput
 		Public X, Y, Z, rX, rY, rZ, s0, s1 As Integer
 	End Structure
 
-	'Private Class joyO
-	'	Public X, Y, Z, rX, rY, rZ, s0, s1 As Integer
-	'End Class
-
 
     Private Sub comControllerType_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comControllerType.SelectedIndexChanged
         If Not Loaded Then Return
@@ -174,13 +180,15 @@ Public Class frmInput
             comController.Enabled = True
         Else
             comController.Enabled = False
+            chkSwitch.Checked = True
+            chkSwitch.Enabled = False
         End If
     End Sub
 
     Private Sub comController_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comController.SelectedIndexChanged
         If Not Loaded Then Return
         CurrentJoystick.Controller = [Enum].Parse(GetType(Midi.ControllerType), comController.SelectedItem.ToString)
-        CurrentJoystick.IsControllerSwitch = IsSwitch(CurrentJoystick.Controller)
+        chkSwitch.Checked = IsSwitch(CurrentJoystick.Controller)
     End Sub
 
     Private Sub chkAutoName_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkAutoName.CheckedChanged
@@ -192,5 +200,10 @@ Public Class frmInput
     Private Sub txtName_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtName.TextChanged
         If Not Loaded Then Return
         CurrentJoystick._Name = txtName.Text
+    End Sub
+
+    Private Sub chkSwitch_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkSwitch.CheckedChanged
+        If Not Loaded Then Return
+        CurrentJoystick.IsControllerSwitch = chkSwitch.Checked
     End Sub
 End Class

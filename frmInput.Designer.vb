@@ -43,6 +43,7 @@ Partial Class frmInput
         Me.txtName = New System.Windows.Forms.TextBox()
         Me.chkAutoName = New System.Windows.Forms.CheckBox()
         Me.Label6 = New System.Windows.Forms.Label()
+        Me.chkSwitch = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.numSwitchOn, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -172,7 +173,10 @@ Partial Class frmInput
         '
         'lblSwitch
         '
+        Me.lblSwitch.BackColor = System.Drawing.Color.Black
         Me.lblSwitch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblSwitch.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblSwitch.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
         Me.lblSwitch.Location = New System.Drawing.Point(264, 130)
         Me.lblSwitch.Name = "lblSwitch"
         Me.lblSwitch.Size = New System.Drawing.Size(50, 50)
@@ -201,7 +205,7 @@ Partial Class frmInput
         'txtName
         '
         Me.txtName.Enabled = False
-        Me.txtName.Location = New System.Drawing.Point(358, 77)
+        Me.txtName.Location = New System.Drawing.Point(358, 101)
         Me.txtName.Name = "txtName"
         Me.txtName.Size = New System.Drawing.Size(185, 20)
         Me.txtName.TabIndex = 10
@@ -211,7 +215,7 @@ Partial Class frmInput
         Me.chkAutoName.AutoSize = True
         Me.chkAutoName.Checked = True
         Me.chkAutoName.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkAutoName.Location = New System.Drawing.Point(358, 103)
+        Me.chkAutoName.Location = New System.Drawing.Point(358, 127)
         Me.chkAutoName.Name = "chkAutoName"
         Me.chkAutoName.Size = New System.Drawing.Size(77, 17)
         Me.chkAutoName.TabIndex = 11
@@ -221,11 +225,23 @@ Partial Class frmInput
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(314, 84)
+        Me.Label6.Location = New System.Drawing.Point(314, 108)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(38, 13)
         Me.Label6.TabIndex = 9
         Me.Label6.Text = "Name:"
+        '
+        'chkSwitch
+        '
+        Me.chkSwitch.AutoSize = True
+        Me.chkSwitch.Checked = True
+        Me.chkSwitch.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkSwitch.Location = New System.Drawing.Point(358, 61)
+        Me.chkSwitch.Name = "chkSwitch"
+        Me.chkSwitch.Size = New System.Drawing.Size(138, 17)
+        Me.chkSwitch.TabIndex = 12
+        Me.chkSwitch.Text = "Use controller as switch"
+        Me.chkSwitch.UseVisualStyleBackColor = True
         '
         'frmInput
         '
@@ -234,6 +250,7 @@ Partial Class frmInput
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(547, 189)
+        Me.Controls.Add(Me.chkSwitch)
         Me.Controls.Add(Me.chkAutoName)
         Me.Controls.Add(Me.txtName)
         Me.Controls.Add(Me.Label6)
@@ -283,5 +300,6 @@ Partial Class frmInput
     Friend WithEvents txtName As System.Windows.Forms.TextBox
     Friend WithEvents chkAutoName As System.Windows.Forms.CheckBox
     Friend WithEvents Label6 As System.Windows.Forms.Label
+    Friend WithEvents chkSwitch As System.Windows.Forms.CheckBox
 
 End Class

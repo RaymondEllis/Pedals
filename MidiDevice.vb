@@ -98,9 +98,17 @@
 
             'Did we find the devices.
             If Not FoundInput Then
-                'We did not find the input device.
-                InDevice = New InputDevice(InDeviceID)
-                InDeviceID = InDeviceID
+                Try
+                    'We did not find the input device.
+                    InDevice = New InputDevice(InDeviceID)
+                Catch ex As Exception
+                    If ex.Message = "The specified device is already in use.  Wait until it is free, and then try again." Then
+                        Status("Could not load input. You may need to restart your computer.", True)
+                        InDevice = Nothing
+                        Return
+                    End If
+                End Try
+
             End If
             If Not FoundOutput Then
                 If OutDevice IsNot Nothing Then
@@ -111,10 +119,18 @@
                     End If
                 End If
 
-                'We did not find the output device.
-                OutDevice = New OutputDevice(OutDeviceID)
-                OutDevice.OthersUsing = 1
-                OutDeviceID = OutDeviceID
+                Try
+                    'We did not find the output device.
+                    OutDevice = New OutputDevice(OutDeviceID)
+                    OutDevice.OthersUsing = 1
+                Catch ex As Exception
+                    If ex.Message = "The specified device is already in use.  Wait until it is free, and then try again." Then
+                        Status("Could not load input. You may need to restart your computer.", True)
+                        OutDevice = Nothing
+                        Return
+                    End If
+                End Try
+
             End If
 
         End If

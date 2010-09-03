@@ -126,7 +126,7 @@ Public Class InputData
 
     'Output
     Public Controller, ControllerType As Integer
-    Public IsControllerSwitch As Boolean = False
+    Public IsControllerSwitch As Boolean = True
 
     Public AutoName As Boolean = True
     Friend _Name As String
