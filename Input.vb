@@ -57,7 +57,6 @@
     End Sub
 
     Public Sub DoInput()
-        If Not Recording Then Return 'If we are not recording then leave.
 
         For Each inp As InputData In Input
             inp.DoInput()
@@ -197,7 +196,7 @@ Public Class InputData
 
 
     Public Sub DoInput()
-        If Not EnableJoysticks Then Return
+        If Not EnableJoysticks Or Not Recording Then Return
         If ID = -1 Then Return
         Dim Pos As Integer = GetAxisPosition()
 

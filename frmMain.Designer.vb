@@ -60,6 +60,8 @@ Partial Class frmMain
         Me.btnInputEdit = New System.Windows.Forms.Button()
         Me.grpInput = New System.Windows.Forms.GroupBox()
         Me.btnInputRemove = New System.Windows.Forms.Button()
+        Me.panMidiInput = New System.Windows.Forms.Panel()
+        Me.panMidiOutput = New System.Windows.Forms.Panel()
         Me.grpMidiOutput.SuspendLayout()
         CType(Me.numOutputChannel, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.grpMidiInput.SuspendLayout()
@@ -67,27 +69,26 @@ Partial Class frmMain
         Me.panDebug.SuspendLayout()
         Me.grpMisc.SuspendLayout()
         Me.grpInput.SuspendLayout()
+        Me.panMidiInput.SuspendLayout()
+        Me.panMidiOutput.SuspendLayout()
         Me.SuspendLayout()
         '
         'grpMidiOutput
         '
-        Me.grpMidiOutput.Controls.Add(Me.btnMidiRemove)
-        Me.grpMidiOutput.Controls.Add(Me.lstMidiOutput)
-        Me.grpMidiOutput.Controls.Add(Me.btnMidiOutputAdd)
+        Me.grpMidiOutput.Controls.Add(Me.panMidiOutput)
         Me.grpMidiOutput.Controls.Add(Me.numOutputChannel)
         Me.grpMidiOutput.Controls.Add(Me.Label5)
-        Me.grpMidiOutput.Controls.Add(Me.comOutput)
         Me.grpMidiOutput.Enabled = False
         Me.grpMidiOutput.Location = New System.Drawing.Point(243, 11)
         Me.grpMidiOutput.Name = "grpMidiOutput"
         Me.grpMidiOutput.Size = New System.Drawing.Size(231, 167)
         Me.grpMidiOutput.TabIndex = 5
         Me.grpMidiOutput.TabStop = False
-        Me.grpMidiOutput.Text = "Output device"
+        Me.grpMidiOutput.Text = "MIDI Output device"
         '
         'btnMidiRemove
         '
-        Me.btnMidiRemove.Location = New System.Drawing.Point(73, 93)
+        Me.btnMidiRemove.Location = New System.Drawing.Point(67, 75)
         Me.btnMidiRemove.Name = "btnMidiRemove"
         Me.btnMidiRemove.Size = New System.Drawing.Size(61, 20)
         Me.btnMidiRemove.TabIndex = 30
@@ -97,14 +98,14 @@ Partial Class frmMain
         'lstMidiOutput
         '
         Me.lstMidiOutput.FormattingEnabled = True
-        Me.lstMidiOutput.Location = New System.Drawing.Point(6, 18)
+        Me.lstMidiOutput.Location = New System.Drawing.Point(0, 0)
         Me.lstMidiOutput.Name = "lstMidiOutput"
         Me.lstMidiOutput.Size = New System.Drawing.Size(219, 69)
         Me.lstMidiOutput.TabIndex = 30
         '
         'btnMidiOutputAdd
         '
-        Me.btnMidiOutputAdd.Location = New System.Drawing.Point(6, 93)
+        Me.btnMidiOutputAdd.Location = New System.Drawing.Point(0, 75)
         Me.btnMidiOutputAdd.Name = "btnMidiOutputAdd"
         Me.btnMidiOutputAdd.Size = New System.Drawing.Size(61, 20)
         Me.btnMidiOutputAdd.TabIndex = 30
@@ -132,21 +133,18 @@ Partial Class frmMain
         '
         Me.comOutput.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.comOutput.FormattingEnabled = True
-        Me.comOutput.Location = New System.Drawing.Point(6, 119)
+        Me.comOutput.Location = New System.Drawing.Point(0, 101)
         Me.comOutput.Name = "comOutput"
         Me.comOutput.Size = New System.Drawing.Size(219, 21)
         Me.comOutput.TabIndex = 1
         '
         'grpMidiInput
         '
+        Me.grpMidiInput.Controls.Add(Me.panMidiInput)
         Me.grpMidiInput.Controls.Add(Me.chkMidiInputVolume)
-        Me.grpMidiInput.Controls.Add(Me.btnMidiInputRemove)
         Me.grpMidiInput.Controls.Add(Me.chkMidiInputChannels)
-        Me.grpMidiInput.Controls.Add(Me.btnMidiInputAdd)
-        Me.grpMidiInput.Controls.Add(Me.lstMidiInput)
         Me.grpMidiInput.Controls.Add(Me.chkMidiInputNotes)
         Me.grpMidiInput.Controls.Add(Me.numInputChannel)
-        Me.grpMidiInput.Controls.Add(Me.comInput)
         Me.grpMidiInput.Controls.Add(Me.Label6)
         Me.grpMidiInput.Enabled = False
         Me.grpMidiInput.Location = New System.Drawing.Point(12, 11)
@@ -154,7 +152,7 @@ Partial Class frmMain
         Me.grpMidiInput.Size = New System.Drawing.Size(231, 200)
         Me.grpMidiInput.TabIndex = 5
         Me.grpMidiInput.TabStop = False
-        Me.grpMidiInput.Text = "Input device"
+        Me.grpMidiInput.Text = "MIDI Input device"
         '
         'chkMidiInputVolume
         '
@@ -171,7 +169,7 @@ Partial Class frmMain
         '
         'btnMidiInputRemove
         '
-        Me.btnMidiInputRemove.Location = New System.Drawing.Point(76, 94)
+        Me.btnMidiInputRemove.Location = New System.Drawing.Point(70, 75)
         Me.btnMidiInputRemove.Name = "btnMidiInputRemove"
         Me.btnMidiInputRemove.Size = New System.Drawing.Size(61, 20)
         Me.btnMidiInputRemove.TabIndex = 30
@@ -186,13 +184,12 @@ Partial Class frmMain
         Me.chkMidiInputChannels.Size = New System.Drawing.Size(83, 17)
         Me.chkMidiInputChannels.TabIndex = 26
         Me.chkMidiInputChannels.Text = "All channels"
-        Me.ToolTips.SetToolTip(Me.chkMidiInputChannels, "Usefull for when you have the same output and input." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "So you don't get dubble not" & _
-                "es.")
+        Me.ToolTips.SetToolTip(Me.chkMidiInputChannels, "Recive input form all channels?")
         Me.chkMidiInputChannels.UseVisualStyleBackColor = True
         '
         'btnMidiInputAdd
         '
-        Me.btnMidiInputAdd.Location = New System.Drawing.Point(9, 94)
+        Me.btnMidiInputAdd.Location = New System.Drawing.Point(3, 75)
         Me.btnMidiInputAdd.Name = "btnMidiInputAdd"
         Me.btnMidiInputAdd.Size = New System.Drawing.Size(61, 20)
         Me.btnMidiInputAdd.TabIndex = 30
@@ -202,9 +199,9 @@ Partial Class frmMain
         'lstMidiInput
         '
         Me.lstMidiInput.FormattingEnabled = True
-        Me.lstMidiInput.Location = New System.Drawing.Point(9, 19)
+        Me.lstMidiInput.Location = New System.Drawing.Point(0, 0)
         Me.lstMidiInput.Name = "lstMidiInput"
-        Me.lstMidiInput.Size = New System.Drawing.Size(216, 69)
+        Me.lstMidiInput.Size = New System.Drawing.Size(219, 69)
         Me.lstMidiInput.TabIndex = 30
         '
         'chkMidiInputNotes
@@ -217,8 +214,7 @@ Partial Class frmMain
         Me.chkMidiInputNotes.Size = New System.Drawing.Size(88, 17)
         Me.chkMidiInputNotes.TabIndex = 25
         Me.chkMidiInputNotes.Text = "Enable notes"
-        Me.ToolTips.SetToolTip(Me.chkMidiInputNotes, "Usefull for when you have the same output and input." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "So you don't get dubble not" & _
-                "es.")
+        Me.ToolTips.SetToolTip(Me.chkMidiInputNotes, "If checked then it will not recive any notes from the selected input device.")
         Me.chkMidiInputNotes.UseVisualStyleBackColor = True
         '
         'numInputChannel
@@ -233,7 +229,7 @@ Partial Class frmMain
         '
         Me.comInput.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.comInput.FormattingEnabled = True
-        Me.comInput.Location = New System.Drawing.Point(6, 120)
+        Me.comInput.Location = New System.Drawing.Point(0, 101)
         Me.comInput.Name = "comInput"
         Me.comInput.Size = New System.Drawing.Size(219, 21)
         Me.comInput.TabIndex = 1
@@ -252,19 +248,20 @@ Partial Class frmMain
         Me.chkOldNote.AutoSize = True
         Me.chkOldNote.Checked = True
         Me.chkOldNote.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkOldNote.Location = New System.Drawing.Point(6, 37)
+        Me.chkOldNote.Location = New System.Drawing.Point(6, 19)
         Me.chkOldNote.Name = "chkOldNote"
         Me.chkOldNote.Size = New System.Drawing.Size(112, 17)
         Me.chkOldNote.TabIndex = 16
         Me.chkOldNote.Text = "Remove old notes"
-        Me.ToolTips.SetToolTip(Me.chkOldNote, "Will depress pressed notes with Altered notes.")
+        Me.ToolTips.SetToolTip(Me.chkOldNote, "If you press a note twice with a altered controller. Does it remove the first not" & _
+                "e?")
         Me.chkOldNote.UseVisualStyleBackColor = True
         '
         'chkDebug
         '
         Me.chkDebug.AutoSize = True
         Me.chkDebug.Enabled = False
-        Me.chkDebug.Location = New System.Drawing.Point(190, 233)
+        Me.chkDebug.Location = New System.Drawing.Point(6, 42)
         Me.chkDebug.Name = "chkDebug"
         Me.chkDebug.Size = New System.Drawing.Size(58, 17)
         Me.chkDebug.TabIndex = 17
@@ -274,16 +271,15 @@ Partial Class frmMain
         '
         'panDebug
         '
-        Me.panDebug.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.panDebug.Controls.Add(Me.Label1)
         Me.panDebug.Controls.Add(Me.lstDebug)
         Me.panDebug.Controls.Add(Me.Label2)
         Me.panDebug.Controls.Add(Me.Label3)
         Me.panDebug.Controls.Add(Me.Label4)
+        Me.panDebug.Controls.Add(Me.Label1)
         Me.panDebug.Enabled = False
-        Me.panDebug.Location = New System.Drawing.Point(171, 247)
+        Me.panDebug.Location = New System.Drawing.Point(695, 29)
         Me.panDebug.Name = "panDebug"
-        Me.panDebug.Size = New System.Drawing.Size(303, 241)
+        Me.panDebug.Size = New System.Drawing.Size(289, 277)
         Me.panDebug.TabIndex = 18
         '
         'Label1
@@ -297,10 +293,12 @@ Partial Class frmMain
         '
         'lstDebug
         '
+        Me.lstDebug.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lstDebug.FormattingEnabled = True
+        Me.lstDebug.ItemHeight = 14
         Me.lstDebug.Location = New System.Drawing.Point(6, 32)
         Me.lstDebug.Name = "lstDebug"
-        Me.lstDebug.Size = New System.Drawing.Size(288, 199)
+        Me.lstDebug.Size = New System.Drawing.Size(273, 242)
         Me.lstDebug.TabIndex = 2
         '
         'Label2
@@ -315,7 +313,7 @@ Partial Class frmMain
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(131, 16)
+        Me.Label3.Location = New System.Drawing.Point(173, 16)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(39, 13)
         Me.Label3.TabIndex = 5
@@ -324,7 +322,7 @@ Partial Class frmMain
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(193, 16)
+        Me.Label4.Location = New System.Drawing.Point(224, 16)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(39, 13)
         Me.Label4.TabIndex = 6
@@ -333,7 +331,7 @@ Partial Class frmMain
         'btnSS
         '
         Me.btnSS.Enabled = False
-        Me.btnSS.Location = New System.Drawing.Point(480, 326)
+        Me.btnSS.Location = New System.Drawing.Point(265, 253)
         Me.btnSS.Name = "btnSS"
         Me.btnSS.Size = New System.Drawing.Size(75, 23)
         Me.btnSS.TabIndex = 19
@@ -344,9 +342,9 @@ Partial Class frmMain
         '
         Me.lblStatus.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.lblStatus.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.lblStatus.Location = New System.Drawing.Point(0, 495)
+        Me.lblStatus.Location = New System.Drawing.Point(0, 314)
         Me.lblStatus.Name = "lblStatus"
-        Me.lblStatus.Size = New System.Drawing.Size(697, 19)
+        Me.lblStatus.Size = New System.Drawing.Size(980, 19)
         Me.lblStatus.TabIndex = 20
         Me.lblStatus.Text = "Status: Loading..."
         Me.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -358,8 +356,9 @@ Partial Class frmMain
         'grpMisc
         '
         Me.grpMisc.Controls.Add(Me.chkOldNote)
+        Me.grpMisc.Controls.Add(Me.chkDebug)
         Me.grpMisc.Enabled = False
-        Me.grpMisc.Location = New System.Drawing.Point(561, 326)
+        Me.grpMisc.Location = New System.Drawing.Point(346, 240)
         Me.grpMisc.Name = "grpMisc"
         Me.grpMisc.Size = New System.Drawing.Size(128, 66)
         Me.grpMisc.TabIndex = 23
@@ -369,7 +368,7 @@ Partial Class frmMain
         'btnTest
         '
         Me.btnTest.Enabled = False
-        Me.btnTest.Location = New System.Drawing.Point(480, 352)
+        Me.btnTest.Location = New System.Drawing.Point(265, 282)
         Me.btnTest.Name = "btnTest"
         Me.btnTest.Size = New System.Drawing.Size(75, 23)
         Me.btnTest.TabIndex = 24
@@ -428,17 +427,40 @@ Partial Class frmMain
         Me.btnInputRemove.Text = "Remove"
         Me.btnInputRemove.UseVisualStyleBackColor = True
         '
+        'panMidiInput
+        '
+        Me.panMidiInput.Controls.Add(Me.lstMidiInput)
+        Me.panMidiInput.Controls.Add(Me.btnMidiInputRemove)
+        Me.panMidiInput.Controls.Add(Me.btnMidiInputAdd)
+        Me.panMidiInput.Controls.Add(Me.comInput)
+        Me.panMidiInput.Enabled = False
+        Me.panMidiInput.Location = New System.Drawing.Point(6, 18)
+        Me.panMidiInput.Name = "panMidiInput"
+        Me.panMidiInput.Size = New System.Drawing.Size(219, 122)
+        Me.panMidiInput.TabIndex = 31
+        '
+        'panMidiOutput
+        '
+        Me.panMidiOutput.Controls.Add(Me.btnMidiRemove)
+        Me.panMidiOutput.Controls.Add(Me.lstMidiOutput)
+        Me.panMidiOutput.Controls.Add(Me.comOutput)
+        Me.panMidiOutput.Controls.Add(Me.btnMidiOutputAdd)
+        Me.panMidiOutput.Enabled = False
+        Me.panMidiOutput.Location = New System.Drawing.Point(6, 18)
+        Me.panMidiOutput.Name = "panMidiOutput"
+        Me.panMidiOutput.Size = New System.Drawing.Size(219, 124)
+        Me.panMidiOutput.TabIndex = 31
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(697, 514)
+        Me.ClientSize = New System.Drawing.Size(980, 333)
         Me.Controls.Add(Me.grpInput)
         Me.Controls.Add(Me.btnTest)
         Me.Controls.Add(Me.grpMisc)
         Me.Controls.Add(Me.lblStatus)
         Me.Controls.Add(Me.btnSS)
-        Me.Controls.Add(Me.chkDebug)
         Me.Controls.Add(Me.panDebug)
         Me.Controls.Add(Me.grpMidiInput)
         Me.Controls.Add(Me.grpMidiOutput)
@@ -458,8 +480,9 @@ Partial Class frmMain
         Me.grpMisc.ResumeLayout(False)
         Me.grpMisc.PerformLayout()
         Me.grpInput.ResumeLayout(False)
+        Me.panMidiInput.ResumeLayout(False)
+        Me.panMidiOutput.ResumeLayout(False)
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Friend WithEvents grpMidiOutput As System.Windows.Forms.GroupBox
@@ -499,5 +522,7 @@ Partial Class frmMain
     Friend WithEvents btnMidiInputAdd As System.Windows.Forms.Button
     Friend WithEvents grpInput As System.Windows.Forms.GroupBox
     Friend WithEvents btnInputRemove As System.Windows.Forms.Button
+    Friend WithEvents panMidiInput As System.Windows.Forms.Panel
+    Friend WithEvents panMidiOutput As System.Windows.Forms.Panel
 
 End Class

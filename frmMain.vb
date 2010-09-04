@@ -30,6 +30,8 @@
     Private Sub frmMain_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Me.Text = "Pedals v" & Application.ProductVersion.ToString
 
+        Me.Width = 697
+
         'Fill boxs.
         GetDevices()
 
@@ -64,11 +66,15 @@
 
     End Sub
 
-    Public Sub EnableControls(ByVal Value As Boolean, Optional ByVal StartB As Boolean = False, Optional ByVal Devices As Boolean = False, Optional ByVal Misc As Boolean = False, Optional ByVal Debug As Boolean = False)
-        If StartB Then btnSS.Enabled = Value
-        If Devices Then
+    Public Sub EnableControls(ByVal Value As Boolean, Optional ByVal Main As Boolean = False, Optional ByVal Devices As Boolean = False, Optional ByVal Misc As Boolean = False, Optional ByVal Debug As Boolean = False)
+        If Main Then
+            btnSS.Enabled = Value
             grpMidiInput.Enabled = Value
             grpMidiOutput.Enabled = Value
+        End If
+        If Devices Then
+            panMidiInput.Enabled = Value
+            panMidiOutput.Enabled = Value
         End If
         If Debug Then chkDebug.Enabled = Value
         If Misc Then grpMisc.Enabled = Value
@@ -171,10 +177,15 @@
             Dim d As New AddMessageToDebugCallback(AddressOf AddMessageToDebug)
             Me.Invoke(d, New Object() {[Message]})
         Else
-            Me.lstDebug.Items.Add(Message.MidiChannel.ToString & vbTab & Message.Command.ToString & vbTab & vbTab & Message.Data1.ToString & vbTab & Message.Data2.ToString)
-            If Me.lstDebug.Items.Count = 15 Then
+            If Me.lstDebug.Items.Count = 17 Then
                 Me.lstDebug.Items.RemoveAt(0)
             End If
+
+            Me.lstDebug.Items.Add(Message.MidiChannel.ToString & vbTab & _
+                                  Message.Command.ToString.PadRight(15) & vbTab & _
+                                  Message.Data1.ToString & vbTab & _
+                                  Message.Data2.ToString)
+
             Me.lstDebug.SelectedIndex = Me.lstDebug.Items.Count - 1
         End If
     End Sub
@@ -185,6 +196,9 @@
 
         If Debug = False Then
             lstDebug.Items.Clear()
+            Me.Width = 697
+        Else
+            Me.Width = 986
         End If
     End Sub
 #End Region
