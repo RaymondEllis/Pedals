@@ -177,7 +177,7 @@
             Dim d As New AddMessageToDebugCallback(AddressOf AddMessageToDebug)
             Me.Invoke(d, New Object() {[Message]})
         Else
-            If Me.lstDebug.Items.Count = 17 Then
+            If Me.lstDebug.Items.Count = 18 Then
                 Me.lstDebug.Items.RemoveAt(0)
             End If
 
@@ -192,13 +192,13 @@
 
     Private Sub chkDebug_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkDebug.CheckedChanged
         Debug = chkDebug.Checked
-        panDebug.Enabled = Debug
+        grpDebug.Enabled = Debug
 
         If Debug = False Then
             lstDebug.Items.Clear()
             Me.Width = 697
         Else
-            Me.Width = 986
+            Me.Width = 995
         End If
     End Sub
 #End Region

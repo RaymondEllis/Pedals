@@ -42,7 +42,6 @@ Partial Class frmMain
         Me.Label6 = New System.Windows.Forms.Label()
         Me.chkOldNote = New System.Windows.Forms.CheckBox()
         Me.chkDebug = New System.Windows.Forms.CheckBox()
-        Me.panDebug = New System.Windows.Forms.Panel()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.lstDebug = New System.Windows.Forms.ListBox()
         Me.Label2 = New System.Windows.Forms.Label()
@@ -62,15 +61,16 @@ Partial Class frmMain
         Me.btnInputRemove = New System.Windows.Forms.Button()
         Me.panMidiInput = New System.Windows.Forms.Panel()
         Me.panMidiOutput = New System.Windows.Forms.Panel()
+        Me.grpDebug = New System.Windows.Forms.GroupBox()
         Me.grpMidiOutput.SuspendLayout()
         CType(Me.numOutputChannel, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.grpMidiInput.SuspendLayout()
         CType(Me.numInputChannel, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.panDebug.SuspendLayout()
         Me.grpMisc.SuspendLayout()
         Me.grpInput.SuspendLayout()
         Me.panMidiInput.SuspendLayout()
         Me.panMidiOutput.SuspendLayout()
+        Me.grpDebug.SuspendLayout()
         Me.SuspendLayout()
         '
         'grpMidiOutput
@@ -269,23 +269,10 @@ Partial Class frmMain
         Me.ToolTips.SetToolTip(Me.chkDebug, "Debug all commands going out.")
         Me.chkDebug.UseVisualStyleBackColor = True
         '
-        'panDebug
-        '
-        Me.panDebug.Controls.Add(Me.lstDebug)
-        Me.panDebug.Controls.Add(Me.Label2)
-        Me.panDebug.Controls.Add(Me.Label3)
-        Me.panDebug.Controls.Add(Me.Label4)
-        Me.panDebug.Controls.Add(Me.Label1)
-        Me.panDebug.Enabled = False
-        Me.panDebug.Location = New System.Drawing.Point(695, 29)
-        Me.panDebug.Name = "panDebug"
-        Me.panDebug.Size = New System.Drawing.Size(289, 277)
-        Me.panDebug.TabIndex = 18
-        '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(58, 16)
+        Me.Label1.Location = New System.Drawing.Point(61, 16)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(57, 13)
         Me.Label1.TabIndex = 3
@@ -296,15 +283,15 @@ Partial Class frmMain
         Me.lstDebug.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lstDebug.FormattingEnabled = True
         Me.lstDebug.ItemHeight = 14
-        Me.lstDebug.Location = New System.Drawing.Point(6, 32)
+        Me.lstDebug.Location = New System.Drawing.Point(9, 32)
         Me.lstDebug.Name = "lstDebug"
-        Me.lstDebug.Size = New System.Drawing.Size(273, 242)
+        Me.lstDebug.Size = New System.Drawing.Size(273, 256)
         Me.lstDebug.TabIndex = 2
         '
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(3, 16)
+        Me.Label2.Location = New System.Drawing.Point(6, 16)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(49, 13)
         Me.Label2.TabIndex = 4
@@ -313,7 +300,7 @@ Partial Class frmMain
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(173, 16)
+        Me.Label3.Location = New System.Drawing.Point(176, 16)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(39, 13)
         Me.Label3.TabIndex = 5
@@ -322,7 +309,7 @@ Partial Class frmMain
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(224, 16)
+        Me.Label4.Location = New System.Drawing.Point(227, 16)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(39, 13)
         Me.Label4.TabIndex = 6
@@ -344,7 +331,7 @@ Partial Class frmMain
         Me.lblStatus.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.lblStatus.Location = New System.Drawing.Point(0, 314)
         Me.lblStatus.Name = "lblStatus"
-        Me.lblStatus.Size = New System.Drawing.Size(980, 19)
+        Me.lblStatus.Size = New System.Drawing.Size(989, 19)
         Me.lblStatus.TabIndex = 20
         Me.lblStatus.Text = "Status: Loading..."
         Me.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -451,17 +438,31 @@ Partial Class frmMain
         Me.panMidiOutput.Size = New System.Drawing.Size(219, 124)
         Me.panMidiOutput.TabIndex = 31
         '
+        'grpDebug
+        '
+        Me.grpDebug.Controls.Add(Me.lstDebug)
+        Me.grpDebug.Controls.Add(Me.Label2)
+        Me.grpDebug.Controls.Add(Me.Label1)
+        Me.grpDebug.Controls.Add(Me.Label3)
+        Me.grpDebug.Controls.Add(Me.Label4)
+        Me.grpDebug.Location = New System.Drawing.Point(695, 12)
+        Me.grpDebug.Name = "grpDebug"
+        Me.grpDebug.Size = New System.Drawing.Size(291, 294)
+        Me.grpDebug.TabIndex = 31
+        Me.grpDebug.TabStop = False
+        Me.grpDebug.Text = "Debug"
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(980, 333)
+        Me.ClientSize = New System.Drawing.Size(989, 333)
+        Me.Controls.Add(Me.grpDebug)
         Me.Controls.Add(Me.grpInput)
         Me.Controls.Add(Me.btnTest)
         Me.Controls.Add(Me.grpMisc)
         Me.Controls.Add(Me.lblStatus)
         Me.Controls.Add(Me.btnSS)
-        Me.Controls.Add(Me.panDebug)
         Me.Controls.Add(Me.grpMidiInput)
         Me.Controls.Add(Me.grpMidiOutput)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
@@ -475,13 +476,13 @@ Partial Class frmMain
         Me.grpMidiInput.ResumeLayout(False)
         Me.grpMidiInput.PerformLayout()
         CType(Me.numInputChannel, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.panDebug.ResumeLayout(False)
-        Me.panDebug.PerformLayout()
         Me.grpMisc.ResumeLayout(False)
         Me.grpMisc.PerformLayout()
         Me.grpInput.ResumeLayout(False)
         Me.panMidiInput.ResumeLayout(False)
         Me.panMidiOutput.ResumeLayout(False)
+        Me.grpDebug.ResumeLayout(False)
+        Me.grpDebug.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -491,7 +492,6 @@ Partial Class frmMain
     Friend WithEvents comInput As System.Windows.Forms.ComboBox
     Friend WithEvents chkOldNote As System.Windows.Forms.CheckBox
     Friend WithEvents chkDebug As System.Windows.Forms.CheckBox
-    Friend WithEvents panDebug As System.Windows.Forms.Panel
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents lstDebug As System.Windows.Forms.ListBox
     Friend WithEvents Label2 As System.Windows.Forms.Label
@@ -524,5 +524,6 @@ Partial Class frmMain
     Friend WithEvents btnInputRemove As System.Windows.Forms.Button
     Friend WithEvents panMidiInput As System.Windows.Forms.Panel
     Friend WithEvents panMidiOutput As System.Windows.Forms.Panel
+    Friend WithEvents grpDebug As System.Windows.Forms.GroupBox
 
 End Class
