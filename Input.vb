@@ -56,6 +56,27 @@
 
     End Sub
 
+    Public Sub AddInput(ByVal Inp As InputData)
+        Inp.Device = CurrentMidiInput
+        Input.Add(Inp)
+        frmMain.lstInput.Items.Add(Inp)
+
+        frmMain.btnInputRemove.Enabled = True
+    End Sub
+    Public Sub RemoveInput(ByVal Index As Integer)
+        frmMain.lstInput.Items.RemoveAt(Index)
+        Input.RemoveAt(Index)
+
+        If Input.Count = 0 Then
+            frmMain.btnInputRemove.Enabled = False
+        Else
+            'For n As Integer = Index To Input.Count - 1
+            '    Input(n).index = Index
+            'Next
+
+            frmMain.lstInput.SelectedIndex = Index - 1
+        End If
+    End Sub
     Public Sub DoInput()
 
         For Each inp As InputData In Input

@@ -7,7 +7,7 @@ Module Misc
 	Public Sub Status(ByVal Text As String, Optional ByVal ShowError As Boolean = False)
 		frmMain.lblStatus.Text = "Status: " & Text
 		If ShowError Then
-			MessageBox.Show("#Error#" & vbNewLine & Text, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("#Error#" & vbNewLine & Text, "Pedals Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
 		End If
 
 #If DEBUG Then

@@ -15,7 +15,32 @@
         InDevices.Add(tmp)
         frmMain.lstMidiInput.Items.Add(tmp.ToString)
         frmMain.lstMidiInput.SelectedIndex = tmp.Index
+
+        frmMain.btnMidiInputRemove.Enabled = True
     End Sub
+    Public Sub RemoveInputDevice(ByVal Index As Integer)
+
+        frmMain.lstMidiInput.Items.RemoveAt(Index) 'Remove the device from the list on the form.
+        InDevices(Index).Dispose() 'Dispose the device.
+        InDevices.RemoveAt(Index) 'Remove the device from the main list.
+
+        'Do we have any devices left?
+        If InDevices.Count = 0 Then
+            CurrentMidiInput = Nothing 'There is no current device.
+            frmMain.btnMidiInputRemove.Enabled = False 'Don't allow anybuddy to press the button.
+        Else
+            'Update the indexes of the other devices.
+            For n As Integer = Index To InDevices.Count - 1
+                InDevices(n).Index = n
+            Next
+
+            'Set the curent device to the last one in the list.
+            'CurrentMidiInput = InDevices(InDevices.Count - 1)
+            frmMain.lstMidiInput.SelectedIndex = Index - 1
+        End If
+
+    End Sub
+
     Public Sub AddOutputDevice(ByVal DeviceID As Integer, ByVal Channel As Integer)
 
         Dim tmp As New MidiOutput(DeviceID, Channel)
@@ -25,9 +50,34 @@
         OutDevices.Add(tmp)
         frmMain.lstMidiOutput.Items.Add(tmp.ToString)
         frmMain.lstMidiOutput.SelectedIndex = tmp.Index
+
+        frmMain.btnMidiOutputRemove.Enabled = True
+    End Sub
+    Public Sub RemoveOutputDevice(ByVal Index As Integer)
+
+        frmMain.lstMidiOutput.Items.RemoveAt(Index) 'Remove the device from the list on the form.
+        OutDevices(Index).Dispose() 'Dispose the device.
+        OutDevices.RemoveAt(Index) 'Remove the device from the main list.
+
+        'Do we have any devices left?
+        If OutDevices.Count = 0 Then
+            CurrentMidiOutput = Nothing 'There is no current device.
+            frmMain.btnMidiOutputRemove.Enabled = False 'Don't allow anybuddy to press the button.
+        Else
+            'Update the indexes of the other devices.
+            For n As Integer = Index To OutDevices.Count - 1
+                OutDevices(n).Index = n
+            Next
+
+            'Set the curent device to the last one in the list.
+            'CurrentMidiOutput = OutDevices(OutDevices.Count - 1)
+            frmMain.lstMidiOutput.SelectedIndex = Index - 1
+        End If
+
     End Sub
 
     Public Sub UpdateInputDevice(ByVal DeviceID As Integer)
+        If CurrentMidiInput Is Nothing Then Return
 
         CurrentMidiInput.DeviceID = DeviceID
 
@@ -40,11 +90,6 @@
         frmMain.lstMidiOutput.Items(CurrentMidiOutput.Index) = CurrentMidiOutput.ToString()
     End Sub
 
-    Public Sub AddInput(ByVal Inp As InputData)
-        Inp.Device = CurrentMidiInput
-        Input.Add(Inp)
-        frmMain.lstInput.Items.Add(Inp)
-    End Sub
 
     Public Sub DisposeDevices()
         For Each dev As MidiInput In InDevices

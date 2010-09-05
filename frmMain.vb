@@ -550,6 +550,11 @@
             lstInput.Items(lstInput.SelectedIndex) = frmInput.CurrentJoystick
         End If
     End Sub
+
+
+    Private Sub btnInputRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnInputRemove.Click
+        RemoveInput(lstInput.SelectedIndex)
+    End Sub
 #End Region
 
 #Region "StartStop"
@@ -658,15 +663,25 @@
 
     Public Sub SetControls()
         If Not Loaded Then Return
-        comInput.SelectedIndex = CurrentMidiInput.DeviceID
-        comOutput.SelectedIndex = CurrentMidiOutput.DeviceID
 
-        numInputChannel.Value = CurrentMidiInput.Channel
-        numOutputChannel.Value = CurrentMidiOutput.Channel
 
-        chkMidiInputVolume.Checked = CurrentMidiInput.SetVolumeMax
-        chkOldNote.Checked = CurrentMidiInput.RemoveOldNotes
-        chkMidiInputNotes.Checked = CurrentMidiInput.EnableNotes
+
+        If CurrentMidiInput IsNot Nothing Then
+            comInput.SelectedIndex = CurrentMidiInput.DeviceID
+
+            numInputChannel.Value = CurrentMidiInput.Channel
+
+            chkMidiInputVolume.Checked = CurrentMidiInput.SetVolumeMax
+            chkOldNote.Checked = CurrentMidiInput.RemoveOldNotes
+            chkMidiInputNotes.Checked = CurrentMidiInput.EnableNotes
+
+        End If
+
+        If CurrentMidiOutput IsNot Nothing Then
+            comOutput.SelectedIndex = CurrentMidiOutput.DeviceID
+            numOutputChannel.Value = CurrentMidiOutput.Channel
+
+        End If
 
 
         If Recording Then
@@ -695,11 +710,20 @@
         SetControls()
     End Sub
 
+    'Add buttons:
     Private Sub btnMidiInputAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMidiInputAdd.Click
         AddInputDevice(comInput.SelectedIndex, numInputChannel.Value)
     End Sub
     Private Sub btnMidiOutputAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMidiOutputAdd.Click
         AddOutputDevice(comOutput.SelectedIndex, numOutputChannel.Value)
+    End Sub
+
+    'Remove buttons:
+    Private Sub btnMidiInputRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMidiInputRemove.Click
+        RemoveInputDevice(lstMidiInput.SelectedIndex)
+    End Sub
+    Private Sub btnMidiOutputRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMidiOutputRemove.Click
+        RemoveOutputDevice(lstMidiOutput.SelectedIndex)
     End Sub
 
     Private Sub chkMidiInputNotes_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkMidiInputNotes.CheckedChanged
@@ -713,7 +737,10 @@
         CurrentMidiInput.AllChannels = chkMidiInputChannels.Checked
         numInputChannel.Enabled = Not chkMidiInputChannels.Checked
     End Sub
+
+
 #End Region
+
 
 
 
