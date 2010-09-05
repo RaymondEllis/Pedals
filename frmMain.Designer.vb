@@ -410,6 +410,7 @@ Partial Class frmMain
         '
         'btnInputEdit
         '
+        Me.btnInputEdit.Enabled = False
         Me.btnInputEdit.Location = New System.Drawing.Point(75, 261)
         Me.btnInputEdit.Name = "btnInputEdit"
         Me.btnInputEdit.Size = New System.Drawing.Size(61, 21)

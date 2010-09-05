@@ -62,6 +62,7 @@
         frmMain.lstInput.Items.Add(Inp)
 
         frmMain.btnInputRemove.Enabled = True
+        frmMain.btnInputEdit.Enabled = True
     End Sub
     Public Sub RemoveInput(ByVal Index As Integer)
         frmMain.lstInput.Items.RemoveAt(Index)
@@ -69,6 +70,7 @@
 
         If Input.Count = 0 Then
             frmMain.btnInputRemove.Enabled = False
+            frmMain.btnInputEdit.Enabled = True
         Else
             'For n As Integer = Index To Input.Count - 1
             '    Input(n).index = Index
