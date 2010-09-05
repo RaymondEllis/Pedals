@@ -66,6 +66,9 @@
   <PropertyGroup>
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Sanford.Slim">
       <HintPath>..\..\..\..\C#\Sanford\Sanford.Slim\bin\Release\Sanford.Slim.dll</HintPath>
@@ -179,6 +182,7 @@
     <Content Include="Changelog.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Icon.ico" />
     <Content Include="Roadmap.txt" />
   </ItemGroup>
   <ItemGroup />

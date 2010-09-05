@@ -23,6 +23,7 @@ Partial Class frmMain
 	<System.Diagnostics.DebuggerStepThrough()> _
 	Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
         Me.grpMidiOutput = New System.Windows.Forms.GroupBox()
         Me.panMidiOutput = New System.Windows.Forms.Panel()
         Me.btnMidiOutputRemove = New System.Windows.Forms.Button()
@@ -469,6 +470,7 @@ Partial Class frmMain
         Me.Controls.Add(Me.grpMidiInput)
         Me.Controls.Add(Me.grpMidiOutput)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.Name = "frmMain"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
