@@ -1,0 +1,24 @@
+﻿This is more like a to do list. But it works :)
+
+*Work on debuging. Better unhandled error messages.
+*Add the ability to add more joysticks to MIDI out
+*Allow you to use MIDI pedals like a joystick
+
+*New UI
+	Allow user to add(and copy) MIDI input devices to a list.
+		Would looke something like this:
+		'MIDI Input			MIDI Output	'
+		'kX Control			kX Synth	'
+
+		Which would then have the joystick/keyboard/midi Input independently of others.
+		Start and stop independently of others.
+		Would not allow adding the same MIDI input device and MIDI channel.
+		Would be best if the MIDI output device was always runing.
+
+
+	Add a list for Input. So you can have more then the three pedals.
+		Would show up in the list like this:
+		'Input								Output				'
+		'Joystick	ID:1	Axis:2			MIDI	HoldPedal1	'
+		'Keyboard	ID:0	Key:Space		MIDI	NoteC1		'
+

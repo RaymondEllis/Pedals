@@ -1,0 +1,33 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Pedals
+</name>
+</assembly>
+<members>
+<member name="P:Pedals.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Pedals.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Pedals.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="F:Pedals.InputData.SwitchOn">
+	<summary>
+ If axis is less then or equals to SwitchOn then turn the switch on.
+ </summary>
+</member><member name="M:Pedals.Devices.Send(Sanford.Multimedia.Midi.ChannelMessageBuilder)">
+	<summary>
+ Will build and send a message.
+ </summary>
+	<param name="message">message to send</param>
+</member>
+</members>
+</doc>
