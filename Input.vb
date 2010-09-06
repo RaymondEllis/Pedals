@@ -190,6 +190,8 @@ Public Class InputData
             Case InputDevices.Joystick
                 pos = GetAxis(ID, Axis)
 
+            Case InputDevices.MIDI
+
 
         End Select
 

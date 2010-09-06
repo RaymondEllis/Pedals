@@ -7,6 +7,11 @@
     Public CurrentMidiOutput As MidiOutput
 
     Public Sub AddInputDevice(ByVal DeviceID As Integer, ByVal Channel As Integer)
+        For Each dev As MidiInput In InDevices
+            If dev.DeviceID = DeviceID Then
+                Return
+            End If
+        Next
 
         Dim tmp As New MidiInput(DeviceID, Channel)
         tmp.Index = InDevices.Count
@@ -17,6 +22,14 @@
         frmMain.lstMidiInput.SelectedIndex = tmp.Index
 
         frmMain.btnMidiInputRemove.Enabled = True
+        frmMain.btnMidiInputSet.Enabled = True
+    End Sub
+    Public Sub UpdateInputDevice(ByVal DeviceID As Integer)
+        If CurrentMidiInput Is Nothing Then Return
+
+        CurrentMidiInput.DeviceID = DeviceID
+
+        frmMain.lstMidiInput.Items(CurrentMidiInput.Index) = CurrentMidiInput.ToString()
     End Sub
     Public Sub RemoveInputDevice(ByVal Index As Integer)
 
@@ -76,13 +89,7 @@
 
     End Sub
 
-    Public Sub UpdateInputDevice(ByVal DeviceID As Integer)
-        If CurrentMidiInput Is Nothing Then Return
 
-        CurrentMidiInput.DeviceID = DeviceID
-
-        frmMain.lstMidiInput.Items(CurrentMidiInput.Index) = CurrentMidiInput.ToString()
-    End Sub
     Public Sub UpdateOutputDevice(ByVal DeviceID As Integer)
 
         CurrentMidiOutput.DeviceID = DeviceID

@@ -35,6 +35,7 @@ Partial Class frmMain
         Me.grpMidiInput = New System.Windows.Forms.GroupBox()
         Me.panMidiInput = New System.Windows.Forms.Panel()
         Me.lstMidiInput = New System.Windows.Forms.ListBox()
+        Me.btnMidiInputSet = New System.Windows.Forms.Button()
         Me.btnMidiInputRemove = New System.Windows.Forms.Button()
         Me.btnMidiInputAdd = New System.Windows.Forms.Button()
         Me.comInput = New System.Windows.Forms.ComboBox()
@@ -171,6 +172,7 @@ Partial Class frmMain
         'panMidiInput
         '
         Me.panMidiInput.Controls.Add(Me.lstMidiInput)
+        Me.panMidiInput.Controls.Add(Me.btnMidiInputSet)
         Me.panMidiInput.Controls.Add(Me.btnMidiInputRemove)
         Me.panMidiInput.Controls.Add(Me.btnMidiInputAdd)
         Me.panMidiInput.Controls.Add(Me.comInput)
@@ -187,6 +189,16 @@ Partial Class frmMain
         Me.lstMidiInput.Name = "lstMidiInput"
         Me.lstMidiInput.Size = New System.Drawing.Size(219, 69)
         Me.lstMidiInput.TabIndex = 30
+        '
+        'btnMidiInputSet
+        '
+        Me.btnMidiInputSet.Enabled = False
+        Me.btnMidiInputSet.Location = New System.Drawing.Point(158, 75)
+        Me.btnMidiInputSet.Name = "btnMidiInputSet"
+        Me.btnMidiInputSet.Size = New System.Drawing.Size(61, 20)
+        Me.btnMidiInputSet.TabIndex = 30
+        Me.btnMidiInputSet.Text = "Set"
+        Me.btnMidiInputSet.UseVisualStyleBackColor = True
         '
         'btnMidiInputRemove
         '
@@ -530,5 +542,6 @@ Partial Class frmMain
     Friend WithEvents panMidiOutput As System.Windows.Forms.Panel
     Friend WithEvents grpDebug As System.Windows.Forms.GroupBox
     Friend WithEvents lstDebug As System.Windows.Forms.ListBox
+    Friend WithEvents btnMidiInputSet As System.Windows.Forms.Button
 
 End Class

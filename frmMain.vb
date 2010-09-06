@@ -133,16 +133,7 @@
 
     End Sub
 
-    Private Sub comInput_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comInput.SelectedIndexChanged
-        If Not Loaded Or CurrentMidiInput Is Nothing Then Return 'We don't need to change anything here until we are done loading.
-        UpdateInputDevice(comInput.SelectedIndex)
-        CheckNoteDisable()
-    End Sub
-    Private Sub comOutput_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comOutput.SelectedIndexChanged
-        If Not Loaded Or CurrentMidiOutput Is Nothing Then Return 'We don't need to change anything here until we are done loading.
-        UpdateOutputDevice(comOutput.SelectedIndex)
-        CheckNoteDisable()
-    End Sub
+   
 
 
     Private Sub numInputChannel_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numInputChannel.ValueChanged
@@ -697,7 +688,16 @@
 
 
 #Region "Midi Input/Output"
-
+    Private Sub comInput_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comInput.SelectedIndexChanged
+        'If Not Loaded Or CurrentMidiInput Is Nothing Then Return 'We don't need to change anything here until we are done loading.
+        'UpdateInputDevice(comInput.SelectedIndex)
+        'CheckNoteDisable()
+    End Sub
+    Private Sub comOutput_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comOutput.SelectedIndexChanged
+        If Not Loaded Or CurrentMidiOutput Is Nothing Then Return 'We don't need to change anything here until we are done loading.
+        UpdateOutputDevice(comOutput.SelectedIndex)
+        CheckNoteDisable()
+    End Sub
 
     Private Sub lstMidiInput_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lstMidiInput.SelectedIndexChanged
         If sender.SelectedIndex < 0 Then Return
@@ -724,6 +724,12 @@
     End Sub
     Private Sub btnMidiOutputRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMidiOutputRemove.Click
         RemoveOutputDevice(lstMidiOutput.SelectedIndex)
+    End Sub
+
+
+    Private Sub btnMidiInputSet_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMidiInputSet.Click
+        UpdateInputDevice(comInput.SelectedIndex)
+        CheckNoteDisable()
     End Sub
 
     Private Sub chkMidiInputNotes_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkMidiInputNotes.CheckedChanged
