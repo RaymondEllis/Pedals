@@ -8,7 +8,8 @@
 
     Public Sub AddInputDevice(ByVal DeviceID As Integer, ByVal Channel As Integer)
         For Each dev As MidiInput In InDevices
-            If dev.DeviceID = DeviceID Then
+            If Not dev.Index = CurrentMidiInput.Index And dev.DeviceID = DeviceID Then
+                Status("Can not have more then one of the same device.")
                 Return
             End If
         Next
@@ -26,6 +27,12 @@
     End Sub
     Public Sub UpdateInputDevice(ByVal DeviceID As Integer)
         If CurrentMidiInput Is Nothing Then Return
+        For Each dev As MidiInput In InDevices
+            If Not dev.Index = CurrentMidiInput.Index And dev.DeviceID = DeviceID Then
+                Status("Can not have more then one of the same device.")
+                Return
+            End If
+        Next
 
         CurrentMidiInput.DeviceID = DeviceID
 

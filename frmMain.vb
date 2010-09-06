@@ -688,11 +688,6 @@
 
 
 #Region "Midi Input/Output"
-    Private Sub comInput_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comInput.SelectedIndexChanged
-        'If Not Loaded Or CurrentMidiInput Is Nothing Then Return 'We don't need to change anything here until we are done loading.
-        'UpdateInputDevice(comInput.SelectedIndex)
-        'CheckNoteDisable()
-    End Sub
     Private Sub comOutput_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comOutput.SelectedIndexChanged
         If Not Loaded Or CurrentMidiOutput Is Nothing Then Return 'We don't need to change anything here until we are done loading.
         UpdateOutputDevice(comOutput.SelectedIndex)

@@ -175,6 +175,7 @@ Public Class frmInput
         CurrentJoystick.ControllerType = [Enum].Parse(GetType(ControllerType0), comControllerType.SelectedItem.ToString)
         If comControllerType.SelectedItem = ControllerType0.MIDI.ToString Then
             comController.Enabled = True
+            chkSwitch.Enabled = True
         Else
             comController.Enabled = False
             chkSwitch.Checked = True

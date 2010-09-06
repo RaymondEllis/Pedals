@@ -461,9 +461,9 @@ Partial Class frmMain
         Me.grpDebug.Controls.Add(Me.Label1)
         Me.grpDebug.Controls.Add(Me.Label3)
         Me.grpDebug.Controls.Add(Me.Label4)
-        Me.grpDebug.Location = New System.Drawing.Point(695, 12)
+        Me.grpDebug.Location = New System.Drawing.Point(695, 11)
         Me.grpDebug.Name = "grpDebug"
-        Me.grpDebug.Size = New System.Drawing.Size(291, 294)
+        Me.grpDebug.Size = New System.Drawing.Size(291, 295)
         Me.grpDebug.TabIndex = 31
         Me.grpDebug.TabStop = False
         Me.grpDebug.Text = "Debug"

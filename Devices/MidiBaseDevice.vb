@@ -7,5 +7,4 @@
     Public Channel As Integer = -1
 
 
-
 End Class

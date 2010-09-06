@@ -12,6 +12,8 @@
     Public SendOtherChannels As Boolean = False
     Public AllChannels As Boolean = False
 
+
+
 #Region "Base"
     Public Sub New(ByVal DeviceID As Integer, ByVal Channel As Integer)
         Me.DeviceID = DeviceID
