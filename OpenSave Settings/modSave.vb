@@ -7,8 +7,8 @@
 
         With frmMain
 
-            g.Add(.chkDebug)
-            g.Add(.chkRemoveOldNotes)
+            g.Add("Debug", .chkDebug.Checked)
+            g.Add("RemoveOldNotes", .chkRemoveOldNotes.Checked)
 
             g.Add("MidiInput", InDevices.Count - 1)
             g.Add("MidiOutput", OutDevices.Count - 1)
@@ -21,7 +21,7 @@
         Dim i As Integer = 0
         For Each dev As MidiInput In InDevices
             g = sd.Create_Group("MidiInput_" & i)
-            g.Add("DeviceID", dev.DeviceID)
+            g.Add("ID", dev.DeviceID)
             g.Add("Channel", dev.Channel)
             g.Add("AllChannels", dev.AllChannels)
             g.Add("EnableNotes", dev.EnableNotes)
@@ -36,7 +36,7 @@
         i = 0
         For Each dev As MidiOutput In OutDevices
             g = sd.Create_Group("MidiOutput_" & i)
-            g.Add("DeviceID", dev.DeviceID)
+            g.Add("ID", dev.DeviceID)
             g.Add("Channel", dev.Channel)
 
             i += 1
@@ -49,6 +49,7 @@
             g = sd.Create_Group("Input_" & i)
             g.Add("ID", inp.ID)
             g.Add("Axis", inp.Axis)
+            g.Add("Reverse", inp.Reverse)
             g.Add("Controller", inp.Controller)
             g.Add("controllerType", inp.ControllerType)
             g.Add("AutoName", inp.AutoName)

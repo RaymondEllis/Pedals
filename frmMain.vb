@@ -84,7 +84,7 @@
 #Region "Open/Save"
 
     Public Sub Open()
-        If Not IO.File.Exists("Pedals.cfg") Then
+        If IO.File.Exists("Pedals.cfg") Then
             LoadSettings("Pedals.cfg")
             'AddInputDevice(0, 0)
             'AddOutputDevice(0, 0)
