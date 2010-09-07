@@ -2,6 +2,8 @@
 
 Public Class frmInput
 
+    Public IsSearching As Boolean = False
+
 	Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         'If CurrentInput.ID = -1 Then
         '    CurrentInput = Nothing
@@ -44,6 +46,7 @@ Public Class frmInput
         Next
         'find = True
         tmr.Enabled = True
+        IsSearching = True
     End Sub
 
     Public CurrentInput As InputData
@@ -62,11 +65,12 @@ Public Class frmInput
         If CurrentInput Is Nothing Then Return
 
         If CurrentInput.Axis > -1 Then
+            IsSearching = False
             OK_Button.Enabled = True
             btnFind.Enabled = True
             Dim pos As Integer = CurrentInput.GetAxisPosition
             lblAxis.Text = pos
-            'CurrentInput.DoInput()
+            CurrentInput.DoInput()
 
             'If the controller is a switch then. we will display it as one.
             If CurrentInput.IsControllerSwitch Then
@@ -85,6 +89,7 @@ Public Class frmInput
             End If
 
         Else
+            IsSearching = True
             Dim i As Integer = -1
             For Each joy As Joystick In Joystick
                 i += 1

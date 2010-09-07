@@ -51,6 +51,7 @@
             g.Get_Value("IsControllerSwitch", inp.IsControllerSwitch)
             g.Get_Value("SwitchOn", inp.SwitchOn)
             g.Get_Value("Name", inp._Name)
+            g.Get_Value("Input", inp.Input)
 
             AddInput(inp)
         Next

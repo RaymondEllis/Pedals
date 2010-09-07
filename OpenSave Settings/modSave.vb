@@ -59,6 +59,8 @@
             g.Add("IsControllerSwitch", inp.IsControllerSwitch)
             g.Add("SwitchOn", inp.SwitchOn)
             g.Add("Name", inp._Name)
+            g.Add("Input", inp.Input)
+
 
             i += 1
         Next

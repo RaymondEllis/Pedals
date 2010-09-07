@@ -11,6 +11,7 @@
     Public SendOtherChannels As Boolean = False
     Public AllChannels As Boolean = False
 
+    Public Controllers(127) As Integer
 
 
 #Region "Base"
@@ -18,6 +19,11 @@
         Me.DeviceID = DeviceID
         'Channels(Channel) = True
         Me.Channel = Channel
+
+        'Set all the controllers value to 127
+        Parallel.ForEach(Controllers, Sub(con)
+                                          con = 127
+                                      End Sub)
     End Sub
 
     Public Overrides Function ToString() As String
@@ -171,7 +177,15 @@
 
 
             ElseIf Message.Command = ChannelCommand.Controller Then 'Controller
-                Send(Message)
+                'If the input form is searching then tell it we found something.
+                If frmInput.IsSearching Then
+                    frmInput.CurrentInput.ID = Index
+                    frmInput.CurrentInput.Axis = Message.Data1
+
+                    frmInput.CurrentInput.Input = InputDevices.MIDI
+                End If
+                Controllers(Message.Data1) = Message.Data2
+                If EnableControllers Then Send(Message)
 
             ElseIf Message.Command = ChannelCommand.ProgramChange Then 'ProgramChannge
                 Send(Message)

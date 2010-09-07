@@ -143,7 +143,7 @@ End Module
 
 Public Class InputData
     Public Device As MidiInput
-    Private Input As Integer = InputDevices.Joystick
+    Public Input As Integer = InputDevices.Joystick
 
     Public Axis As Integer = -1
     Public ID As Integer = -1
@@ -194,7 +194,7 @@ Public Class InputData
                 pos = GetAxis(ID, Axis)
 
             Case InputDevices.MIDI
-
+                pos = InDevices(ID).Controllers(Axis)
 
         End Select
 
@@ -223,16 +223,17 @@ Public Class InputData
     End Sub
 
 
+    Public Position As Integer
     Public Sub DoInput()
         If Not EnableJoysticks Or Not Recording Then Return
         If ID = -1 Then Return
-        Dim Pos As Integer = GetAxisPosition()
+        Dim Position As Integer = GetAxisPosition()
 
         'Is the current position the same as the old postion?
-        If Pos = OldPosition Then Return 'If so then we need to leave.
-        OldPosition = Pos
+        If Position = OldPosition Then Return 'If so then we need to leave.
+        OldPosition = Position
 
-        If Pos >= SwitchOn Then
+        If Position >= SwitchOn Then
             If Not Pressed Then
                 Pressed = True
                 Changed = True
@@ -265,7 +266,7 @@ Public Class InputData
                     End If
                     Send(m)
                 ElseIf Not IsControllerSwitch Then
-                    m.Data2 = Pos
+                    m.Data2 = Position
                     Send(m)
                 End If
 
