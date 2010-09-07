@@ -158,6 +158,7 @@ Partial Class frmInput
         '
         'comController
         '
+        Me.comController.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.comController.FormattingEnabled = True
         Me.comController.Location = New System.Drawing.Point(358, 33)
         Me.comController.Name = "comController"
@@ -166,6 +167,7 @@ Partial Class frmInput
         '
         'comControllerType
         '
+        Me.comControllerType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.comControllerType.FormattingEnabled = True
         Me.comControllerType.Location = New System.Drawing.Point(358, 6)
         Me.comControllerType.Name = "comControllerType"

@@ -227,6 +227,7 @@ Public Class InputData
 
         'Is the current position the same as the old postion?
         If Pos = OldPosition Then Return 'If so then we need to leave.
+        OldPosition = Pos
 
         If Pos >= SwitchOn Then
             If Not Pressed Then
@@ -244,9 +245,12 @@ Public Class InputData
             End If
         End If
 
+
+
         'What should we control?
         Select Case ControllerType
             Case ControllerType0.MIDI
+
                 Dim m As New ChannelMessageBuilder
                 m.Command = ChannelCommand.Controller
                 m.Data1 = Controller

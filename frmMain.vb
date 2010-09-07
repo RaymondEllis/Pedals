@@ -479,17 +479,17 @@
 
     'Private Sub btnLeftInput_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
     '    If frmInput.ShowDialog(LeftInput) = System.Windows.Forms.DialogResult.OK Then
-    '        LeftInput = frmInput.CurrentJoystick
+    '        LeftInput = frmInput.CurrentInput
     '    End If
     'End Sub
     'Private Sub btnMiddleInput_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
     '    If frmInput.ShowDialog(MiddleInput) = System.Windows.Forms.DialogResult.OK Then
-    '        MiddleInput = frmInput.CurrentJoystick
+    '        MiddleInput = frmInput.CurrentInput
     '    End If
     'End Sub
     'Private Sub btnRightInput_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
     '    If frmInput.ShowDialog(RightInput) = System.Windows.Forms.DialogResult.OK Then
-    '        RightInput = frmInput.CurrentJoystick
+    '        RightInput = frmInput.CurrentInput
     '    End If
     'End Sub
 
@@ -501,7 +501,6 @@
 
 
 #Region "Input"
-
 
     Private Sub tmrInput_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tmrInput.Tick
         DoInput()
@@ -516,9 +515,9 @@
     End Sub
 
     Private Sub btnInputEdit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnInputEdit.Click
-        If frmInput.ShowDialog(Input(lstInput.SelectedIndex)) = System.Windows.Forms.DialogResult.OK Then
-            'CurrentDevice.Input(lstInput.SelectedIndex) = frmInput.CurrentJoystick
-            lstInput.Items(lstInput.SelectedIndex) = frmInput.CurrentJoystick
+        If frmInput.ShowDialog(lstInput.SelectedIndex) = System.Windows.Forms.DialogResult.OK Then
+            'CurrentDevice.Input(lstInput.SelectedIndex) = frmInput.CurrentInput
+            lstInput.Items(lstInput.SelectedIndex) = frmInput.CurrentInput
         End If
     End Sub
 
