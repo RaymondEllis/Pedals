@@ -1,10 +1,13 @@
 ﻿Module modSave
 
-    Public Sub SaveSettings(ByVal File As String)
+    Public Sub SaveSettings()
+        'Create a new SimpleD so we can use it for saving stuff to.
         Dim sd As New SimpleD.SimpleD
 
+        'Create a new group.
         Dim g As SimpleD.Group = sd.Create_Group("Pedals")
 
+        'Add stuff to the group.
         With frmMain
 
             g.Add("Debug", .chkDebug.Checked)
@@ -60,7 +63,8 @@
             i += 1
         Next
 
-        sd.ToFile(File)
+        'Save the info in the SimpleD.
+        sd.ToFile(SettingsFile)
     End Sub
 
 End Module

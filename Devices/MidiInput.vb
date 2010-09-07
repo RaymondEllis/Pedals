@@ -7,6 +7,7 @@
 
     Public SetVolumeMax As Boolean = True
     Public EnableNotes As Boolean = True
+    Public EnableControllers As Boolean = False
     Public SendOtherChannels As Boolean = False
     Public AllChannels As Boolean = False
 
@@ -168,9 +169,24 @@
 
                 Send(Message)
 
-            ElseIf Message.Command = ChannelCommand.Controller Then
+
+            ElseIf Message.Command = ChannelCommand.Controller Then 'Controller
                 Send(Message)
+
+            ElseIf Message.Command = ChannelCommand.ProgramChange Then 'ProgramChannge
+                Send(Message)
+
+            ElseIf Message.Command = ChannelCommand.ChannelPressure Then 'ChannelPressure
+                Send(Message)
+
+            ElseIf Message.Command = ChannelCommand.PitchWheel Then 'PitchWheel
+                Send(Message)
+
+            ElseIf Message.Command = ChannelCommand.PolyPressure Then 'PolyPressure
+                Send(Message)
+
             End If
+
 
         ElseIf SendOtherChannels Then
             Send(e.Message)

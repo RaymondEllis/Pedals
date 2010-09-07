@@ -57,10 +57,13 @@
     End Sub
 
     Public Sub AddInput(ByVal Inp As InputData)
-        Inp.Device = CurrentMidiInput
+        Inp.Device = CurrentMidiInput 'Set the device of the input.
+
+        'Add the input to the lists.
         Input.Add(Inp)
         frmMain.lstInput.Items.Add(Inp)
 
+        'Enable the input buttons.
         frmMain.btnInputRemove.Enabled = True
         frmMain.btnInputEdit.Enabled = True
     End Sub
@@ -80,7 +83,7 @@
         End If
     End Sub
     Public Sub DoInput()
-
+        'Do the input in the list.
         For Each inp As InputData In Input
             inp.DoInput()
         Next

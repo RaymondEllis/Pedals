@@ -3,13 +3,13 @@
 Public Class frmInput
 
 	Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
-        If CurrentInput.ID = -1 Then
-            CurrentInput = Nothing
-        Else
-            CurrentInput.ControllerType = [Enum].Parse(GetType(ControllerType0), comControllerType.SelectedItem.ToString)
-            CurrentInput.Controller = [Enum].Parse(GetType(Midi.ControllerType), comController.SelectedItem.ToString)
-            CurrentInput.IsControllerSwitch = IsSwitch(CurrentInput.Controller)
-        End If
+        'If CurrentInput.ID = -1 Then
+        '    CurrentInput = Nothing
+        'Else
+        '    CurrentInput.ControllerType = [Enum].Parse(GetType(ControllerType0), comControllerType.SelectedItem.ToString)
+        '    CurrentInput.Controller = [Enum].Parse(GetType(Midi.ControllerType), comController.SelectedItem.ToString)
+        '    CurrentInput.IsControllerSwitch = IsSwitch(CurrentInput.Controller)
+        'End If
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
     End Sub

@@ -2,7 +2,7 @@
 
 Module Misc
 	Public Debug As Boolean = False
-	Public Loaded As Boolean = False
+    Public Loaded As Boolean = False 'Has pedals finshed loading?
 
 	Public Sub Status(ByVal Text As String, Optional ByVal ShowError As Boolean = False)
 		frmMain.lblStatus.Text = "Status: " & Text
@@ -55,22 +55,31 @@ Module Misc
     Public SustainList As New List(Of Integer)
     Public SustainPressed, SostenutoPressed, SoftPressed As Boolean
 #Region "Note holder"
-    Public Note(127) As Integer
+    Public Note(127) As Integer 'Used to hold notes.
 
     Public Enum Notes
         Released = 0
         Pressed = 1
-        Sostenuto = 2
+        Sostenuto = 2 'Is the sostenuto pedal holding the note.
         SustainPressed = 3
-        SustainReleased = 4
+        SustainReleased = 4 'Meaning the note was released but the sustain pedal is down.
     End Enum
 
+    ''' <summary>
+    ''' Reset all the notes in the holder.
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Sub ResetNotes()
         Parallel.ForEach(Note, Sub(n)
                                    n = 0
                                End Sub)
     End Sub
 
+    ''' <summary>
+    ''' Release note at ID
+    ''' </summary>
+    ''' <param name="ID"></param>
+    ''' <remarks></remarks>
     Public Sub ReleaseNote(ByVal ID As Integer)
         Dim tmp As New ChannelMessageBuilder
         tmp.Command = Midi.ChannelCommand.NoteOn

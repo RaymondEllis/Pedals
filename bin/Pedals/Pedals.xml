@@ -11,6 +11,17 @@ Pedals
  Is the controller a switch?
  </summary>
 	<param name="Controller">Controller to check.</param>
+</member><member name="M:Pedals.Misc.ResetNotes">
+	<summary>
+ Reset all the notes in the holder.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Pedals.Misc.ReleaseNote(System.Int32)">
+	<summary>
+ Release note at ID
+ </summary>
+	<param name="ID"></param>
+	<remarks></remarks>
 </member><member name="M:Pedals.frmMain.SetControls">
 	<summary>
  Updates the controls with the curent device data.

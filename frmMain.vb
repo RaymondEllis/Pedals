@@ -16,7 +16,7 @@
         ContinueLoading = False
         EnableJoysticks = False
 
-        If Loaded Then Save()
+        If Loaded Then SaveSettings()
 		Status("Closing...")
         tmrInput.Enabled = False
 
@@ -34,7 +34,6 @@
 
         'Fill boxs.
         GetDevices()
-
 
         frmInput.comController.Items.AddRange([Enum].GetNames(GetType(Midi.ControllerType)))
         frmInput.comController.SelectedItem = Midi.ControllerType.HoldPedal1.ToString
@@ -56,7 +55,7 @@
 
 
 
-            Open()
+            LoadSettings()
         End If
 
         Loaded = True
@@ -81,31 +80,6 @@
     End Sub
 #End Region
 
-#Region "Open/Save"
-
-    Public Sub Open()
-        If IO.File.Exists("Pedals.cfg") Then
-            LoadSettings("Pedals.cfg")
-            'AddInputDevice(0, 0)
-            'AddOutputDevice(0, 0)
-
-
-            Return
-        End If
-
-
-
-    End Sub
-
-    Public Sub Save()
-        Status("Saving...")
-
-        SaveSettings("Pedals.cfg")
-
-        Status("Saved!")
-    End Sub
-
-#End Region
 
 #Region "Get Input/Output Devices"
     Private Sub GetDevices()
@@ -515,7 +489,7 @@
     End Sub
 
     Private Sub btnInputEdit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnInputEdit.Click
-        If frmInput.ShowDialog(lstInput.SelectedIndex) = System.Windows.Forms.DialogResult.OK Then
+        If frmInput.ShowDialog(lstInput.SelectedIndex) = DialogResult.OK Then
             'CurrentDevice.Input(lstInput.SelectedIndex) = frmInput.CurrentInput
             lstInput.Items(lstInput.SelectedIndex) = frmInput.CurrentInput
         End If

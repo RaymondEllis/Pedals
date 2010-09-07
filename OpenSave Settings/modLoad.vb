@@ -1,9 +1,22 @@
 ﻿Module modLoad
+    'Just something to hold the file name.
+    Public Const SettingsFile As String = "Pedals.cfg"
 
-    Public Sub LoadSettings(ByVal File As String)
-        Dim sd As New SimpleD.SimpleD(File, True)
+    Public Sub LoadSettings()
+        Status("Loading settings.")
 
+        'If the file does not exist then tell then user and return.
+        If Not IO.File.Exists(SettingsFile) Then
+            Status("Could not load settings file not found.")
+            Return
+        End If
+
+        'Load the settings from the settings file.
+        Dim sd As New SimpleD.SimpleD(SettingsFile, True)
+
+        'Get the pedals group.
         Dim g As SimpleD.Group = sd.Get_Group("Pedals")
+        'Now we get values from the group.
         frmMain.chkDebug.Checked = g.Get_Value("Debug")
         frmMain.chkRemoveOldNotes.Checked = g.Get_Value("RemoveOldNotes")
 
