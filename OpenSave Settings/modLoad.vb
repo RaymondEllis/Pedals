@@ -16,10 +16,10 @@
             g = sd.Get_Group("MidiInput_" & n)
             AddInputDevice(g.Get_Value("ID"), g.Get_Value("Channel"))
 
-            CurrentMidiInput.AllChannels = g.Get_Value("AllChannels")
-            CurrentMidiInput.EnableNotes = g.Get_Value("EnableNotes")
-            CurrentMidiInput.SendOtherChannels = g.Get_Value("OtherChannels")
-            CurrentMidiInput.SetVolumeMax = g.Get_Value("SetVolumeMax")
+            g.Get_Value("AllChannels", CurrentMidiInput.AllChannels)
+            g.Get_Value("EnableNotes", CurrentMidiInput.EnableNotes)
+            g.Get_Value("OtherChannels", CurrentMidiInput.SendOtherChannels)
+            g.Get_Value("SetVolumeMax", CurrentMidiInput.SetVolumeMax)
 
         Next
 
@@ -32,11 +32,12 @@
             g = sd.Get_Group("Input_" & n)
             Dim inp As New InputData(g.Get_Value("ID"), g.Get_Value("Axis"), g.Get_Value("Reverse"), g.Get_Value("SwitchOn"))
 
-            inp.Controller = g.Get_Value("Controller")
-            inp.ControllerType = g.Get_Value("controllerType")
-            inp.AutoName = g.Get_Value("AutoName")
-            inp.IsControllerSwitch = g.Get_Value("IsControllerSwitch")
-            inp._Name = g.Get_Value("Name")
+            g.Get_Value("Controller", inp.Controller)
+            g.Get_Value("controllerType", inp.ControllerType)
+            g.Get_Value("AutoName", inp.AutoName)
+            g.Get_Value("IsControllerSwitch", inp.IsControllerSwitch)
+            g.Get_Value("SwitchOn", inp.SwitchOn)
+            g.Get_Value("Name", inp._Name)
 
             AddInput(inp)
         Next

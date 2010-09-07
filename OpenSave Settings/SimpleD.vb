@@ -3,6 +3,7 @@
         Public Const Version = 0.98
         '0.98
         'Fixed: Spelling
+        'Added: New get value with byref value
         '0.97
         'Added: ToFile
         'Added: Check exists in FromFile
@@ -228,6 +229,9 @@ Endy:
         Public Function Get_Value(ByVal Name As String) As String
             Return Find(Name).Value 'Find the property and return the value.
         End Function
+        Public Sub Get_Value(ByVal Name As String, ByRef Value As Object)
+            Value = Find(Name).Value 'Find the property and return the value.
+        End Sub
         ''' <summary>
         ''' Get the value from a property.
         ''' </summary>

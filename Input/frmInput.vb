@@ -149,10 +149,15 @@ Public Class frmInput
         End If
         CurrentJoystick = Input
         chkRev.Checked = CurrentJoystick.Reverse
-        numSwitchOn.Value = CurrentJoystick.SwitchOn
+
         txtName.Text = CurrentJoystick._Name
         chkAutoName.Checked = CurrentJoystick.AutoName
+
+        numSwitchOn.Value = CurrentJoystick.SwitchOn
         chkSwitch.Checked = CurrentJoystick.IsControllerSwitch
+
+        comController.SelectedItem = DirectCast(CurrentJoystick.Controller, Midi.ControllerType).ToString
+        comControllerType.SelectedItem = DirectCast(CurrentJoystick.ControllerType, ControllerType0).ToString
 
         Return MyBase.ShowDialog()
     End Function
