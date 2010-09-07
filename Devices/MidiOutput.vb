@@ -7,6 +7,7 @@
 #Region "Base"
     Public Sub New(ByVal DeviceID As Integer, ByVal Channel As Integer)
         Me.DeviceID = DeviceID
+        'Channels(Channel) = True
         Me.Channel = Channel
     End Sub
 

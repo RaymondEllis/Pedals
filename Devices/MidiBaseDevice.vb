@@ -6,5 +6,4 @@
     Public DeviceID As Integer = -1
     Public Channel As Integer = -1
 
-
 End Class

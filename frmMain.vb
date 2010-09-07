@@ -136,28 +136,7 @@
    
 
 
-    Private Sub numInputChannel_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numInputChannel.ValueChanged
-        If Not Loaded Or CurrentMidiInput Is Nothing Then Return 'We don't need to change anything here until we are done loading.
-        CurrentMidiInput.Channel = sender.value
-        CheckNoteDisable()
-    End Sub
-    Private Sub numOutputChannel_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numOutputChannel.ValueChanged
-        If Not Loaded Or CurrentMidiOutput Is Nothing Then Return 'We don't need to change anything here until we are done loading.
-        CurrentMidiOutput.Channel = sender.value
-        CheckNoteDisable()
-    End Sub
-
-    Private Sub CheckNoteDisable() 'Used to disable alter notes and stuff.
-        If Not grpMidiOutput.Enabled Or Not Loaded Then Return
-
-        'Is the input and output the same?
-        If comInput.SelectedItem = comOutput.SelectedItem Then
-            If numInputChannel.Value = numOutputChannel.Value Then
-                chkMidiInputNotes.Checked = False
-
-            End If
-        End If
-    End Sub
+   
 #End Region
 
 
@@ -651,7 +630,10 @@
     End Sub
 #End Region
 
-
+    ''' <summary>
+    ''' Updates the controls with the curent device data.
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Sub SetControls()
         If Not Loaded Then Return
 
@@ -660,7 +642,7 @@
         If CurrentMidiInput IsNot Nothing Then
             comInput.SelectedIndex = CurrentMidiInput.DeviceID
 
-            numInputChannel.Value = CurrentMidiInput.Channel
+            numMidiInputChannel.Value = CurrentMidiInput.Channel
 
             chkMidiInputVolume.Checked = CurrentMidiInput.SetVolumeMax
             chkOldNote.Checked = CurrentMidiInput.RemoveOldNotes
@@ -670,7 +652,7 @@
 
         If CurrentMidiOutput IsNot Nothing Then
             comOutput.SelectedIndex = CurrentMidiOutput.DeviceID
-            numOutputChannel.Value = CurrentMidiOutput.Channel
+            numMidiOutputChannel.Value = CurrentMidiOutput.Channel
 
         End If
 
@@ -688,12 +670,7 @@
 
 
 #Region "Midi Input/Output"
-    Private Sub comOutput_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comOutput.SelectedIndexChanged
-        If Not Loaded Or CurrentMidiOutput Is Nothing Then Return 'We don't need to change anything here until we are done loading.
-        UpdateOutputDevice(comOutput.SelectedIndex)
-        CheckNoteDisable()
-    End Sub
-
+    'Input/Output lists:
     Private Sub lstMidiInput_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lstMidiInput.SelectedIndexChanged
         If sender.SelectedIndex < 0 Then Return
         CurrentMidiInput = InDevices(lstMidiInput.SelectedIndex)
@@ -707,10 +684,10 @@
 
     'Add buttons:
     Private Sub btnMidiInputAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMidiInputAdd.Click
-        AddInputDevice(comInput.SelectedIndex, numInputChannel.Value)
+        AddInputDevice(comInput.SelectedIndex, numMidiInputChannel.Value)
     End Sub
     Private Sub btnMidiOutputAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMidiOutputAdd.Click
-        AddOutputDevice(comOutput.SelectedIndex, numOutputChannel.Value)
+        AddOutputDevice(comOutput.SelectedIndex, numMidiOutputChannel.Value)
     End Sub
 
     'Remove buttons:
@@ -721,10 +698,12 @@
         RemoveOutputDevice(lstMidiOutput.SelectedIndex)
     End Sub
 
-
+    'Set buttons:
     Private Sub btnMidiInputSet_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMidiInputSet.Click
         UpdateInputDevice(comInput.SelectedIndex)
-        CheckNoteDisable()
+    End Sub
+    Private Sub btnMidiOutputSet_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMidiOutputSet.Click
+        UpdateOutputDevice(comOutput.SelectedIndex)
     End Sub
 
     Private Sub chkMidiInputNotes_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkMidiInputNotes.CheckedChanged
@@ -736,14 +715,37 @@
     Private Sub chkMidiInputChannels_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkMidiInputChannels.CheckedChanged
         If Not Loaded Or CurrentMidiInput Is Nothing Then Return
         CurrentMidiInput.AllChannels = chkMidiInputChannels.Checked
-        numInputChannel.Enabled = Not chkMidiInputChannels.Checked
+        numMidiInputChannel.Enabled = Not chkMidiInputChannels.Checked
     End Sub
 
+    'Channels:
+    Private Sub numMidiInputChannel_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMidiInputChannel.ValueChanged
+        If Not Loaded Or CurrentMidiInput Is Nothing Then Return 'We don't need to change anything here until we are done loading.
+        CurrentMidiInput.Channel = sender.value
+        CheckNoteDisable()
+    End Sub
+    Private Sub numMidiOutputChannel_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMidiOutputChannel.ValueChanged
+        If Not Loaded Or CurrentMidiOutput Is Nothing Then Return 'We don't need to change anything here until we are done loading.
+        CurrentMidiOutput.Channel = sender.value
+        CheckNoteDisable()
+    End Sub
 
+    Public Sub CheckNoteDisable() 'Used to disable alter notes and stuff.
+        If Not grpMidiOutput.Enabled Or Not Loaded Then Return
+
+        'Is the input and output the same?
+        If comInput.SelectedItem = comOutput.SelectedItem Then
+            If numMidiInputChannel.Value = numMidiOutputChannel.Value Then
+                chkMidiInputNotes.Checked = False
+
+            End If
+        End If
+    End Sub
 #End Region
 
 
 
 
 
+    
 End Class

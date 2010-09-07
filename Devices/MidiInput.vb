@@ -17,6 +17,7 @@
 #Region "Base"
     Public Sub New(ByVal DeviceID As Integer, ByVal Channel As Integer)
         Me.DeviceID = DeviceID
+        'Channels(Channel) = True
         Me.Channel = Channel
     End Sub
 
@@ -90,8 +91,7 @@
     Private Sub InDevice_ChannelMessageReceived(ByVal sender As Object, ByVal e As Sanford.Multimedia.Midi.ChannelMessageEventArgs) Handles Device.ChannelMessageReceived
         If Not Recording Then Return 'If we are not recording then leave.
 
-        'If note output is false then leave
-        If Not EnableNotes Then Return
+        
 
         'If the message is comeing from the selected midi channel.
         If AllChannels Or e.Message.MidiChannel = Channel Then
@@ -99,8 +99,8 @@
             'Create a message from the input device.
             Dim Message As New Midi.ChannelMessageBuilder(e.Message)
 
-            'Is it a note on or off?
-            If Message.Command = ChannelCommand.NoteOn Or Message.Command = ChannelCommand.NoteOff Then
+            'Is it a note (on or off)?
+            If (Message.Command = ChannelCommand.NoteOn Or Message.Command = ChannelCommand.NoteOff) And EnableNotes Then
 
                 'Is the note on? (volume more then 0)
                 If Message.Data2 > 0 Then
@@ -169,7 +169,8 @@
 
 
                 Send(Message)
-            Else
+
+            ElseIf Message.Command = ChannelCommand.Controller Then
                 Send(Message)
             End If
 
