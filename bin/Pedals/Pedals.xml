@@ -6,15 +6,74 @@ Pedals
 </name>
 </assembly>
 <members>
-<member name="M:Pedals.Misc.IsSwitch(System.Int32)">
+<member name="M:Pedals.SimpleD.SimpleD.#ctor(System.String,System.Boolean)">
 	<summary>
- Is the controller a switch?
+ Load from string.
  </summary>
-	<param name="Controller">Controller to check.</param>
+	<param name="Data"></param>
+	<param name="FromFile">If set to true then it will load from the file specfied in data</param>
+	<remarks></remarks>
+</member><member name="M:Pedals.SimpleD.SimpleD.Create_Group(System.String)">
+	<summary>
+ Create a group.
+ </summary>
+	<param name="Name">The name of the group.</param>
+</member><member name="M:Pedals.SimpleD.SimpleD.FromFile(System.String)">
+	<summary>
+ Load the SimpleData from a file.
+ </summary>
+	<param name="File"></param>
+	<returns>True if loaded false if not.</returns>
+	<remarks></remarks>
+</member><member name="M:Pedals.SimpleD.Group.Set_Value(System.String,System.String)">
+	<summary>
+ This sets the value of a property.
+ If it can not find the property it creates it.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Pedals.SimpleD.Group.Set_Value(System.Object)">
+	<summary>
+ This sets the value of a property.
+ If it can not find the property it creates it.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Pedals.SimpleD.Group.Get_Value(System.String)">
+	<summary>
+ Get the value from a property.
+ </summary>
+	<param name="Name">The name of the property to get the value from.</param>
+</member><member name="M:Pedals.SimpleD.Group.Get_Value(System.Object)">
+	<summary>
+ Get the value from a property.
+ </summary>
+	<param name="Obj">The object to get the property from.</param>
+</member><member name="M:Pedals.SimpleD.Group.GetValueFromObject(System.Object)">
+	<summary>
+ Retuns "Could_Not_Find_Value" if it can not find the value.
+ </summary>
+	<param name="Obj"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Pedals.SimpleD.Group.Find(System.String)">
+	<summary>
+ Find a property from the name.
+ </summary>
+	<param name="Name">The name of the property.</param>
+	<returns>The property.</returns>
 </member><member name="F:Pedals.InputData.SwitchOn">
 	<summary>
  If an axis is less then or equals to SwitchOn then turn the switch on.
  </summary>
+</member><member name="M:Pedals.Misc.IsSwitch(System.Int32)">
+	<summary>
+ Is the controller a switch?
+ </summary>
+	<param name="Controller">Controller to check.</param>
+</member><member name="M:Pedals.frmMain.SetControls">
+	<summary>
+ Updates the controls with the curent device data.
+ </summary>
+	<remarks></remarks>
 </member><member name="P:Pedals.My.Resources.Resources.ResourceManager">
 	<summary>
   Returns the cached ResourceManager instance used by this class.

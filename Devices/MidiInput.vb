@@ -5,9 +5,7 @@
 
 
 
-
     Public SetVolumeMax As Boolean = True
-    Public RemoveOldNotes As Boolean = True
     Public EnableNotes As Boolean = True
     Public SendOtherChannels As Boolean = False
     Public AllChannels As Boolean = False

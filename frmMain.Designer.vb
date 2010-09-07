@@ -45,7 +45,7 @@ Partial Class frmMain
         Me.chkMidiInputNotes = New System.Windows.Forms.CheckBox()
         Me.numMidiInputChannel = New System.Windows.Forms.NumericUpDown()
         Me.Label6 = New System.Windows.Forms.Label()
-        Me.chkOldNote = New System.Windows.Forms.CheckBox()
+        Me.chkRemoveOldNotes = New System.Windows.Forms.CheckBox()
         Me.chkDebug = New System.Windows.Forms.CheckBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.lstDebug = New System.Windows.Forms.ListBox()
@@ -294,19 +294,19 @@ Partial Class frmMain
         Me.Label6.TabIndex = 2
         Me.Label6.Text = "MIDI channel:"
         '
-        'chkOldNote
+        'chkRemoveOldNotes
         '
-        Me.chkOldNote.AutoSize = True
-        Me.chkOldNote.Checked = True
-        Me.chkOldNote.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkOldNote.Location = New System.Drawing.Point(6, 19)
-        Me.chkOldNote.Name = "chkOldNote"
-        Me.chkOldNote.Size = New System.Drawing.Size(112, 17)
-        Me.chkOldNote.TabIndex = 16
-        Me.chkOldNote.Text = "Remove old notes"
-        Me.ToolTips.SetToolTip(Me.chkOldNote, "If you press a note twice with a altered controller. Does it remove the first not" & _
+        Me.chkRemoveOldNotes.AutoSize = True
+        Me.chkRemoveOldNotes.Checked = True
+        Me.chkRemoveOldNotes.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkRemoveOldNotes.Location = New System.Drawing.Point(6, 19)
+        Me.chkRemoveOldNotes.Name = "chkRemoveOldNotes"
+        Me.chkRemoveOldNotes.Size = New System.Drawing.Size(112, 17)
+        Me.chkRemoveOldNotes.TabIndex = 16
+        Me.chkRemoveOldNotes.Text = "Remove old notes"
+        Me.ToolTips.SetToolTip(Me.chkRemoveOldNotes, "If you press a note twice with a altered controller. Does it remove the first not" & _
                 "e?")
-        Me.chkOldNote.UseVisualStyleBackColor = True
+        Me.chkRemoveOldNotes.UseVisualStyleBackColor = True
         '
         'chkDebug
         '
@@ -392,7 +392,7 @@ Partial Class frmMain
         '
         'grpMisc
         '
-        Me.grpMisc.Controls.Add(Me.chkOldNote)
+        Me.grpMisc.Controls.Add(Me.chkRemoveOldNotes)
         Me.grpMisc.Controls.Add(Me.chkDebug)
         Me.grpMisc.Enabled = False
         Me.grpMisc.Location = New System.Drawing.Point(346, 240)
@@ -519,7 +519,7 @@ Partial Class frmMain
     Friend WithEvents comOutput As System.Windows.Forms.ComboBox
     Friend WithEvents grpMidiInput As System.Windows.Forms.GroupBox
     Friend WithEvents comInput As System.Windows.Forms.ComboBox
-    Friend WithEvents chkOldNote As System.Windows.Forms.CheckBox
+    Friend WithEvents chkRemoveOldNotes As System.Windows.Forms.CheckBox
     Friend WithEvents chkDebug As System.Windows.Forms.CheckBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label

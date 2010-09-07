@@ -1,10 +1,13 @@
 ﻿Module Devices
     Public Recording As Boolean = False
 
+    Public RemoveOldNotes As Boolean = True
+
     Public InDevices As New List(Of MidiInput)
     Public OutDevices As New List(Of MidiOutput)
     Public CurrentMidiInput As MidiInput
     Public CurrentMidiOutput As MidiOutput
+
 
     Public Sub AddInputDevice(ByVal DeviceID As Integer, ByVal Channel As Integer)
         For Each dev As MidiInput In InDevices

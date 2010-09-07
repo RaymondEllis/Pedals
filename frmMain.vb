@@ -85,8 +85,9 @@
 
     Public Sub Open()
         If Not IO.File.Exists("Pedals.cfg") Then
-            AddInputDevice(0, 0)
-            AddOutputDevice(0, 0)
+            LoadSettings("Pedals.cfg")
+            'AddInputDevice(0, 0)
+            'AddOutputDevice(0, 0)
 
 
             Return
@@ -99,7 +100,7 @@
     Public Sub Save()
         Status("Saving...")
 
-
+        SaveSettings("Pedals.cfg")
 
         Status("Saved!")
     End Sub
@@ -595,9 +596,9 @@
         CurrentMidiInput.SetVolumeMax = sender.checked
     End Sub
 
-    Private Sub chkOldNote_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkOldNote.CheckedChanged
+    Private Sub chkOldNote_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkRemoveOldNotes.CheckedChanged
         If Not Loaded Then Return 'We don't need to change anything here until we are done loading.
-        CurrentMidiInput.RemoveOldNotes = sender.checked
+        RemoveOldNotes = sender.checked
     End Sub
 
 
@@ -637,15 +638,17 @@
     Public Sub SetControls()
         If Not Loaded Then Return
 
-
+        'chkRemoveOldNotes.Checked = RemoveOldNotes
 
         If CurrentMidiInput IsNot Nothing Then
             comInput.SelectedIndex = CurrentMidiInput.DeviceID
 
             numMidiInputChannel.Value = CurrentMidiInput.Channel
 
+            chkMidiInputChannels.Checked = CurrentMidiInput.AllChannels
+
             chkMidiInputVolume.Checked = CurrentMidiInput.SetVolumeMax
-            chkOldNote.Checked = CurrentMidiInput.RemoveOldNotes
+
             chkMidiInputNotes.Checked = CurrentMidiInput.EnableNotes
 
         End If
