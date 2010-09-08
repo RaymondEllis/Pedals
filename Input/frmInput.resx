@@ -123,6 +123,12 @@
   <metadata name="tmr.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="comControllerType.ToolTip" xml:space="preserve">
+    <value>MIDI                Will use a MIDI controller
+AlterSustain     Holds  the notes if the switch is on.
+AlterSostenuto Holds the notes that when it was First switched on.
+AlterSoft           Sets the volume of the notes to a low volume(~30)</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

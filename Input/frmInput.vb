@@ -124,7 +124,11 @@ Public Class frmInput
     End Sub
 
     Private Sub frmInput_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        comController.Items.AddRange([Enum].GetNames(GetType(Midi.ControllerType)))
+        comController.SelectedItem = Midi.ControllerType.HoldPedal1.ToString
 
+        comControllerType.Items.AddRange([Enum].GetNames(GetType(InputStuff.ControllerType0)))
+        comControllerType.SelectedItem = ControllerType0.MIDI.ToString
 
         'For Each joy As Joystick In Joystick
         '    joy.Poll()
@@ -168,6 +172,7 @@ Public Class frmInput
     End Sub
 
     Private Sub numSwitchOn_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numSwitchOn.ValueChanged
+        If CurrentInput Is Nothing Then Return
         CurrentInput.SwitchOn = numSwitchOn.Value
     End Sub
 

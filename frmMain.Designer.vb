@@ -82,7 +82,7 @@ Partial Class frmMain
         Me.grpMidiOutput.Controls.Add(Me.numMidiOutputChannel)
         Me.grpMidiOutput.Controls.Add(Me.Label5)
         Me.grpMidiOutput.Enabled = False
-        Me.grpMidiOutput.Location = New System.Drawing.Point(243, 11)
+        Me.grpMidiOutput.Location = New System.Drawing.Point(240, 12)
         Me.grpMidiOutput.Name = "grpMidiOutput"
         Me.grpMidiOutput.Size = New System.Drawing.Size(231, 167)
         Me.grpMidiOutput.TabIndex = 5
@@ -174,7 +174,7 @@ Partial Class frmMain
         Me.grpMidiInput.Controls.Add(Me.numMidiInputChannel)
         Me.grpMidiInput.Controls.Add(Me.Label6)
         Me.grpMidiInput.Enabled = False
-        Me.grpMidiInput.Location = New System.Drawing.Point(12, 11)
+        Me.grpMidiInput.Location = New System.Drawing.Point(3, 12)
         Me.grpMidiInput.Name = "grpMidiInput"
         Me.grpMidiInput.Size = New System.Drawing.Size(231, 200)
         Me.grpMidiInput.TabIndex = 5
@@ -449,7 +449,7 @@ Partial Class frmMain
         Me.grpInput.Controls.Add(Me.lstInput)
         Me.grpInput.Controls.Add(Me.btnInputAdd)
         Me.grpInput.Controls.Add(Me.btnInputEdit)
-        Me.grpInput.Location = New System.Drawing.Point(480, 11)
+        Me.grpInput.Location = New System.Drawing.Point(477, 10)
         Me.grpInput.Name = "grpInput"
         Me.grpInput.Size = New System.Drawing.Size(209, 295)
         Me.grpInput.TabIndex = 30
@@ -473,7 +473,7 @@ Partial Class frmMain
         Me.grpDebug.Controls.Add(Me.Label1)
         Me.grpDebug.Controls.Add(Me.Label3)
         Me.grpDebug.Controls.Add(Me.Label4)
-        Me.grpDebug.Location = New System.Drawing.Point(695, 11)
+        Me.grpDebug.Location = New System.Drawing.Point(692, 11)
         Me.grpDebug.Name = "grpDebug"
         Me.grpDebug.Size = New System.Drawing.Size(291, 295)
         Me.grpDebug.TabIndex = 31

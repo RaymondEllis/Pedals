@@ -35,11 +35,13 @@
         'Fill boxs.
         GetDevices()
 
-        frmInput.comController.Items.AddRange([Enum].GetNames(GetType(Midi.ControllerType)))
-        frmInput.comController.SelectedItem = Midi.ControllerType.HoldPedal1.ToString
+        ' frmInput = New frmInput
 
-        frmInput.comControllerType.Items.AddRange([Enum].GetNames(GetType(InputStuff.ControllerType0)))
-        frmInput.comControllerType.SelectedItem = ControllerType0.MIDI.ToString
+        'frmInput.comController.Items.AddRange([Enum].GetNames(GetType(Midi.ControllerType)))
+        'frmInput.comController.SelectedItem = Midi.ControllerType.HoldPedal1.ToString
+
+        'frmInput.comControllerType.Items.AddRange([Enum].GetNames(GetType(InputStuff.ControllerType0)))
+        'frmInput.comControllerType.SelectedItem = ControllerType0.MIDI.ToString
     End Sub
 
     Private Sub frmMain_Shown(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Shown
