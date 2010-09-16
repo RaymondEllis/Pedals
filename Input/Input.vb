@@ -2,6 +2,7 @@
     Public Input As New List(Of InputData)
 
     Public Joystick As New List(Of Joystick)
+    Public Keyboard As Keyboard
     Public dInput As DirectInput
     Public EnableJoysticks As Boolean = False
 
@@ -18,7 +19,8 @@
     End Enum
 
     Public Sub CreateInput()
-        Status("Creating joystick input...")
+
+        Status("Searching for joysticks...")
         'Create direct input
         dInput = New DirectInput
 
@@ -35,9 +37,8 @@
             End Try
         Next
         If Joystick.Count = 0 Then
-            Status("No attached joysticks." & vbNewLine & "Reload the program after you have pluged one in.", True)
-            'frmMain.ContinueLoading = False
-            'Close()
+            Status("No attached joysticks.")
+            EnableJoysticks = False
         Else
             For Each joy As Joystick In Joystick
                 joy.Acquire()
@@ -49,8 +50,17 @@
                 Next
             Next
             EnableJoysticks = True
-            Status("Creating joystick input... Done!")
+            Status("Found #" & Joystick.Count & " joysticks.")
         End If
+
+
+
+        Status("Creating DirectInput keyboard.")
+        Keyboard = New Keyboard(dInput)
+        Keyboard.Acquire()
+        Keyboard.Poll()
+        Status("Created keyboard.")
+
 
 
 
@@ -129,6 +139,9 @@
             Next
         End If
 
+        Keyboard.Unacquire()
+        Keyboard.Dispose()
+
         If dInput IsNot Nothing Then
             dInput.Dispose()
         End If
@@ -145,8 +158,9 @@ Public Class InputData
     Public Device As MidiInput
     Public Input As Integer = InputDevices.Joystick
 
-    Public Axis As Integer = -1
     Public ID As Integer = -1
+    Public Axis As Integer = -1
+
     Public OldPosition As Integer
 
     Public Reverse As Boolean = True
@@ -196,6 +210,13 @@ Public Class InputData
             Case InputDevices.MIDI
                 pos = InDevices(ID).Controllers(Axis)
 
+            Case InputDevices.Keyboard
+                If Keyboard.GetCurrentState.IsPressed(Axis) Then
+                    pos = 127
+                Else
+                    pos = 0
+                End If
+
         End Select
 
 
@@ -209,7 +230,18 @@ Public Class InputData
 
     Public Overrides Function ToString() As String
         If AutoName Then
-            Return "Joystick#" & ID & "  Axis:" & Axis
+            Select Case Input
+                Case InputDevices.Joystick
+                    Return "Joystick#" & ID & "  Axis:" & Axis
+
+                Case InputDevices.MIDI
+                    Return "MIDI#" & ID & "  Controller:" & Axis
+
+                Case InputDevices.Keyboard
+                    Return "Keyboard" & "  Key:" & [Enum].Parse(GetType(SlimDX.DirectInput.Key), Axis).ToString
+
+            End Select
+
         End If
         Return _Name
     End Function

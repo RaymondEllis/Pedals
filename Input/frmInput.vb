@@ -3,6 +3,7 @@
 Public Class frmInput
 
     Public IsSearching As Boolean = False
+    Public Loaded As Boolean = False
 
 	Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         'If CurrentInput.ID = -1 Then
@@ -12,6 +13,7 @@ Public Class frmInput
         '    CurrentInput.Controller = [Enum].Parse(GetType(Midi.ControllerType), comController.SelectedItem.ToString)
         '    CurrentInput.IsControllerSwitch = IsSwitch(CurrentInput.Controller)
         'End If
+        Loaded = False
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
     End Sub
@@ -27,6 +29,8 @@ Public Class frmInput
     Private Sub btnFind_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnFind.Click
         btnFind.Enabled = False
         CurrentInput.SetData(-1, -1)
+
+        Keyboard.Poll()
 
         Dim i As Integer = -1
         For Each joy As Joystick In Joystick
@@ -119,6 +123,15 @@ Public Class frmInput
                 End If
 
             Next
+
+            Keyboard.Poll()
+            For Each Key As Integer In Keyboard.GetCurrentState.PressedKeys 'SlimDX.DirectInput.Key
+
+                CurrentInput.Input = InputDevices.Keyboard
+                CurrentInput.ID = 0
+                CurrentInput.Axis = Key
+
+            Next
         End If
 
     End Sub
@@ -151,7 +164,7 @@ Public Class frmInput
         comControllerType.SelectedItem = DirectCast(CurrentInput.ControllerType, ControllerType0).ToString
         'End If
 
-
+        Loaded = True
     End Sub
 
     Public Overloads Function ShowDialog(ByVal Index As Integer) As DialogResult

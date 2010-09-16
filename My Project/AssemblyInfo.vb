@@ -10,7 +10,7 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("Pedals")> 
 <Assembly: AssemblyDescription("Use a joystick as a MIDI device.")> 
-<Assembly: AssemblyCompany("")> 
+<Assembly: AssemblyCompany("ML Systems")> 
 <Assembly: AssemblyProduct("Pedals")> 
 <Assembly: AssemblyCopyright("Copyright ©  2010 Raymond Ellis")> 
 <Assembly: AssemblyTrademark("")> 
