@@ -25,7 +25,7 @@
         For Each dev As MidiInput In InDevices
             g = sd.Create_Group("MidiInput_" & i)
             g.Add("ID", dev.DeviceID)
-            g.Add("Channel", dev.Channel)
+            g.Add("Channel", dev.Channel + 1)
             g.Add("AllChannels", dev.AllChannels)
             g.Add("EnableNotes", dev.EnableNotes)
             g.Add("OtherChannels", dev.SendOtherChannels)
@@ -40,7 +40,7 @@
         For Each dev As MidiOutput In OutDevices
             g = sd.Create_Group("MidiOutput_" & i)
             g.Add("ID", dev.DeviceID)
-            g.Add("Channel", dev.Channel)
+            g.Add("Channel", dev.Channel + 1)
 
             i += 1
         Next

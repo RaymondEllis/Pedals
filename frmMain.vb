@@ -128,7 +128,7 @@
                 Me.lstDebug.Items.RemoveAt(0)
             End If
 
-            Me.lstDebug.Items.Add(Message.MidiChannel.ToString & vbTab & _
+            Me.lstDebug.Items.Add(Message.MidiChannel + 1 & vbTab & _
                                   Message.Command.ToString.PadRight(15) & vbTab & _
                                   Message.Data1.ToString & vbTab & _
                                   Message.Data2.ToString)
@@ -618,7 +618,7 @@
         If CurrentMidiInput IsNot Nothing Then
             comInput.SelectedIndex = CurrentMidiInput.DeviceID
 
-            numMidiInputChannel.Value = CurrentMidiInput.Channel
+            numMidiInputChannel.Value = CurrentMidiInput.Channel + 1
 
             chkMidiInputChannels.Checked = CurrentMidiInput.AllChannels
 
@@ -630,7 +630,7 @@
 
         If CurrentMidiOutput IsNot Nothing Then
             comOutput.SelectedIndex = CurrentMidiOutput.DeviceID
-            numMidiOutputChannel.Value = CurrentMidiOutput.Channel
+            numMidiOutputChannel.Value = CurrentMidiOutput.Channel + 1
 
         End If
 
@@ -699,12 +699,12 @@
     'Channels:
     Private Sub numMidiInputChannel_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMidiInputChannel.ValueChanged
         If Not Loaded Or CurrentMidiInput Is Nothing Then Return 'We don't need to change anything here until we are done loading.
-        CurrentMidiInput.Channel = sender.value
+        CurrentMidiInput.Channel = sender.value - 1
         CheckNoteDisable()
     End Sub
     Private Sub numMidiOutputChannel_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMidiOutputChannel.ValueChanged
         If Not Loaded Or CurrentMidiOutput Is Nothing Then Return 'We don't need to change anything here until we are done loading.
-        CurrentMidiOutput.Channel = sender.value
+        CurrentMidiOutput.Channel = sender.value - 1
         CheckNoteDisable()
     End Sub
 

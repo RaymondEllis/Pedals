@@ -151,10 +151,12 @@ Partial Class frmMain
         'numMidiOutputChannel
         '
         Me.numMidiOutputChannel.Location = New System.Drawing.Point(86, 141)
-        Me.numMidiOutputChannel.Maximum = New Decimal(New Integer() {15, 0, 0, 0})
+        Me.numMidiOutputChannel.Maximum = New Decimal(New Integer() {16, 0, 0, 0})
+        Me.numMidiOutputChannel.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.numMidiOutputChannel.Name = "numMidiOutputChannel"
         Me.numMidiOutputChannel.Size = New System.Drawing.Size(39, 20)
         Me.numMidiOutputChannel.TabIndex = 3
+        Me.numMidiOutputChannel.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
         'Label5
         '
@@ -280,10 +282,12 @@ Partial Class frmMain
         'numMidiInputChannel
         '
         Me.numMidiInputChannel.Location = New System.Drawing.Point(86, 147)
-        Me.numMidiInputChannel.Maximum = New Decimal(New Integer() {15, 0, 0, 0})
+        Me.numMidiInputChannel.Maximum = New Decimal(New Integer() {16, 0, 0, 0})
+        Me.numMidiInputChannel.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.numMidiInputChannel.Name = "numMidiInputChannel"
         Me.numMidiInputChannel.Size = New System.Drawing.Size(39, 20)
         Me.numMidiInputChannel.TabIndex = 3
+        Me.numMidiInputChannel.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
         'Label6
         '

@@ -27,7 +27,7 @@
 
         For n As Integer = 0 To MidiIn
             g = sd.Get_Group("MidiInput_" & n)
-            AddInputDevice(g.Get_Value("ID"), g.Get_Value("Channel"))
+            AddInputDevice(g.Get_Value("ID"), g.Get_Value("Channel") - 1)
 
             g.Get_Value("AllChannels", CurrentMidiInput.AllChannels)
             g.Get_Value("EnableNotes", CurrentMidiInput.EnableNotes)
@@ -38,7 +38,7 @@
 
         For n As Integer = 0 To MidiOut
             g = sd.Get_Group("MidiOutput_" & n)
-            AddOutputDevice(g.Get_Value("ID"), g.Get_Value("Channel"))
+            AddOutputDevice(g.Get_Value("ID"), g.Get_Value("Channel") - 1)
         Next
 
         For n As Integer = 0 To InpCount
