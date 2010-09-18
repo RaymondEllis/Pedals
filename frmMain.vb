@@ -360,7 +360,7 @@
     Private Sub chkMidiInputNotes_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkMidiInputNotes.CheckedChanged
         If Not Loaded Or CurrentMidiInput Is Nothing Then Return 'We don't need to change anything here until we are done loading.
         CurrentMidiInput.EnableNotes = sender.Checked
-        grpMisc.Enabled = sender.Checked
+        ' grpMisc.Enabled = sender.Checked
     End Sub
 
     Private Sub chkMidiInputChannels_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkMidiInputChannels.CheckedChanged
