@@ -626,11 +626,15 @@
 
             chkMidiInputNotes.Checked = CurrentMidiInput.EnableNotes
 
+            chkMidiInputInstrument.Checked = CurrentMidiInput.EnableInstrument
+
         End If
 
         If CurrentMidiOutput IsNot Nothing Then
             comOutput.SelectedIndex = CurrentMidiOutput.DeviceID
             numMidiOutputChannel.Value = CurrentMidiOutput.Channel + 1
+
+            numMidiOutputInsturment.Value = CurrentMidiOutput.Instrument + 1
 
         End If
 
@@ -708,6 +712,17 @@
         CheckNoteDisable()
     End Sub
 
+    'Instrument
+    Private Sub numMidiOutputInsturment_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMidiOutputInsturment.ValueChanged
+        If Not Loaded Or CurrentMidiOutput Is Nothing Then Return 'We don't need to change anything here until we are done loading.
+        CurrentMidiOutput.Instrument = numMidiOutputInsturment.Value - 1 'Set the instrument.
+    End Sub
+    Private Sub chkMidiInputInstrument_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkMidiInputInstrument.CheckedChanged
+        If Not Loaded Or CurrentMidiInput Is Nothing Then Return 'We don't need to change anything here until we are done loading.
+        CurrentMidiInput.EnableInstrument = chkMidiInputInstrument.Checked
+    End Sub
+
+
     Public Sub CheckNoteDisable() 'Used to disable alter notes and stuff.
         If Not grpMidiOutput.Enabled Or Not Loaded Then Return
 
@@ -726,4 +741,6 @@
 
 
     
+
+
 End Class

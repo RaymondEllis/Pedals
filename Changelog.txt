@@ -1,3 +1,7 @@
+2.01:
+Added: Instrument stuff.
+Fixed: Loading settings file with out everything in side the file.
+
 2.0:
 New UI
 Can now use the computer keyboard and a MIDI controller as input.

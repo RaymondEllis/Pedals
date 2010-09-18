@@ -1,6 +1,8 @@
 ﻿Namespace SimpleD
     Module Info
-        Public Const Version = 0.98
+        Public Const Version = 0.981
+        '0.981
+        'Changed: Get_Value(Name, Value) No longer throws a error if no value found.
         '0.98
         'Fixed: Spelling
         'Added: New get value with byref value
@@ -229,8 +231,19 @@ Endy:
         Public Function Get_Value(ByVal Name As String) As String
             Return Find(Name).Value 'Find the property and return the value.
         End Function
+        ''' <summary>
+        ''' Will not set value if no value found.
+        ''' </summary>
+        ''' <param name="Name"></param>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
         Public Sub Get_Value(ByVal Name As String, ByRef Value As Object)
-            Value = Find(Name).Value 'Find the property and return the value.
+            Try
+                Value = Find(Name).Value 'Find the property and return the value.
+            Catch ex As Exception
+
+            End Try
+            'Value = Find(Name).Value 'Find the property and return the value.
         End Sub
         ''' <summary>
         ''' Get the value from a property.

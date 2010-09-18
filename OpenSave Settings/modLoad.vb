@@ -31,6 +31,8 @@
 
             g.Get_Value("AllChannels", CurrentMidiInput.AllChannels)
             g.Get_Value("EnableNotes", CurrentMidiInput.EnableNotes)
+            g.Get_Value("EnableControllers", CurrentMidiInput.EnableControllers)
+            g.Get_Value("EnableInstrument", CurrentMidiInput.EnableInstrument)
             g.Get_Value("OtherChannels", CurrentMidiInput.SendOtherChannels)
             g.Get_Value("SetVolumeMax", CurrentMidiInput.SetVolumeMax)
 

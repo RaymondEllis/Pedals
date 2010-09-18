@@ -31,7 +31,9 @@ Partial Class frmMain
         Me.lstMidiOutput = New System.Windows.Forms.ListBox()
         Me.comOutput = New System.Windows.Forms.ComboBox()
         Me.btnMidiOutputAdd = New System.Windows.Forms.Button()
+        Me.numMidiOutputInsturment = New System.Windows.Forms.NumericUpDown()
         Me.numMidiOutputChannel = New System.Windows.Forms.NumericUpDown()
+        Me.Label7 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.grpMidiInput = New System.Windows.Forms.GroupBox()
         Me.panMidiInput = New System.Windows.Forms.Panel()
@@ -65,8 +67,11 @@ Partial Class frmMain
         Me.grpInput = New System.Windows.Forms.GroupBox()
         Me.btnInputRemove = New System.Windows.Forms.Button()
         Me.grpDebug = New System.Windows.Forms.GroupBox()
+        Me.chkMidiInputInstrument = New System.Windows.Forms.CheckBox()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.grpMidiOutput.SuspendLayout()
         Me.panMidiOutput.SuspendLayout()
+        CType(Me.numMidiOutputInsturment, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.numMidiOutputChannel, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.grpMidiInput.SuspendLayout()
         Me.panMidiInput.SuspendLayout()
@@ -79,12 +84,14 @@ Partial Class frmMain
         'grpMidiOutput
         '
         Me.grpMidiOutput.Controls.Add(Me.panMidiOutput)
+        Me.grpMidiOutput.Controls.Add(Me.numMidiOutputInsturment)
         Me.grpMidiOutput.Controls.Add(Me.numMidiOutputChannel)
+        Me.grpMidiOutput.Controls.Add(Me.Label7)
         Me.grpMidiOutput.Controls.Add(Me.Label5)
         Me.grpMidiOutput.Enabled = False
         Me.grpMidiOutput.Location = New System.Drawing.Point(240, 12)
         Me.grpMidiOutput.Name = "grpMidiOutput"
-        Me.grpMidiOutput.Size = New System.Drawing.Size(231, 167)
+        Me.grpMidiOutput.Size = New System.Drawing.Size(231, 200)
         Me.grpMidiOutput.TabIndex = 5
         Me.grpMidiOutput.TabStop = False
         Me.grpMidiOutput.Text = "MIDI Output device"
@@ -148,6 +155,16 @@ Partial Class frmMain
         Me.btnMidiOutputAdd.Text = "Add"
         Me.btnMidiOutputAdd.UseVisualStyleBackColor = True
         '
+        'numMidiOutputInsturment
+        '
+        Me.numMidiOutputInsturment.Location = New System.Drawing.Point(77, 171)
+        Me.numMidiOutputInsturment.Maximum = New Decimal(New Integer() {128, 0, 0, 0})
+        Me.numMidiOutputInsturment.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.numMidiOutputInsturment.Name = "numMidiOutputInsturment"
+        Me.numMidiOutputInsturment.Size = New System.Drawing.Size(48, 20)
+        Me.numMidiOutputInsturment.TabIndex = 3
+        Me.numMidiOutputInsturment.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        '
         'numMidiOutputChannel
         '
         Me.numMidiOutputChannel.Location = New System.Drawing.Point(86, 141)
@@ -157,6 +174,15 @@ Partial Class frmMain
         Me.numMidiOutputChannel.Size = New System.Drawing.Size(39, 20)
         Me.numMidiOutputChannel.TabIndex = 3
         Me.numMidiOutputChannel.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Location = New System.Drawing.Point(6, 173)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(59, 13)
+        Me.Label7.TabIndex = 2
+        Me.Label7.Text = "Instrument:"
         '
         'Label5
         '
@@ -169,6 +195,8 @@ Partial Class frmMain
         '
         'grpMidiInput
         '
+        Me.grpMidiInput.Controls.Add(Me.CheckBox1)
+        Me.grpMidiInput.Controls.Add(Me.chkMidiInputInstrument)
         Me.grpMidiInput.Controls.Add(Me.panMidiInput)
         Me.grpMidiInput.Controls.Add(Me.chkMidiInputVolume)
         Me.grpMidiInput.Controls.Add(Me.chkMidiInputChannels)
@@ -178,7 +206,7 @@ Partial Class frmMain
         Me.grpMidiInput.Enabled = False
         Me.grpMidiInput.Location = New System.Drawing.Point(3, 12)
         Me.grpMidiInput.Name = "grpMidiInput"
-        Me.grpMidiInput.Size = New System.Drawing.Size(231, 200)
+        Me.grpMidiInput.Size = New System.Drawing.Size(231, 254)
         Me.grpMidiInput.TabIndex = 5
         Me.grpMidiInput.TabStop = False
         Me.grpMidiInput.Text = "MIDI Input device"
@@ -484,6 +512,29 @@ Partial Class frmMain
         Me.grpDebug.TabStop = False
         Me.grpDebug.Text = "Debug"
         '
+        'chkMidiInputInstrument
+        '
+        Me.chkMidiInputInstrument.AutoSize = True
+        Me.chkMidiInputInstrument.Checked = True
+        Me.chkMidiInputInstrument.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkMidiInputInstrument.Location = New System.Drawing.Point(9, 228)
+        Me.chkMidiInputInstrument.Name = "chkMidiInputInstrument"
+        Me.chkMidiInputInstrument.Size = New System.Drawing.Size(110, 17)
+        Me.chkMidiInputInstrument.TabIndex = 32
+        Me.chkMidiInputInstrument.Text = "Enable instrument"
+        Me.ToolTips.SetToolTip(Me.chkMidiInputInstrument, "Allow the input device to change the instrument.")
+        Me.chkMidiInputInstrument.UseVisualStyleBackColor = True
+        '
+        'CheckBox1
+        '
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Location = New System.Drawing.Point(9, 197)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(81, 17)
+        Me.CheckBox1.TabIndex = 33
+        Me.CheckBox1.Text = "CheckBox1"
+        Me.CheckBox1.UseVisualStyleBackColor = True
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -506,6 +557,7 @@ Partial Class frmMain
         Me.grpMidiOutput.ResumeLayout(False)
         Me.grpMidiOutput.PerformLayout()
         Me.panMidiOutput.ResumeLayout(False)
+        CType(Me.numMidiOutputInsturment, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.numMidiOutputChannel, System.ComponentModel.ISupportInitialize).EndInit()
         Me.grpMidiInput.ResumeLayout(False)
         Me.grpMidiInput.PerformLayout()
@@ -560,5 +612,9 @@ Partial Class frmMain
     Friend WithEvents lstDebug As System.Windows.Forms.ListBox
     Friend WithEvents btnMidiInputSet As System.Windows.Forms.Button
     Friend WithEvents btnMidiOutputSet As System.Windows.Forms.Button
+    Friend WithEvents numMidiOutputInsturment As System.Windows.Forms.NumericUpDown
+    Friend WithEvents Label7 As System.Windows.Forms.Label
+    Friend WithEvents chkMidiInputInstrument As System.Windows.Forms.CheckBox
+    Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
 
 End Class

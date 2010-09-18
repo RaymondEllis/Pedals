@@ -28,6 +28,8 @@
             g.Add("Channel", dev.Channel + 1)
             g.Add("AllChannels", dev.AllChannels)
             g.Add("EnableNotes", dev.EnableNotes)
+            g.Add("EnableControllers", dev.EnableControllers)
+            g.Add("EnableInstrument", dev.EnableInstrument)
             g.Add("OtherChannels", dev.SendOtherChannels)
             g.Add("SetVolumeMax", dev.SetVolumeMax)
 

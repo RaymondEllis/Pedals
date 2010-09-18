@@ -3,6 +3,7 @@
 
     Public WithEvents Device As OutputDevice
 
+    Friend bInstrument As Byte
 
 #Region "Base"
     Public Sub New(ByVal DeviceID As Integer, ByVal Channel As Integer)
@@ -25,6 +26,26 @@
         End If
     End Sub
 #End Region
+
+
+
+    Public Property Instrument As Byte
+        Get
+            Return bInstrument
+        End Get
+        Set(ByVal value As Byte)
+            bInstrument = value
+            Dim msg As New ChannelMessageBuilder
+            msg.Command = ChannelCommand.ProgramChange
+            msg.Data1 = value
+            msg.MidiChannel = Channel
+
+            msg.Build()
+            Me.Send(msg.Result)
+        End Set
+    End Property
+
+
 
 
 

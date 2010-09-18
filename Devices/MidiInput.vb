@@ -8,6 +8,7 @@
     Public SetVolumeMax As Boolean = True
     Public EnableNotes As Boolean = True
     Public EnableControllers As Boolean = False
+    Public EnableInstrument As Boolean = True
     Public SendOtherChannels As Boolean = False
     Public AllChannels As Boolean = False
 
@@ -188,7 +189,15 @@
                 If EnableControllers Then Send(Message)
 
             ElseIf Message.Command = ChannelCommand.ProgramChange Then 'ProgramChannge
-                Send(Message)
+                If EnableInstrument Then
+                    For Each dev As MidiOutput In OutDevices
+                        dev.bInstrument = Message.Data1
+                    Next
+                    Send(Message)
+                    Loaded = False
+                    frmMain.numMidiOutputInsturment.Value = Message.Data1 + 1
+                    Loaded = True
+                End If
 
             ElseIf Message.Command = ChannelCommand.ChannelPressure Then 'ChannelPressure
                 Send(Message)
