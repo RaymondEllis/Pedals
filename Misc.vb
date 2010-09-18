@@ -34,7 +34,7 @@ Module Misc
             Case 66 'Sostenuto
                 Return True
 
-            Case 67 'Sift
+            Case 67 'Soft
                 Return True
 
             Case 68 'Legato
@@ -51,9 +51,7 @@ Module Misc
         Return False
     End Function
 
-    Public SostenutoList As New List(Of Integer)
-    Public SustainList As New List(Of Integer)
-    Public SustainPressed, SostenutoPressed, SoftPressed As Boolean
+
 #Region "Note holder"
     Public Note(127) As Integer 'Used to hold notes.
 
@@ -89,6 +87,9 @@ Module Misc
         Send(tmp)
     End Sub
 
+    Public SostenutoList As New List(Of Integer)
+    Public SustainList As New List(Of Integer)
+    Public SustainPressed, SostenutoPressed, SoftPressed As Boolean
     Friend Sub PressSustain()
         'Check for down keys and set them to sustain.
         Parallel.For(0, Note.Length - 1, Sub(n)

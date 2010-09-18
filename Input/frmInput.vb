@@ -6,13 +6,6 @@ Public Class frmInput
     Public Loaded As Boolean = False
 
 	Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
-        'If CurrentInput.ID = -1 Then
-        '    CurrentInput = Nothing
-        'Else
-        '    CurrentInput.ControllerType = [Enum].Parse(GetType(ControllerType0), comControllerType.SelectedItem.ToString)
-        '    CurrentInput.Controller = [Enum].Parse(GetType(Midi.ControllerType), comController.SelectedItem.ToString)
-        '    CurrentInput.IsControllerSwitch = IsSwitch(CurrentInput.Controller)
-        'End If
         Loaded = False
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
@@ -36,7 +29,6 @@ Public Class frmInput
         For Each joy As Joystick In Joystick
             i += 1
             oldJoy(i) = New Joy0
-            'joy.Acquire()
             joy.Poll()
             Dim s As JoystickState = joy.GetCurrentState
             oldJoy(i).X = s.X
@@ -143,9 +135,6 @@ Public Class frmInput
         comControllerType.Items.AddRange([Enum].GetNames(GetType(InputStuff.ControllerType0)))
         comControllerType.SelectedItem = ControllerType0.MIDI.ToString
 
-        'For Each joy As Joystick In Joystick
-        '    joy.Poll()
-        'Next
 
         ReDim oldJoy(Joystick.Count - 1)
 
