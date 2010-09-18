@@ -625,7 +625,7 @@
             chkMidiInputVolume.Checked = CurrentMidiInput.SetVolumeMax
 
             chkMidiInputNotes.Checked = CurrentMidiInput.EnableNotes
-
+            chkMidiInputControllers.Checked = CurrentMidiInput.EnableControllers
             chkMidiInputInstrument.Checked = CurrentMidiInput.EnableInstrument
 
         End If
@@ -720,6 +720,12 @@
     Private Sub chkMidiInputInstrument_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkMidiInputInstrument.CheckedChanged
         If Not Loaded Or CurrentMidiInput Is Nothing Then Return 'We don't need to change anything here until we are done loading.
         CurrentMidiInput.EnableInstrument = chkMidiInputInstrument.Checked
+    End Sub
+
+
+    Private Sub chkMidiInputControllers_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkMidiInputControllers.CheckedChanged
+        If Not Loaded Or CurrentMidiInput Is Nothing Then Return 'We don't need to change anything here until we are done loading.
+        CurrentMidiInput.EnableControllers = chkMidiInputControllers.Checked
     End Sub
 
 

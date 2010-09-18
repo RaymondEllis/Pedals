@@ -68,7 +68,7 @@ Partial Class frmMain
         Me.btnInputRemove = New System.Windows.Forms.Button()
         Me.grpDebug = New System.Windows.Forms.GroupBox()
         Me.chkMidiInputInstrument = New System.Windows.Forms.CheckBox()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.chkMidiInputControllers = New System.Windows.Forms.CheckBox()
         Me.grpMidiOutput.SuspendLayout()
         Me.panMidiOutput.SuspendLayout()
         CType(Me.numMidiOutputInsturment, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -195,7 +195,7 @@ Partial Class frmMain
         '
         'grpMidiInput
         '
-        Me.grpMidiInput.Controls.Add(Me.CheckBox1)
+        Me.grpMidiInput.Controls.Add(Me.chkMidiInputControllers)
         Me.grpMidiInput.Controls.Add(Me.chkMidiInputInstrument)
         Me.grpMidiInput.Controls.Add(Me.panMidiInput)
         Me.grpMidiInput.Controls.Add(Me.chkMidiInputVolume)
@@ -273,8 +273,6 @@ Partial Class frmMain
         'chkMidiInputVolume
         '
         Me.chkMidiInputVolume.AutoSize = True
-        Me.chkMidiInputVolume.Checked = True
-        Me.chkMidiInputVolume.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chkMidiInputVolume.Location = New System.Drawing.Point(112, 173)
         Me.chkMidiInputVolume.Name = "chkMidiInputVolume"
         Me.chkMidiInputVolume.Size = New System.Drawing.Size(113, 17)
@@ -517,7 +515,7 @@ Partial Class frmMain
         Me.chkMidiInputInstrument.AutoSize = True
         Me.chkMidiInputInstrument.Checked = True
         Me.chkMidiInputInstrument.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkMidiInputInstrument.Location = New System.Drawing.Point(9, 228)
+        Me.chkMidiInputInstrument.Location = New System.Drawing.Point(9, 220)
         Me.chkMidiInputInstrument.Name = "chkMidiInputInstrument"
         Me.chkMidiInputInstrument.Size = New System.Drawing.Size(110, 17)
         Me.chkMidiInputInstrument.TabIndex = 32
@@ -525,15 +523,18 @@ Partial Class frmMain
         Me.ToolTips.SetToolTip(Me.chkMidiInputInstrument, "Allow the input device to change the instrument.")
         Me.chkMidiInputInstrument.UseVisualStyleBackColor = True
         '
-        'CheckBox1
+        'chkMidiInputControllers
         '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(9, 197)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(81, 17)
-        Me.CheckBox1.TabIndex = 33
-        Me.CheckBox1.Text = "CheckBox1"
-        Me.CheckBox1.UseVisualStyleBackColor = True
+        Me.chkMidiInputControllers.AutoSize = True
+        Me.chkMidiInputControllers.Checked = True
+        Me.chkMidiInputControllers.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkMidiInputControllers.Location = New System.Drawing.Point(9, 197)
+        Me.chkMidiInputControllers.Name = "chkMidiInputControllers"
+        Me.chkMidiInputControllers.Size = New System.Drawing.Size(110, 17)
+        Me.chkMidiInputControllers.TabIndex = 33
+        Me.chkMidiInputControllers.Text = "Enable controllers"
+        Me.ToolTips.SetToolTip(Me.chkMidiInputControllers, "Send controller data to all output devices.")
+        Me.chkMidiInputControllers.UseVisualStyleBackColor = True
         '
         'frmMain
         '
@@ -615,6 +616,6 @@ Partial Class frmMain
     Friend WithEvents numMidiOutputInsturment As System.Windows.Forms.NumericUpDown
     Friend WithEvents Label7 As System.Windows.Forms.Label
     Friend WithEvents chkMidiInputInstrument As System.Windows.Forms.CheckBox
-    Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
+    Friend WithEvents chkMidiInputControllers As System.Windows.Forms.CheckBox
 
 End Class

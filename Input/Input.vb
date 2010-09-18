@@ -67,7 +67,7 @@
     End Sub
 
     Public Sub AddInput(ByVal Inp As InputData)
-        Inp.Device = CurrentMidiInput 'Set the device of the input.
+        ' Inp.Device = CurrentMidiInput 'Set the device of the input.
 
         'Add the input to the lists.
         Input.Add(Inp)
@@ -155,7 +155,8 @@ End Module
 
 
 Public Class InputData
-    Public Device As MidiInput
+
+    'Public Device As MidiInput
     Public Input As Integer = InputDevices.Joystick
 
     Public ID As Integer = -1
@@ -305,9 +306,9 @@ Public Class InputData
             Case ControllerType0.AlterSustain
                 If Changed Then
                     If Pressed Then
-                        Device.PressSustain()
+                        PressSustain()
                     Else
-                        Device.ReleaseSustain()
+                        ReleaseSustain()
                     End If
                 End If
                 SustainPressed = Pressed
@@ -315,9 +316,9 @@ Public Class InputData
             Case ControllerType0.AlterSostenuto
                 If Changed Then
                     If Pressed Then
-                        Device.PressSostenuto()
+                        PressSostenuto()
                     Else
-                        Device.ReleaseSostenuto()
+                        ReleaseSostenuto()
                     End If
                 End If
                 SostenutoPressed = Pressed

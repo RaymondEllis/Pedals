@@ -1,6 +1,8 @@
 2.01:
 Added: Instrument stuff.
 Fixed: Loading settings file with out everything in side the file.
+Fixed: Edit input with an alter controller type selected.
+Added: Control for enabling controllers.
 
 2.0:
 New UI

@@ -195,8 +195,6 @@ Public Class frmInput
 
 
     Private Sub comControllerType_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comControllerType.SelectedIndexChanged
-        If Not Loaded Then Return
-        CurrentInput.ControllerType = [Enum].Parse(GetType(ControllerType0), comControllerType.SelectedItem.ToString)
         If comControllerType.SelectedItem = ControllerType0.MIDI.ToString Then
             comController.Enabled = True
             chkSwitch.Enabled = True
@@ -205,6 +203,10 @@ Public Class frmInput
             chkSwitch.Checked = True
             chkSwitch.Enabled = False
         End If
+
+        If Not Loaded Then Return
+        CurrentInput.ControllerType = [Enum].Parse(GetType(ControllerType0), comControllerType.SelectedItem.ToString)
+        
     End Sub
 
     Private Sub comController_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comController.SelectedIndexChanged

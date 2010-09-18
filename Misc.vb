@@ -88,6 +88,54 @@ Module Misc
         Note(ID) = Notes.Released
         Send(tmp)
     End Sub
+
+    Friend Sub PressSustain()
+        'Check for down keys and set them to sustain.
+        Parallel.For(0, Note.Length - 1, Sub(n)
+                                             'For n As Integer = 0 To CurrentDevice.Note.Length - 1
+                                             If Note(n) = Notes.Pressed Then
+                                                 Note(n) = Notes.SustainPressed
+                                                 SustainList.Add(n)
+                                             End If
+                                             'Next
+                                         End Sub)
+    End Sub
+    Friend Sub ReleaseSustain()
+        Dim tmp As New ChannelMessageBuilder
+        tmp.Command = Midi.ChannelCommand.NoteOff
+        tmp.Data2 = 0
+        For Each n As Integer In SustainList
+            If Note(n) = Notes.SustainReleased Then
+                Note(n) = Notes.Released
+                tmp.Data1 = n
+                Send(tmp)
+            End If
+        Next
+        SustainList.Clear()
+    End Sub
+
+    Friend Sub PressSostenuto()
+        Parallel.For(0, Note.Length - 1, Sub(n As Integer)
+                                             If Note(n) = Notes.Pressed Or Note(n) = Notes.SustainPressed Then
+                                                 Note(n) = Notes.Sostenuto
+                                                 SostenutoList.Add(n)
+                                             End If
+                                         End Sub)
+    End Sub
+    Friend Sub ReleaseSostenuto()
+        Dim tmp As New ChannelMessageBuilder
+        tmp.Command = Midi.ChannelCommand.NoteOff
+        tmp.MidiChannel = 0
+        tmp.Data2 = 0
+        For Each n As Integer In SostenutoList
+            Note(n) = Notes.Released
+            tmp.Data1 = n
+            Send(tmp)
+        Next
+        SostenutoList.Clear()
+    End Sub
+
+
 #End Region
 
 
