@@ -80,6 +80,13 @@ Pedals
  Get the value from a property.
  </summary>
 	<param name="Name">The name of the property to get the value from.</param>
+</member><member name="M:Pedals.SimpleD.Group.Get_Value(System.String,System.Object@)">
+	<summary>
+ Will not set value if no value found.
+ </summary>
+	<param name="Name"></param>
+	<param name="Value"></param>
+	<remarks></remarks>
 </member><member name="M:Pedals.SimpleD.Group.Get_Value(System.Object)">
 	<summary>
  Get the value from a property.

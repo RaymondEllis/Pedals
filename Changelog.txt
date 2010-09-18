@@ -1,7 +1,9 @@
-2.01:
+
+2.01 & 2.02:
 Added: Instrument stuff.
 Fixed: Loading settings file with out everything in side the file.
 Fixed: Edit input with an alter controller type selected.
+Fixed: Channels are now one based.
 Added: Control for enabling controllers.
 
 2.0:

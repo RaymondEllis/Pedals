@@ -335,10 +335,10 @@
 
     'Add buttons:
     Private Sub btnMidiInputAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMidiInputAdd.Click
-        AddInputDevice(comInput.SelectedIndex, numMidiInputChannel.Value)
+        AddInputDevice(comInput.SelectedIndex, numMidiInputChannel.Value - 1)
     End Sub
     Private Sub btnMidiOutputAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMidiOutputAdd.Click
-        AddOutputDevice(comOutput.SelectedIndex, numMidiOutputChannel.Value)
+        AddOutputDevice(comOutput.SelectedIndex, numMidiOutputChannel.Value - 1)
     End Sub
 
     'Remove buttons:
@@ -415,7 +415,7 @@
 
 
 
-    
+
 
 
 End Class
