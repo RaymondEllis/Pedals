@@ -201,13 +201,15 @@
                 End If
             Next
 
-            If numInput > 0 And numOutput > 0 Then
+            If numOutput > 0 Then
                 EnableControls(False, , True)
                 btnTest.Enabled = True
                 tmrInput.Enabled = True
 
                 Status("Recording")
                 Recording = True
+            Else
+                Status("No output devices!")
             End If
 
 

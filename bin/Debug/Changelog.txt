@@ -1,4 +1,7 @@
 
+2.03:
+Can now start if there is no midi input devices.
+
 2.01 & 2.02:
 Added: Instrument stuff.
 Fixed: Loading settings file with out everything in side the file.
