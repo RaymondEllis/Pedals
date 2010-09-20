@@ -76,6 +76,8 @@
         'Enable the input buttons.
         frmMain.btnInputRemove.Enabled = True
         frmMain.btnInputEdit.Enabled = True
+
+        frmMain.lstInput.SelectedIndex = frmMain.lstInput.Items.Count - 1
     End Sub
     Public Sub RemoveInput(ByVal Index As Integer)
         frmMain.lstInput.Items.RemoveAt(Index)

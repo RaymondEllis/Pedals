@@ -36,6 +36,8 @@ Partial Class frmMain
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.grpMidiInput = New System.Windows.Forms.GroupBox()
+        Me.chkMidiInputControllers = New System.Windows.Forms.CheckBox()
+        Me.chkMidiInputInstrument = New System.Windows.Forms.CheckBox()
         Me.panMidiInput = New System.Windows.Forms.Panel()
         Me.lstMidiInput = New System.Windows.Forms.ListBox()
         Me.btnMidiInputSet = New System.Windows.Forms.Button()
@@ -67,8 +69,6 @@ Partial Class frmMain
         Me.grpInput = New System.Windows.Forms.GroupBox()
         Me.btnInputRemove = New System.Windows.Forms.Button()
         Me.grpDebug = New System.Windows.Forms.GroupBox()
-        Me.chkMidiInputInstrument = New System.Windows.Forms.CheckBox()
-        Me.chkMidiInputControllers = New System.Windows.Forms.CheckBox()
         Me.grpMidiOutput.SuspendLayout()
         Me.panMidiOutput.SuspendLayout()
         CType(Me.numMidiOutputInsturment, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -210,6 +210,32 @@ Partial Class frmMain
         Me.grpMidiInput.TabIndex = 5
         Me.grpMidiInput.TabStop = False
         Me.grpMidiInput.Text = "MIDI Input device"
+        '
+        'chkMidiInputControllers
+        '
+        Me.chkMidiInputControllers.AutoSize = True
+        Me.chkMidiInputControllers.Checked = True
+        Me.chkMidiInputControllers.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkMidiInputControllers.Location = New System.Drawing.Point(9, 197)
+        Me.chkMidiInputControllers.Name = "chkMidiInputControllers"
+        Me.chkMidiInputControllers.Size = New System.Drawing.Size(110, 17)
+        Me.chkMidiInputControllers.TabIndex = 33
+        Me.chkMidiInputControllers.Text = "Enable controllers"
+        Me.ToolTips.SetToolTip(Me.chkMidiInputControllers, "Send controller data to all output devices.")
+        Me.chkMidiInputControllers.UseVisualStyleBackColor = True
+        '
+        'chkMidiInputInstrument
+        '
+        Me.chkMidiInputInstrument.AutoSize = True
+        Me.chkMidiInputInstrument.Checked = True
+        Me.chkMidiInputInstrument.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkMidiInputInstrument.Location = New System.Drawing.Point(9, 220)
+        Me.chkMidiInputInstrument.Name = "chkMidiInputInstrument"
+        Me.chkMidiInputInstrument.Size = New System.Drawing.Size(110, 17)
+        Me.chkMidiInputInstrument.TabIndex = 32
+        Me.chkMidiInputInstrument.Text = "Enable instrument"
+        Me.ToolTips.SetToolTip(Me.chkMidiInputInstrument, "Allow the input device to change the instrument.")
+        Me.chkMidiInputInstrument.UseVisualStyleBackColor = True
         '
         'panMidiInput
         '
@@ -503,38 +529,12 @@ Partial Class frmMain
         Me.grpDebug.Controls.Add(Me.Label1)
         Me.grpDebug.Controls.Add(Me.Label3)
         Me.grpDebug.Controls.Add(Me.Label4)
-        Me.grpDebug.Location = New System.Drawing.Point(692, 11)
+        Me.grpDebug.Location = New System.Drawing.Point(692, 10)
         Me.grpDebug.Name = "grpDebug"
         Me.grpDebug.Size = New System.Drawing.Size(291, 295)
         Me.grpDebug.TabIndex = 31
         Me.grpDebug.TabStop = False
         Me.grpDebug.Text = "Debug"
-        '
-        'chkMidiInputInstrument
-        '
-        Me.chkMidiInputInstrument.AutoSize = True
-        Me.chkMidiInputInstrument.Checked = True
-        Me.chkMidiInputInstrument.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkMidiInputInstrument.Location = New System.Drawing.Point(9, 220)
-        Me.chkMidiInputInstrument.Name = "chkMidiInputInstrument"
-        Me.chkMidiInputInstrument.Size = New System.Drawing.Size(110, 17)
-        Me.chkMidiInputInstrument.TabIndex = 32
-        Me.chkMidiInputInstrument.Text = "Enable instrument"
-        Me.ToolTips.SetToolTip(Me.chkMidiInputInstrument, "Allow the input device to change the instrument.")
-        Me.chkMidiInputInstrument.UseVisualStyleBackColor = True
-        '
-        'chkMidiInputControllers
-        '
-        Me.chkMidiInputControllers.AutoSize = True
-        Me.chkMidiInputControllers.Checked = True
-        Me.chkMidiInputControllers.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkMidiInputControllers.Location = New System.Drawing.Point(9, 197)
-        Me.chkMidiInputControllers.Name = "chkMidiInputControllers"
-        Me.chkMidiInputControllers.Size = New System.Drawing.Size(110, 17)
-        Me.chkMidiInputControllers.TabIndex = 33
-        Me.chkMidiInputControllers.Text = "Enable controllers"
-        Me.ToolTips.SetToolTip(Me.chkMidiInputControllers, "Send controller data to all output devices.")
-        Me.chkMidiInputControllers.UseVisualStyleBackColor = True
         '
         'frmMain
         '

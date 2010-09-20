@@ -1,6 +1,8 @@
 
 2.03:
 Can now start if there is no midi input devices.
+Fixed: Input window use to fill the combo boxs with more stuff.
+Fixed: Would throw error if you pressed edit with out anything seletced.
 
 2.01 & 2.02:
 Added: Instrument stuff.

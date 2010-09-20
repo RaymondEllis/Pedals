@@ -128,18 +128,24 @@ Public Class frmInput
 
     End Sub
 
+    Private IsFirstLoad As Boolean = True
     Private Sub frmInput_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        comController.Items.AddRange([Enum].GetNames(GetType(Midi.ControllerType)))
-        comController.SelectedItem = Midi.ControllerType.HoldPedal1.ToString
+        If IsFirstLoad Then
+            comController.Items.AddRange([Enum].GetNames(GetType(Midi.ControllerType)))
+            comController.SelectedItem = Midi.ControllerType.HoldPedal1.ToString
 
-        comControllerType.Items.AddRange([Enum].GetNames(GetType(InputStuff.ControllerType0)))
-        comControllerType.SelectedItem = ControllerType0.MIDI.ToString
+            comControllerType.Items.AddRange([Enum].GetNames(GetType(InputStuff.ControllerType0)))
+            comControllerType.SelectedItem = ControllerType0.MIDI.ToString
+            IsFirstLoad = False
+        End If
+
 
 
         ReDim oldJoy(Joystick.Count - 1)
 
         'If CurrentInput IsNot Nothing Then
         tmr.Enabled = True
+        Loaded = True
 
         chkRev.Checked = CurrentInput.Reverse
 
@@ -153,7 +159,7 @@ Public Class frmInput
         comControllerType.SelectedItem = DirectCast(CurrentInput.ControllerType, ControllerType0).ToString
         'End If
 
-        Loaded = True
+
     End Sub
 
     Public Overloads Function ShowDialog(ByVal Index As Integer) As DialogResult
@@ -219,4 +225,5 @@ Public Class frmInput
         If Not Loaded Then Return
         CurrentInput.IsControllerSwitch = chkSwitch.Checked
     End Sub
+
 End Class

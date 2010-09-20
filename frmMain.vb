@@ -164,6 +164,7 @@
     End Sub
 
     Private Sub btnInputEdit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnInputEdit.Click
+        'If lstInput.SelectedIndex = -1 Then Return
         If frmInput.ShowDialog(lstInput.SelectedIndex) = DialogResult.OK Then
             lstInput.Items(lstInput.SelectedIndex) = frmInput.CurrentInput
         End If
@@ -171,6 +172,7 @@
 
 
     Private Sub btnInputRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnInputRemove.Click
+        ' If lstInput.SelectedIndex = -1 Then Return
         RemoveInput(lstInput.SelectedIndex)
     End Sub
 #End Region
