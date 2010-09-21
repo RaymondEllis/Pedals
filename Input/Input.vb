@@ -11,13 +11,14 @@
         Keyboard
         MIDI
     End Enum
-    Public Enum ControllerType0
+    Public Enum InputControllerType
         MIDI
         AlterSustain
         AlterSostenuto
         AlterSoft
     End Enum
 
+#Region "Create & Distroy"
     Public Sub CreateInput()
 
         Status("Searching for joysticks...")
@@ -66,6 +67,30 @@
 
     End Sub
 
+    Public Sub DistroyInput()
+
+        Status("Distroying joystick input...")
+        If Joystick.Count > 0 Then
+            For Each j As Joystick In Joystick
+                If j IsNot Nothing Then
+                    j.Unacquire()
+                    j.Dispose()
+                End If
+            Next
+        End If
+
+        Keyboard.Unacquire()
+        Keyboard.Dispose()
+
+        If dInput IsNot Nothing Then
+            dInput.Dispose()
+        End If
+
+        Status("Distroying joystick input... Done!")
+    End Sub
+#End Region
+
+#Region "Add & Remove"
     Public Sub AddInput(ByVal Inp As InputData)
 
         'Add the input to the lists.
@@ -93,6 +118,9 @@
             frmMain.lstInput.SelectedIndex = Index - 1
         End If
     End Sub
+#End Region
+
+#Region "DoInput & GetAxis"
     Public Sub DoInput()
         'Do the input in the list.
         For Each inp As InputData In Input
@@ -127,65 +155,38 @@
 
         Return 0
     End Function
-
-    Public Sub DistroyInput()
-
-        Status("Distroying joystick input...")
-        If Joystick.Count > 0 Then
-            For Each j As Joystick In Joystick
-                If j IsNot Nothing Then
-                    j.Unacquire()
-                    j.Dispose()
-                End If
-            Next
-        End If
-
-        Keyboard.Unacquire()
-        Keyboard.Dispose()
-
-        If dInput IsNot Nothing Then
-            dInput.Dispose()
-        End If
-
-        Status("Distroying joystick input... Done!")
-    End Sub
-
+#End Region
 
 
 End Module
 
 
 Public Class InputData
+    Public Position, OldPosition As Integer
+    Public Pressed, Changed As Boolean
 
+    Public AutoName As Boolean = True
+    Friend _Name As String
+
+    'Input:
     Public Input As Integer = InputDevices.Joystick
-
     Public ID As Integer = -1
     Public Axis As Integer = -1
-
-    Public OldPosition As Integer
-
     Public Reverse As Boolean = True
-
-
     ''' <summary>
     ''' If an axis is less then or equals to SwitchOn then turn the switch on.
     ''' </summary>
     Public SwitchOn As Integer
 
-    Public Pressed, Changed As Boolean
 
-    'Output
+    'Output:
     Public Controller, ControllerType As Integer
     Public IsControllerSwitch As Boolean = True
 
-    Public AutoName As Boolean = True
-    Friend _Name As String
+    
 
-
+#Region "New & SetData"
     Public Sub New()
-    End Sub
-    Public Sub New(ByVal Data As String)
-        FromString(Data)
     End Sub
     Public Sub New(ByVal ID As Integer, ByVal Axis As Integer, Optional ByVal Reverse As Boolean = True, Optional ByVal SwitchOn As Integer = 127)
         Me.ID = ID
@@ -200,6 +201,85 @@ Public Class InputData
         Me.Reverse = Reverse
         Me.SwitchOn = SwitchOn
     End Sub
+
+#End Region
+
+#Region "Functions"
+
+    Public Function DoInput() As Boolean
+        If Not EnableJoysticks Or Not Recording Then Return False
+        If ID = -1 Then Return False
+        Position = GetAxisPosition()
+
+        'Is the current position the same as the old postion?
+        If Position = OldPosition Then Return False 'If so then we need to leave.
+        OldPosition = Position
+
+        If Position >= SwitchOn Then
+            If Not Pressed Then
+                Pressed = True
+                Changed = True
+            Else
+                Changed = False
+            End If
+        Else
+            If Pressed Then
+                Pressed = False
+                Changed = True
+            Else
+                Changed = False
+            End If
+        End If
+
+
+
+        'What should we control?
+        Select Case ControllerType
+            Case InputControllerType.MIDI
+
+                Dim m As New ChannelMessageBuilder
+                m.Command = ChannelCommand.Controller
+                m.Data1 = Controller
+                If IsControllerSwitch And Changed Then
+                    If Pressed Then
+                        m.Data2 = 127
+                    Else
+                        m.Data2 = 0
+                    End If
+                    Send(m)
+                ElseIf Not IsControllerSwitch Then
+                    m.Data2 = Position
+                    Send(m)
+                End If
+
+            Case InputControllerType.AlterSustain
+                If Changed Then
+                    If Pressed Then
+                        PressSustain()
+                    Else
+                        ReleaseSustain()
+                    End If
+                End If
+                SustainPressed = Pressed
+
+            Case InputControllerType.AlterSostenuto
+                If Changed Then
+                    If Pressed Then
+                        PressSostenuto()
+                    Else
+                        ReleaseSostenuto()
+                    End If
+                End If
+                SostenutoPressed = Pressed
+
+            Case InputControllerType.AlterSoft
+                SoftPressed = Pressed
+
+        End Select
+
+        Return True
+    End Function
+
 
     Public Function GetAxisPosition() As Integer
         Dim pos As Integer = 0
@@ -251,87 +331,6 @@ Public Class InputData
         Return _Name
     End Function
 
-    Public Sub FromString(ByVal Data As String)
-        Dim tmp() As String = Split(Data, ",")
-        ID = tmp(0)
-        Axis = tmp(1)
-        Reverse = tmp(2)
-        SwitchOn = tmp(3)
-    End Sub
+#End Region
 
-
-    Public Position As Integer
-    Public Function DoInput() As Boolean
-        If Not EnableJoysticks Or Not Recording Then Return False
-        If ID = -1 Then Return False
-        Position = GetAxisPosition()
-
-        'Is the current position the same as the old postion?
-        If Position = OldPosition Then Return False 'If so then we need to leave.
-        OldPosition = Position
-
-        If Position >= SwitchOn Then
-            If Not Pressed Then
-                Pressed = True
-                Changed = True
-            Else
-                Changed = False
-            End If
-        Else
-            If Pressed Then
-                Pressed = False
-                Changed = True
-            Else
-                Changed = False
-            End If
-        End If
-
-
-
-        'What should we control?
-        Select Case ControllerType
-            Case ControllerType0.MIDI
-
-                Dim m As New ChannelMessageBuilder
-                m.Command = ChannelCommand.Controller
-                m.Data1 = Controller
-                If IsControllerSwitch And Changed Then
-                    If Pressed Then
-                        m.Data2 = 127
-                    Else
-                        m.Data2 = 0
-                    End If
-                    Send(m)
-                ElseIf Not IsControllerSwitch Then
-                    m.Data2 = Position
-                    Send(m)
-                End If
-
-            Case ControllerType0.AlterSustain
-                If Changed Then
-                    If Pressed Then
-                        PressSustain()
-                    Else
-                        ReleaseSustain()
-                    End If
-                End If
-                SustainPressed = Pressed
-
-            Case ControllerType0.AlterSostenuto
-                If Changed Then
-                    If Pressed Then
-                        PressSostenuto()
-                    Else
-                        ReleaseSostenuto()
-                    End If
-                End If
-                SostenutoPressed = Pressed
-
-            Case ControllerType0.AlterSoft
-                SoftPressed = Pressed
-
-        End Select
-
-        Return True
-    End Function
 End Class

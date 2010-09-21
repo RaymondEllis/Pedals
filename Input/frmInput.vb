@@ -2,10 +2,19 @@
 
 Public Class frmInput
 
-    Public IsSearching As Boolean = False
-    Public Loaded As Boolean = False
+    Public CurrentInput As InputData
+    'Axis:
+    '0=x
+    '1=y
+    '2=z
+    '3=rX
+    '4=rY
+    '5=rZ
+    '6=s0
+    '7=s1
 
-	Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+#Region "Dialog buttons"
+    Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         Loaded = False
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
@@ -16,7 +25,11 @@ Public Class frmInput
         Me.Close()
     End Sub
 
+#End Region
 
+#Region "Search & Update"
+
+    Public IsSearching As Boolean = False
     Private oldJoy() As Joy0
 
     Private Sub btnFind_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnFind.Click
@@ -44,17 +57,6 @@ Public Class frmInput
         tmr.Enabled = True
         IsSearching = True
     End Sub
-
-    Public CurrentInput As InputData
-    'Axis:
-    '0=x
-    '1=y
-    '2=z
-    '3=rX
-    '4=rY
-    '5=rZ
-    '6=s0
-    '7=s1
 
     Private OldPos As Integer
     Private Sub tmr_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tmr.Tick
@@ -139,14 +141,21 @@ Public Class frmInput
 
     End Sub
 
+    Private Structure Joy0
+        Public X, Y, Z, rX, rY, rZ, s0, s1 As Integer
+    End Structure
+#End Region
+
+#Region "Load & ShowDialog"
+    Public Loaded As Boolean = False
     Private IsFirstLoad As Boolean = True
     Private Sub frmInput_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         If IsFirstLoad Then
             comController.Items.AddRange([Enum].GetNames(GetType(Midi.ControllerType)))
             comController.SelectedItem = Midi.ControllerType.HoldPedal1.ToString
 
-            comControllerType.Items.AddRange([Enum].GetNames(GetType(InputStuff.ControllerType0)))
-            comControllerType.SelectedItem = ControllerType0.MIDI.ToString
+            comControllerType.Items.AddRange([Enum].GetNames(GetType(InputStuff.InputControllerType)))
+            comControllerType.SelectedItem = InputControllerType.MIDI.ToString
             IsFirstLoad = False
         End If
 
@@ -166,7 +175,7 @@ Public Class frmInput
         chkSwitch.Checked = CurrentInput.IsControllerSwitch
 
         comController.SelectedItem = DirectCast(CurrentInput.Controller, Midi.ControllerType).ToString
-        comControllerType.SelectedItem = DirectCast(CurrentInput.ControllerType, ControllerType0).ToString
+        comControllerType.SelectedItem = DirectCast(CurrentInput.ControllerType, InputControllerType).ToString
 
         lblAutoName.Text = CurrentInput.GetName(True)
     End Sub
@@ -187,6 +196,9 @@ Public Class frmInput
         Return MyBase.ShowDialog()
     End Function
 
+#End Region
+
+#Region "Control changed"
     Private Sub chkRev_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkRev.CheckedChanged
         CurrentInput.Reverse = chkRev.Checked
     End Sub
@@ -196,13 +208,8 @@ Public Class frmInput
         CurrentInput.SwitchOn = numSwitchOn.Value
     End Sub
 
-    Private Structure Joy0
-        Public X, Y, Z, rX, rY, rZ, s0, s1 As Integer
-    End Structure
-
-
     Private Sub comControllerType_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comControllerType.SelectedIndexChanged
-        If comControllerType.SelectedItem = ControllerType0.MIDI.ToString Then
+        If comControllerType.SelectedItem = InputControllerType.MIDI.ToString Then
             comController.Enabled = True
             chkSwitch.Enabled = True
         Else
@@ -212,8 +219,8 @@ Public Class frmInput
         End If
 
         If Not Loaded Then Return
-        CurrentInput.ControllerType = [Enum].Parse(GetType(ControllerType0), comControllerType.SelectedItem.ToString)
-        
+        CurrentInput.ControllerType = [Enum].Parse(GetType(InputControllerType), comControllerType.SelectedItem.ToString)
+
     End Sub
 
     Private Sub comController_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comController.SelectedIndexChanged
@@ -237,5 +244,6 @@ Public Class frmInput
         If Not Loaded Then Return
         CurrentInput.IsControllerSwitch = chkSwitch.Checked
     End Sub
+#End Region
 
 End Class
