@@ -1,8 +1,32 @@
-﻿Namespace SimpleD
+﻿#Region "License & Contact"
+'License:
+'   Copyright (c) 2010 Raymond Ellis
+'   
+'   This is licensed under the 'Creative Commons Attribution-ShareAlike 3.0 Unported' license.
+'   http://creativecommons.org/licenses/by-sa/3.0/
+'
+'   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+'   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+'   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+'   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+'   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+'   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+'   THE SOFTWARE.
+
+
+'Contact:
+'   Raymond Ellis
+'   Email: RaymondEllis@live.com
+#End Region
+
+
+Namespace SimpleD
     Module Info
         Public Const Version = 0.981
         '0.981
         'Changed: Get_Value(Name, Value) No longer throws a error if no value found.
+        'Clean up.
+        'Added: Linense and contact.
         '0.98
         'Fixed: Spelling
         'Added: New get value with byref value
@@ -16,6 +40,7 @@
     Public Class SimpleD
         Private Groups As New List(Of Group)
 
+#Region "New"
         ''' <summary>
         ''' Load from string.
         ''' </summary>
@@ -32,7 +57,9 @@
         End Sub
         Public Sub New()
         End Sub
+#End Region
 
+#Region "Group"
         ''' <summary>
         ''' Create a group.
         ''' </summary>
@@ -51,8 +78,9 @@
             Throw New Exception("Could not find any groups named:" & Name)
             'Return Nothing
         End Function
+#End Region
 
-
+#Region "To String/File"
         Public Overloads Function ToString(Optional ByVal Split As String = vbNewLine & vbTab) As String
             If Groups.Count = 0 Then Return ""
 
@@ -69,7 +97,9 @@
             sw.Write(ToString(Split))
             sw.Close()
         End Sub
+#End Region
 
+#Region "From String/File"
         ''' <summary>
         ''' Load the SimpleData from a file.
         ''' </summary>
@@ -85,8 +115,6 @@
         End Function
         Public Sub FromString(ByVal Data As String)
             If Data = "" Then Return
-
-            'Data.Substring 
 
             Dim InComment As Boolean = False
 
@@ -155,7 +183,7 @@ NextP:                  'Next Property.
                         n += 1
                     Loop Until Data.Substring(n, 1) = "}"
                 End If
-                'Asc()
+
 
 
 NextG:
@@ -167,6 +195,7 @@ Endy:
 
 
         End Sub
+#End Region
 
     End Class
 
@@ -179,6 +208,7 @@ Endy:
             Me.Name = Name
         End Sub
 
+#Region "Add"
         Public Function Add(ByVal Name As String, ByVal Value As String) As Prop
             Dim tmp As New Prop(Name, Value)
             Propertys.Add(tmp)
@@ -193,7 +223,9 @@ Endy:
             Propertys.Add(Prop)
             Return Prop
         End Function
+#End Region
 
+#Region "SetValue"
         ''' <summary>
         ''' This sets the value of a property.
         ''' If it can not find the property it creates it.
@@ -223,7 +255,9 @@ Endy:
                 tmp.Value = Value 'Set the value.
             End If
         End Sub
+#End Region
 
+#Region "GetValue"
         ''' <summary>
         ''' Get the value from a property.
         ''' </summary>
@@ -241,9 +275,7 @@ Endy:
             Try
                 Value = Find(Name).Value 'Find the property and return the value.
             Catch ex As Exception
-
             End Try
-            'Value = Find(Name).Value 'Find the property and return the value.
         End Sub
         ''' <summary>
         ''' Get the value from a property.
@@ -252,6 +284,8 @@ Endy:
         Public Function Get_Value(ByVal Obj As Object) As String
             Return Find(Obj.Name).Value 'Find the property from a object and return the value.
         End Function
+#End Region
+
 
         ''' <summary>
         ''' Retuns "Could_Not_Find_Value" if it can not find the value.
@@ -273,7 +307,7 @@ Endy:
                         Try
                             Value = Obj.ToString
                         Catch
-
+                            Throw New Exception("Could not get value from object!")
                         End Try
                     End Try
                 End Try

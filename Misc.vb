@@ -4,6 +4,90 @@ Module Misc
 	Public Debug As Boolean = False
     Public Loaded As Boolean = False 'Has pedals finshed loading?
 
+    Public Sub Main()
+
+        AddHandler Application.ThreadException, AddressOf UIThreadException
+
+
+        Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException)
+
+        ' Add the event handler for handling non-UI thread exceptions to the event. 
+        AddHandler AppDomain.CurrentDomain.UnhandledException, AddressOf CurrentDomain_UnhandledException
+
+
+        'Delete the old debug file.
+        If IO.File.Exists("debug.txt") Then IO.File.Delete("debug.txt")
+
+        Application.Run(frmMain)
+
+    End Sub
+
+#Region "Error handling"
+    Private Sub UIThreadException(ByVal sender As Object, ByVal e As ThreadExceptionEventArgs)
+        Dim result As DialogResult = DialogResult.Cancel
+
+        Try
+            Dim sw As New IO.StreamWriter("debug.txt", True)
+            sw.WriteLine(ExceptionToString(e.Exception))
+            sw.Close()
+            sw.Dispose()
+
+            result = ShowThreadExceptionDialog("Windows Forms Error", e.Exception)
+
+        Catch
+            Try
+                MessageBox.Show("Fatal Windows Forms Error" & vbNewLine & "There may be more info in your debug file.", _
+              "Fatal Windows Forms Error", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Stop)
+            Finally
+                Application.Exit()
+            End Try
+
+        End Try
+
+        ' Exits the program when the user clicks Abort.
+        If result = DialogResult.Abort Then
+            Application.Exit()
+        End If
+
+    End Sub
+
+    Private Sub CurrentDomain_UnhandledException(ByVal sender As Object, ByVal e As UnhandledExceptionEventArgs)
+        Try
+            Dim ex As Exception = CType(e.ExceptionObject, Exception)
+            Dim sw As New IO.StreamWriter("debug.txt", True)
+            sw.WriteLine(ExceptionToString(ex))
+            sw.Close()
+            sw.Dispose()
+
+        Catch exc As Exception
+            Try
+                MessageBox.Show("Fatal Non-UI Error", "Fatal Non-UI Error. Could not write the error to the debug file. " & _
+              "Reason: " & exc.Message, MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            Finally
+                Application.Exit()
+            End Try
+
+        End Try
+    End Sub
+
+    Public Function ExceptionToString(ByVal e As Exception) As String
+        Dim t As String = "You found a unhandled error!   Pleasereport it to http://code.google.com/p/pedals/issues/   With this file included."
+        t &= vbNewLine & "Message: " & e.Message
+        t &= vbNewLine & "StackTrace: " & e.StackTrace
+        Return t
+    End Function
+
+    ' Creates the error message and displays it.
+    Private Function ShowThreadExceptionDialog(ByVal title As String, ByVal e As Exception) As DialogResult
+        Dim errorMsg As String = "An error occurred." & _
+         " error message: " & ControlChars.Lf
+        errorMsg = errorMsg & e.Message & vbNewLine & vbNewLine & "More help about this is in your debug.txt file." & vbNewLine & "Note: if you keep getting the same error then end the task with taskmanager (ctrl + shift + esc)"
+        Return MessageBox.Show(errorMsg, title, MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Stop)
+    End Function
+#End Region
+
+
+
 	Public Sub Status(ByVal Text As String, Optional ByVal ShowError As Boolean = False)
 		frmMain.lblStatus.Text = "Status: " & Text
 		If ShowError Then
@@ -50,6 +134,7 @@ Module Misc
 
         Return False
     End Function
+
 
 
 #Region "Note holder"
@@ -140,87 +225,6 @@ Module Misc
 #End Region
 
 
-	Public Sub Main()
-
-		AddHandler Application.ThreadException, AddressOf UIThreadException
-
-
-		Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException)
-
-		' Add the event handler for handling non-UI thread exceptions to the event. 
-		AddHandler AppDomain.CurrentDomain.UnhandledException, AddressOf CurrentDomain_UnhandledException
-
-
-		'Delete the old debug file.
-		If IO.File.Exists("debug.txt") Then IO.File.Delete("debug.txt")
-
-        Application.Run(frmMain)
-
-	End Sub
-
-#Region "Error handling"
-	Private Sub UIThreadException(ByVal sender As Object, ByVal e As ThreadExceptionEventArgs)
-		Dim result As DialogResult = DialogResult.Cancel
-
-		Try
-			Dim sw As New IO.StreamWriter("debug.txt", True)
-			sw.WriteLine(ExceptionToString(e.Exception))
-			sw.Close()
-			sw.Dispose()
-
-			result = ShowThreadExceptionDialog("Windows Forms Error", e.Exception)
-
-		Catch
-			Try
-				MessageBox.Show("Fatal Windows Forms Error" & vbNewLine & "There may be more info in your debug file.", _
-	 "Fatal Windows Forms Error", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Stop)
-			Finally
-				Application.Exit()
-			End Try
-
-		End Try
-
-		' Exits the program when the user clicks Abort.
-		If result = DialogResult.Abort Then
-			Application.Exit()
-		End If
-
-	End Sub
-
-	Private Sub CurrentDomain_UnhandledException(ByVal sender As Object, ByVal e As UnhandledExceptionEventArgs)
-		Try
-			Dim ex As Exception = CType(e.ExceptionObject, Exception)
-			Dim sw As New IO.StreamWriter("debug.txt", True)
-			sw.WriteLine(ExceptionToString(ex))
-			sw.Close()
-			sw.Dispose()
-
-		Catch exc As Exception
-			Try
-				MessageBox.Show("Fatal Non-UI Error", "Fatal Non-UI Error. Could not write the error to the debug file. " & _
-	 "Reason: " & exc.Message, MessageBoxButtons.OK, MessageBoxIcon.Stop)
-			Finally
-				Application.Exit()
-			End Try
-
-		End Try
-	End Sub
-
-	Public Function ExceptionToString(ByVal e As Exception) As String
-		Dim t As String = "You found a unhandled error!   Pleasereport it to http://code.google.com/p/pedals/issues/   With this file included."
-		t &= vbNewLine & "Message: " & e.Message
-		t &= vbNewLine & "StackTrace: " & e.StackTrace
-		Return t
-	End Function
-
-	' Creates the error message and displays it.
-	Private Function ShowThreadExceptionDialog(ByVal title As String, ByVal e As Exception) As DialogResult
-		Dim errorMsg As String = "An error occurred." & _
-		 " error message: " & ControlChars.Lf
-		errorMsg = errorMsg & e.Message & vbNewLine & vbNewLine & "More help about this is in your debug.txt file." & vbNewLine & "Note: if you keep getting the same error then end the task with taskmanager (ctrl + shift + esc)"
-		Return MessageBox.Show(errorMsg, title, MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Stop)
-	End Function
-#End Region
 
 
 End Module
