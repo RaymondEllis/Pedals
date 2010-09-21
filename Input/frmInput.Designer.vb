@@ -34,8 +34,8 @@ Partial Class frmInput
         Me.numSwitchOn = New System.Windows.Forms.NumericUpDown()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.ToolTips = New System.Windows.Forms.ToolTip(Me.components)
-        Me.comController = New System.Windows.Forms.ComboBox()
         Me.comControllerType = New System.Windows.Forms.ComboBox()
+        Me.comController = New System.Windows.Forms.ComboBox()
         Me.lblSwitch = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
@@ -46,6 +46,7 @@ Partial Class frmInput
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.lblAutoName = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.numSwitchOn, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -99,7 +100,7 @@ Partial Class frmInput
         '
         'lblAxis
         '
-        Me.lblAxis.Location = New System.Drawing.Point(76, 22)
+        Me.lblAxis.Location = New System.Drawing.Point(76, 39)
         Me.lblAxis.Name = "lblAxis"
         Me.lblAxis.Size = New System.Drawing.Size(30, 13)
         Me.lblAxis.TabIndex = 3
@@ -108,7 +109,7 @@ Partial Class frmInput
         'chkRev
         '
         Me.chkRev.AutoSize = True
-        Me.chkRev.Location = New System.Drawing.Point(111, 18)
+        Me.chkRev.Location = New System.Drawing.Point(112, 39)
         Me.chkRev.Name = "chkRev"
         Me.chkRev.Size = New System.Drawing.Size(66, 17)
         Me.chkRev.TabIndex = 4
@@ -133,20 +134,11 @@ Partial Class frmInput
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(6, 22)
+        Me.Label2.Location = New System.Drawing.Point(6, 39)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(68, 13)
         Me.Label2.TabIndex = 6
         Me.Label2.Text = "Axis position:"
-        '
-        'comController
-        '
-        Me.comController.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.comController.FormattingEnabled = True
-        Me.comController.Location = New System.Drawing.Point(85, 39)
-        Me.comController.Name = "comController"
-        Me.comController.Size = New System.Drawing.Size(185, 21)
-        Me.comController.TabIndex = 7
         '
         'comControllerType
         '
@@ -157,6 +149,15 @@ Partial Class frmInput
         Me.comControllerType.Size = New System.Drawing.Size(185, 21)
         Me.comControllerType.TabIndex = 7
         Me.ToolTips.SetToolTip(Me.comControllerType, resources.GetString("comControllerType.ToolTip"))
+        '
+        'comController
+        '
+        Me.comController.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.comController.FormattingEnabled = True
+        Me.comController.Location = New System.Drawing.Point(85, 39)
+        Me.comController.Name = "comController"
+        Me.comController.Size = New System.Drawing.Size(185, 21)
+        Me.comController.TabIndex = 7
         '
         'lblSwitch
         '
@@ -255,6 +256,7 @@ Partial Class frmInput
         '
         'GroupBox2
         '
+        Me.GroupBox2.Controls.Add(Me.lblAutoName)
         Me.GroupBox2.Controls.Add(Me.Label2)
         Me.GroupBox2.Controls.Add(Me.lblAxis)
         Me.GroupBox2.Controls.Add(Me.chkRev)
@@ -268,6 +270,14 @@ Partial Class frmInput
         Me.GroupBox2.TabIndex = 14
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Input"
+        '
+        'lblAutoName
+        '
+        Me.lblAutoName.Location = New System.Drawing.Point(6, 20)
+        Me.lblAutoName.Name = "lblAutoName"
+        Me.lblAutoName.Size = New System.Drawing.Size(171, 13)
+        Me.lblAutoName.TabIndex = 6
+        Me.lblAutoName.Text = "<Input info>"
         '
         'frmInput
         '
@@ -322,5 +332,6 @@ Partial Class frmInput
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
+    Friend WithEvents lblAutoName As System.Windows.Forms.Label
 
 End Class

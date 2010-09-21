@@ -63,7 +63,7 @@
         Loaded = True
         CheckNoteDisable()
         SetControls()
-        Status("Loading... Done!")
+        Status("Idle.")
 
     End Sub
 
@@ -164,7 +164,6 @@
     End Sub
 
     Private Sub btnInputEdit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnInputEdit.Click
-        'If lstInput.SelectedIndex = -1 Then Return
         If frmInput.ShowDialog(lstInput.SelectedIndex) = DialogResult.OK Then
             lstInput.Items(lstInput.SelectedIndex) = frmInput.CurrentInput
         End If
@@ -172,7 +171,6 @@
 
 
     Private Sub btnInputRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnInputRemove.Click
-        ' If lstInput.SelectedIndex = -1 Then Return
         RemoveInput(lstInput.SelectedIndex)
     End Sub
 #End Region
@@ -188,41 +186,51 @@
     End Sub
 
     Public Sub StartStop()
+        'If we are not recording then we will start.
         If Not Recording Then
 
-            Dim numInput As Integer
-            For Each dev As MidiInput In InDevices
+            'Get the number of inputs we have.
+            Dim numInput As Integer = Input.Count
+            For Each dev As MidiInput In InDevices 'Loop thru each midi input and start recording.
                 If dev.StartRecording Then
-                    numInput += 1
+                    numInput += 1 'If it started then add it to the number of inputs.
                 End If
             Next
             Dim numOutput As Integer
             For Each dev As MidiOutput In OutDevices
-                If dev.Start Then
-                    numOutput += 1
+                If dev.Start Then 'Start each midi output device.
+                    numOutput += 1 'If it satarted then add it to the list.
                 End If
             Next
 
+            'Do we have any midi output devices runing?
             If numOutput > 0 Then
-                EnableControls(False, , True)
-                btnTest.Enabled = True
-                tmrInput.Enabled = True
+                'Do we have any input?
+                If numInput > 0 Then
+                    EnableControls(False, , True)
+                    btnTest.Enabled = True
+                    tmrInput.Enabled = True
 
-                Status("Recording")
-                Recording = True
+                    Status("Recording")
+                    Recording = True
+                Else
+                    Status("No input!  You need atleast one input or midi input device.")
+                End If
             Else
                 Status("No output devices!")
             End If
 
 
-        Else
+        Else 'Stop recording.
             tmrInput.Enabled = False
             btnTest.Enabled = False
 
+            'Stop each midi input device.
             For Each dev As MidiInput In InDevices
                 dev.StopRecording()
             Next
 
+            'Reset all of the notes in the note holder.
             ResetNotes()
             SustainList.Clear()
             SostenutoList.Clear()
@@ -287,6 +295,9 @@
     ''' <remarks></remarks>
     Public Sub SetControls()
         If Not Loaded Then Return
+
+        'This sub is used when a input/output device changes.
+        'It will set all of the controls to the values in the devices.
 
         If CurrentMidiInput IsNot Nothing Then
             comInput.SelectedIndex = CurrentMidiInput.DeviceID
@@ -364,7 +375,6 @@
     Private Sub chkMidiInputNotes_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkMidiInputNotes.CheckedChanged
         If Not Loaded Or CurrentMidiInput Is Nothing Then Return 'We don't need to change anything here until we are done loading.
         CurrentMidiInput.EnableNotes = sender.Checked
-        ' grpMisc.Enabled = sender.Checked
     End Sub
 
     Private Sub chkMidiInputChannels_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkMidiInputChannels.CheckedChanged

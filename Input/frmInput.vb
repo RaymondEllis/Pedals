@@ -56,17 +56,27 @@ Public Class frmInput
     '6=s0
     '7=s1
 
-
+    Private OldPos As Integer
     Private Sub tmr_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tmr.Tick
         If CurrentInput Is Nothing Then Return
 
         If CurrentInput.Axis > -1 Then
-            IsSearching = False
-            OK_Button.Enabled = True
-            btnFind.Enabled = True
+
+
+            If IsSearching Then
+                IsSearching = False
+                btnFind.Enabled = True
+                OK_Button.Enabled = True
+                lblAutoName.Text = CurrentInput.GetName(True)
+            End If
+
             Dim pos As Integer = CurrentInput.GetAxisPosition
+            If pos = OldPos Then Return
+            OldPos = pos
+
             lblAxis.Text = pos
-            CurrentInput.DoInput()
+
+
 
             'If the controller is a switch then. we will display it as one.
             If CurrentInput.IsControllerSwitch Then
@@ -84,6 +94,7 @@ Public Class frmInput
 
             End If
 
+            'Me.Focus()
         Else
             IsSearching = True
             Dim i As Integer = -1
@@ -143,8 +154,7 @@ Public Class frmInput
 
         ReDim oldJoy(Joystick.Count - 1)
 
-        'If CurrentInput IsNot Nothing Then
-        tmr.Enabled = True
+        If CurrentInput.ID > -1 Then tmr.Enabled = True
         Loaded = True
 
         chkRev.Checked = CurrentInput.Reverse
@@ -157,18 +167,20 @@ Public Class frmInput
 
         comController.SelectedItem = DirectCast(CurrentInput.Controller, Midi.ControllerType).ToString
         comControllerType.SelectedItem = DirectCast(CurrentInput.ControllerType, ControllerType0).ToString
-        'End If
 
-
+        lblAutoName.Text = CurrentInput.GetName(True)
     End Sub
 
     Public Overloads Function ShowDialog(ByVal Index As Integer) As DialogResult
         CurrentInput = Input(Index)
+        OK_Button.Enabled = True
         Return MyBase.ShowDialog()
     End Function
     Public Overloads Function ShowDialog(ByRef Input As InputData) As DialogResult
         If Input Is Nothing Then
             Input = New InputData(-1, -1)
+        Else
+            OK_Button.Enabled = True
         End If
         CurrentInput = Input
 

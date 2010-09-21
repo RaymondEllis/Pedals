@@ -8,7 +8,6 @@
 #Region "Base"
     Public Sub New(ByVal DeviceID As Integer, ByVal Channel As Integer)
         Me.DeviceID = DeviceID
-        'Channels(Channel) = True
         Me.Channel = Channel
     End Sub
 
@@ -28,7 +27,6 @@
 #End Region
 
 
-
     Public Property Instrument As Byte
         Get
             Return bInstrument
@@ -44,9 +42,6 @@
             Me.Send(msg.Result)
         End Set
     End Property
-
-
-
 
 
     Public Function Start() As Boolean

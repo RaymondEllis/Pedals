@@ -67,7 +67,6 @@
     End Sub
 
     Public Sub AddInput(ByVal Inp As InputData)
-        ' Inp.Device = CurrentMidiInput 'Set the device of the input.
 
         'Add the input to the lists.
         Input.Add(Inp)
@@ -158,7 +157,6 @@ End Module
 
 Public Class InputData
 
-    'Public Device As MidiInput
     Public Input As Integer = InputDevices.Joystick
 
     Public ID As Integer = -1
@@ -232,7 +230,11 @@ Public Class InputData
     End Function
 
     Public Overrides Function ToString() As String
-        If AutoName Then
+        Return GetName()
+    End Function
+
+    Public Shadows Function GetName(Optional ByVal UseAutoName As Boolean = False) As String
+        If AutoName Or UseAutoName Then
             Select Case Input
                 Case InputDevices.Joystick
                     Return "Joystick#" & ID & "  Axis:" & Axis
@@ -259,13 +261,13 @@ Public Class InputData
 
 
     Public Position As Integer
-    Public Sub DoInput()
-        If Not EnableJoysticks Or Not Recording Then Return
-        If ID = -1 Then Return
-        Dim Position As Integer = GetAxisPosition()
+    Public Function DoInput() As Boolean
+        If Not EnableJoysticks Or Not Recording Then Return False
+        If ID = -1 Then Return False
+        Position = GetAxisPosition()
 
         'Is the current position the same as the old postion?
-        If Position = OldPosition Then Return 'If so then we need to leave.
+        If Position = OldPosition Then Return False 'If so then we need to leave.
         OldPosition = Position
 
         If Position >= SwitchOn Then
@@ -330,6 +332,6 @@ Public Class InputData
 
         End Select
 
-
-    End Sub
+        Return True
+    End Function
 End Class
