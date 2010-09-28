@@ -1,4 +1,13 @@
 
+2.03:
+Added:  Display current input info in input window.
+Change: Can now start if there is no midi input devices.
+Change: Will not start if there is no input at all.  before it would start with no inputs(MIDI,Keyboard,Joystick)
+Fixed:  Input window use to fill the combo boxs with more stuff.
+Fixed:  Input window would update stuff even if nothing changed.
+Fixed:  Would throw error if you pressed edit with out anything seletced.
+Fixed:  Would look for input before it was told to. (and find joy0 axis0)
+
 2.01 & 2.02:
 Added: Instrument stuff.
 Fixed: Loading settings file with out everything in side the file.
