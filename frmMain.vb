@@ -129,8 +129,6 @@
                                   Message.Command.ToString.PadRight(15) & vbTab & _
                                   Message.Data1.ToString & vbTab & _
                                   Message.Data2.ToString)
-
-            Me.lstDebug.SelectedIndex = Me.lstDebug.Items.Count - 1
         End If
     End Sub
 
@@ -424,12 +422,5 @@
         End If
     End Sub
 #End Region
-
-
-
-
-
-
-
 
 End Class
