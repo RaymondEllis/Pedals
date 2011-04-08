@@ -5,33 +5,33 @@
         Dim sd As New SimpleD.SimpleD
 
         'Create a new group.
-        Dim g As SimpleD.Group = sd.Create_Group("Pedals")
+        Dim g As SimpleD.Group = sd.CreateGroup("Pedals")
 
-        'Add stuff to the group.
+        'SetValue stuff to the group.
         With frmMain
 
-            g.Add("Debug", .chkDebug.Checked)
-            g.Add("RemoveOldNotes", .chkRemoveOldNotes.Checked)
+            g.SetValue("Debug", .chkDebug.Checked)
+            g.SetValue("RemoveOldNotes", .chkRemoveOldNotes.Checked)
 
-            g.Add("MidiInput", InDevices.Count - 1)
-            g.Add("MidiOutput", OutDevices.Count - 1)
+            g.SetValue("MidiInput", InDevices.Count - 1)
+            g.SetValue("MidiOutput", OutDevices.Count - 1)
 
-            g.Add("Input", Input.Count - 1)
+            g.SetValue("Input", Input.Count - 1)
 
         End With
 
         'Midi input:
         Dim i As Integer = 0
         For Each dev As MidiInput In InDevices
-            g = sd.Create_Group("MidiInput_" & i)
-            g.Add("ID", dev.DeviceID)
-            g.Add("Channel", dev.Channel + 1)
-            g.Add("AllChannels", dev.AllChannels)
-            g.Add("EnableNotes", dev.EnableNotes)
-            g.Add("EnableControllers", dev.EnableControllers)
-            g.Add("EnableInstrument", dev.EnableInstrument)
-            g.Add("OtherChannels", dev.SendOtherChannels)
-            g.Add("SetVolumeMax", dev.SetVolumeMax)
+            g = sd.CreateGroup("MidiInput_" & i)
+            g.SetValue("ID", dev.DeviceID)
+            g.SetValue("Channel", dev.Channel + 1)
+            g.SetValue("AllChannels", dev.AllChannels)
+            g.SetValue("EnableNotes", dev.EnableNotes)
+            g.SetValue("EnableControllers", dev.EnableControllers)
+            g.SetValue("EnableInstrument", dev.EnableInstrument)
+            g.SetValue("OtherChannels", dev.SendOtherChannels)
+            g.SetValue("SetVolumeMax", dev.SetVolumeMax)
 
 
             i += 1
@@ -40,9 +40,9 @@
         'Midi output:
         i = 0
         For Each dev As MidiOutput In OutDevices
-            g = sd.Create_Group("MidiOutput_" & i)
-            g.Add("ID", dev.DeviceID)
-            g.Add("Channel", dev.Channel + 1)
+            g = sd.CreateGroup("MidiOutput_" & i)
+            g.SetValue("ID", dev.DeviceID)
+            g.SetValue("Channel", dev.Channel + 1)
 
             i += 1
         Next
@@ -51,17 +51,17 @@
         'Input:
         i = 0
         For Each inp As InputData In Input
-            g = sd.Create_Group("Input_" & i)
-            g.Add("ID", inp.ID)
-            g.Add("Axis", inp.Axis)
-            g.Add("Reverse", inp.Reverse)
-            g.Add("Controller", inp.Controller)
-            g.Add("controllerType", inp.ControllerType)
-            g.Add("AutoName", inp.AutoName)
-            g.Add("IsControllerSwitch", inp.IsControllerSwitch)
-            g.Add("SwitchOn", inp.SwitchOn)
-            g.Add("Name", inp._Name)
-            g.Add("Input", inp.Input)
+            g = sd.CreateGroup("Input_" & i)
+            g.SetValue("ID", inp.ID)
+            g.SetValue("Axis", inp.Axis)
+            g.SetValue("Reverse", inp.Reverse)
+            g.SetValue("Controller", inp.Controller)
+            g.SetValue("controllerType", inp.ControllerType)
+            g.SetValue("AutoName", inp.AutoName)
+            g.SetValue("IsControllerSwitch", inp.IsControllerSwitch)
+            g.SetValue("SwitchOn", inp.SwitchOn)
+            g.SetValue("Name", inp._Name)
+            g.SetValue("Input", inp.Input)
 
 
             i += 1

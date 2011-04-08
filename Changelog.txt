@@ -1,3 +1,6 @@
+2.04
+Upgraded: SimpleD to 0.991
+Fixed:	Selected debug item.
 
 2.03:
 Added:  Display current input info in input window.

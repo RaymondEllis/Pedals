@@ -51,60 +51,104 @@ Pedals
 	<param name="Data"></param>
 	<param name="FromFile">If set to true then it will load from the file specfied in data</param>
 	<remarks></remarks>
-</member><member name="M:Pedals.SimpleD.SimpleD.Create_Group(System.String)">
+</member><member name="M:Pedals.SimpleD.SimpleD.CreateGroup(System.String)">
 	<summary>
  Create a group.
+ Will return other group if names match.
  </summary>
 	<param name="Name">The name of the group.</param>
+</member><member name="M:Pedals.SimpleD.SimpleD.ToString(System.Boolean,System.Boolean)">
+	<summary>
+ Returns a string with all groups and properties.
+ </summary>
+	<param name="SplitWithNewLine">Split properties and groups using a newline?</param>
+	<param name="SplitWithTabs">Split properties and groups using tabs?
+ Does not use tabs if newline is disabled.</param>
 </member><member name="M:Pedals.SimpleD.SimpleD.FromFile(System.String)">
 	<summary>
  Load the SimpleData from a file.
  </summary>
-	<param name="File"></param>
-	<returns>True if loaded false if not.</returns>
+	<param name="File">The file to load.</param>
+	<returns>Error if any.</returns>
 	<remarks></remarks>
-</member><member name="M:Pedals.SimpleD.Group.Set_Value(System.String,System.String)">
+</member><member name="M:Pedals.SimpleD.Group.CreateGroup(System.String)">
+	<summary>
+ Create a group.
+ Will return other group if names match.
+ </summary>
+	<param name="Name">The name of the group.</param>
+</member><member name="M:Pedals.SimpleD.Group.SetValue(System.String,System.String)">
 	<summary>
  This sets the value of a property.
  If it can not find the property it creates it.
  </summary>
-	<remarks></remarks>
-</member><member name="M:Pedals.SimpleD.Group.Set_Value(System.Object)">
+</member><member name="M:Pedals.SimpleD.Group.SetValue(System.String,System.String,System.String)">
+	<summary>
+ This sets the value of a property.
+ If it can not find the property it creates it.
+ Does not create if value is equal to default value.
+ </summary>
+</member><member name="M:Pedals.SimpleD.Group.SetValue(System.Windows.Forms.Control)">
 	<summary>
  This sets the value of a property.
  If it can not find the property it creates it.
  </summary>
-	<remarks></remarks>
-</member><member name="M:Pedals.SimpleD.Group.Get_Value(System.String)">
+</member><member name="M:Pedals.SimpleD.Group.AddValue(System.String,System.String)">
+	<summary>
+ Creates a new property and adds it to the list.
+ </summary>
+</member><member name="M:Pedals.SimpleD.Group.GetValue(System.String)">
 	<summary>
  Get the value from a property.
  </summary>
 	<param name="Name">The name of the property to get the value from.</param>
-</member><member name="M:Pedals.SimpleD.Group.Get_Value(System.String,System.Object@)">
+</member><member name="M:Pedals.SimpleD.Group.GetValue(System.String,System.Object@,System.Boolean)">
 	<summary>
- Will not set value if no value found.
+ Will only set the value if the property is found.
  </summary>
 	<param name="Name"></param>
 	<param name="Value"></param>
-	<remarks></remarks>
-</member><member name="M:Pedals.SimpleD.Group.Get_Value(System.Object)">
+	<param name="EmptyIfNotFound">Set value to nothing, if it can't find the property.</param>
+</member><member name="M:Pedals.SimpleD.Group.GetValue(System.Windows.Forms.Control@,System.String@)">
 	<summary>
- Get the value from a property.
+ Sets the value of the control to the proprety with the same name.
+ Known controls: TextBox,Label,CheckBox,RadioButton,NumericUpDown,ProgressBar
  </summary>
-	<param name="Obj">The object to get the property from.</param>
-</member><member name="M:Pedals.SimpleD.Group.GetValueFromObject(System.Object)">
+	<param name="Control">The control to get the property from.</param>
+	<param name="Value">Returns value if control is unknown.</param>
+</member><member name="M:Pedals.SimpleD.Group.GetValue(System.Windows.Forms.Control)">
 	<summary>
- Retuns "Could_Not_Find_Value" if it can not find the value.
+ Uses the name of the control to find the property value.
  </summary>
-	<param name="Obj"></param>
-	<returns></returns>
-	<remarks></remarks>
+	<param name="Control"></param>
+	<returns>Property value.</returns>
 </member><member name="M:Pedals.SimpleD.Group.Find(System.String)">
 	<summary>
- Find a property from the name.
+ Find a property from the name. returns the first property found.
  </summary>
 	<param name="Name">The name of the property.</param>
 	<returns>The property.</returns>
+</member><member name="M:Pedals.SimpleD.Group.FindArray(System.String)">
+	<summary>
+ Find a properties from the name. returns all properties found.
+ </summary>
+	<param name="Name">The name of the property.</param>
+</member><member name="M:Pedals.SimpleD.Group.ToString(System.Boolean,System.Int32)">
+	<summary>
+ Returns a string with all the properties and sub groups.
+ </summary>
+	<param name="SplitWithNewLine">Split properties and groups using a newline?</param>
+	<param name="TabCount">Split properties and groups using tabs?
+ Does not use tabs if newline is disabled.</param>
+</member><member name="M:Pedals.SimpleD.Group.Combine(Pedals.SimpleD.Group)">
+	<summary>
+ Conbines the group with this group.
+ </summary>
+	<param name="Group">Overides all the properties with the properties in the group.</param>
+</member><member name="T:Pedals.SimpleD.Prop">
+	<summary>
+ Holds a properties name and value.
+ </summary>
 </member>
 </members>
 </doc>
