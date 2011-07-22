@@ -2,7 +2,7 @@
 
     Public Sub SaveSettings()
         'Create a new SimpleD so we can use it for saving stuff to.
-        Dim sd As New SimpleD.SimpleD
+        Dim sd As New SimpleD.Group
 
         'Create a new group.
         Dim g As SimpleD.Group = sd.CreateGroup("Pedals")

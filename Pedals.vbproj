@@ -133,6 +133,7 @@
     <Compile Include="OpenSave Settings\modLoad.vb" />
     <Compile Include="OpenSave Settings\modSave.vb" />
     <Compile Include="OpenSave Settings\SimpleD.vb" />
+	<Compile Include="OpenSave Settings\SimpleD_Helper.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Input\frmInput.resx">

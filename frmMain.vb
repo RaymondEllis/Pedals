@@ -184,6 +184,7 @@
     End Sub
 
     Public Sub StartStop()
+        numMidiOutputInsturment.Enabled = False
         'If we are not recording then we will start.
         If Not Recording Then
 
@@ -201,6 +202,7 @@
                 End If
             Next
 
+
             'Do we have any midi output devices runing?
             If numOutput > 0 Then
                 'Do we have any input?
@@ -208,6 +210,7 @@
                     EnableControls(False, , True)
                     btnTest.Enabled = True
                     tmrInput.Enabled = True
+                    numMidiOutputInsturment.Enabled = True
 
                     Status("Recording")
                     Recording = True

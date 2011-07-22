@@ -70,22 +70,25 @@
     Public Sub DistroyInput()
 
         Status("Distroying joystick input...")
-        If Joystick.Count > 0 Then
-            For Each j As Joystick In Joystick
-                If j IsNot Nothing Then
-                    j.Unacquire()
-                    j.Dispose()
-                End If
-            Next
-        End If
+        Try
+            If Joystick.Count > 0 Then
+                For Each j As Joystick In Joystick
+                    If j IsNot Nothing Then
+                        j.Unacquire()
+                        j.Dispose()
+                    End If
+                Next
+            End If
 
-        Keyboard.Unacquire()
-        Keyboard.Dispose()
+            Keyboard.Unacquire()
+            Keyboard.Dispose()
 
-        If dInput IsNot Nothing Then
-            dInput.Dispose()
-        End If
-
+            If dInput IsNot Nothing Then
+                dInput.Dispose()
+            End If
+        Catch ex As Exception
+            MsgBox("Could not dispose input.")
+        End Try
         Status("Distroying joystick input... Done!")
     End Sub
 #End Region

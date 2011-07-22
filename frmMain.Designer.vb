@@ -157,6 +157,7 @@ Partial Class frmMain
         '
         'numMidiOutputInsturment
         '
+        Me.numMidiOutputInsturment.Enabled = False
         Me.numMidiOutputInsturment.Location = New System.Drawing.Point(77, 171)
         Me.numMidiOutputInsturment.Maximum = New Decimal(New Integer() {128, 0, 0, 0})
         Me.numMidiOutputInsturment.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
@@ -361,7 +362,7 @@ Partial Class frmMain
         Me.chkRemoveOldNotes.TabIndex = 16
         Me.chkRemoveOldNotes.Text = "Remove old notes"
         Me.ToolTips.SetToolTip(Me.chkRemoveOldNotes, "If you press a note twice with a altered controller. Does it remove the first not" & _
-                "e?")
+        "e?")
         Me.chkRemoveOldNotes.UseVisualStyleBackColor = True
         '
         'chkDebug

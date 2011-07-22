@@ -1,7 +1,6 @@
-﻿
-#Region "License & Contact"
+﻿#Region "License & Contact"
 'License:
-'   Copyright (c) 2010 Raymond Ellis
+'   Copyright (c) 2011 Raymond Ellis
 '   
 '   This software is provided 'as-is', without any express or implied
 '   warranty. In no event will the authors be held liable for any damages
@@ -29,540 +28,273 @@
 '   Website: https://sites.google.com/site/raymondellis89/
 #End Region
 
+Option Explicit On
+Option Strict On
+
+Imports System
+Imports System.Collections
+Imports System.Collections.Generic
+Imports Microsoft.VisualBasic
 
 Namespace SimpleD
     Module Info
-        Public Const IllegalCharacters As String = "{}=;"
-        Public Const Version = 0.991
-        Public Const FileVersion = 1
-        '0.991  *InDev*
-        'Added  : Error handling to FromString\FromFile
-        'Added  : Properties and Groups can now have duplcate names.
-        'Added  : AddValue AND FindArray AND GetValueArray AND GetGroupArray
-        'Change : Groups and properties are now public.
-        'Rename : Propretys to Properties
-        'Rename : Set_Value to SetValue AND Get_Value to GetValue
-        'Rename : Get_Group to GetGroup AND Add_Group to AddGroup AND Create_Group to CreateGroup
-        'Cleaned: This version log.
-        'Fixed  : Issue#2 g{p=;g2{ would lockup.
-        'Fixed  : Can now compile using dot net 2+  (could only compile on 4.0 before)
-        'Fixed  : Was trimming the value.
-        'Fixed  : GetValue Would try and set a value it could not set.
+        'What things can NOT contain.
+        '   Property names { // =
+        '   Property values ; = (Equals is allowed if specafied)
+        '   Group names { // = ;
+        Public Const Version = 1
+        Public Const FileVersion = 2
+        '1      7-18-2011
+        'New    : ToString now has brace styling.
+        'New    : FromString(Now Parse) is now faster. (Have seen 14x better speed. Bigger strings will have a bigger difference.)
+        'New    : Can now have properties with out any groups in a file.
+        'New    : Checks for empty data in "Group.FromString".
+        'New    : Can now set what you want to use as a tab.
+        'Renamed: Prop to Property
+        'Removed: Windows.Forms and everything that used it.
+        'Change : Now saves the version of SimpleD as a group on the top of the file. (was saved as a comment before.)
+        'Change : Removed "SimpleD.SimpleD" now just use "SimpleD.Group".
+        'Change : The helper functions are now in a seperate file. (Can be put in same file if desired.)
+        'Fixed  : Property is now a class. Fixed a few bugs because structures are not reference type.
+        'Fixed  : GetValue(ByRef Control, ByRef Value) Nolonger crashes if value did not convert properly. (Can be found at: https://code.google.com/p/simpled/wiki/control_helper)
+        'Fixed  : ToFile now creates dir if it does not exist.
 
         'Old change logs at:
         'https://code.google.com/p/simpled/wiki/Versions
     End Module
 
-    Public Class SimpleD
-        Public Groups As New List(Of Group)
-
-#Region "New"
-        ''' <summary>
-        ''' Load from string.
-        ''' </summary>
-        ''' <param name="Data"></param>
-        ''' <param name="FromFile">If set to true then it will load from the file specfied in data</param>
-        ''' <remarks></remarks>
-        Public Sub New(ByVal Data As String, Optional ByVal FromFile As Boolean = False)
-            If Not FromFile Then
-                FromString(Data)
-            Else
-                Me.FromFile(Data)
-            End If
-
-        End Sub
-        Public Sub New()
-        End Sub
-#End Region
-
-#Region "Group"
-        ''' <summary>
-        ''' Create a group.
-        ''' Will return other group if names match.
-        ''' </summary>
-        ''' <param name="Name">The name of the group.</param>
-        Public Function CreateGroup(ByVal Name As String) As Group
-            Dim tmp As Group = GetGroup(Name) 'Search for a group with the name.
-            If tmp Is Nothing Then 'If group not found then.
-                tmp = New Group(Name) 'Create a new group.
-                Groups.Add(tmp) 'Add the new group to the list.
-            End If
-            Return tmp 'Return the group.
-        End Function
-        Public Sub AddGroup(ByVal Group As Group, Optional ByVal CombineDuplicates As Boolean = False)
-            If Not CombineDuplicates Then
-                Groups.Add(Group)
-            Else
-                'First lets see if we can find a group.
-                Dim tmp As Group = GetGroup(Group.Name)
-                If tmp IsNot Nothing Then
-                    'We found a group so lets combine them.
-                    tmp.Combine(Group)
-                Else
-                    'We did not find any other groups so add it to the list.
-                    Groups.Add(Group)
-                End If
-            End If
-        End Sub
-        Public Function GetGroup(ByVal Name As String) As Group
-            Name = LCase(Name)
-            For Each Group As Group In Groups
-                If Name = LCase(Group.Name) Then
-                    Return Group
-                End If
-            Next
-            Return Nothing
-        End Function
-        Public Function GetGroupArray(ByVal Name As String) As Group()
-            Dim tmp As New List(Of Group)
-            Name = LCase(Name)
-            For Each Group As Group In Groups
-                If Name = LCase(Group.Name) Then
-                    tmp.Add(Group)
-                End If
-            Next
-            Return tmp.ToArray
-        End Function
-#End Region
-
-#Region "To String/File"
-        Public Sub ToFile(ByVal File As String, Optional ByVal SplitWithNewLine As Boolean = True, Optional ByVal SplitWithTabs As Boolean = True)
-            Dim sw As New IO.StreamWriter(File)
-            sw.Write(ToString(SplitWithNewLine, SplitWithTabs))
-            sw.Close()
-        End Sub
-
-        ''' <summary>
-        ''' Returns a string with all groups and properties.
-        ''' </summary>
-        ''' <param name="SplitWithNewLine">Split properties and groups using a newline?</param>
-        ''' <param name="SplitWithTabs">Split properties and groups using tabs?
-        ''' Does not use tabs if newline is disabled.</param>
-        Public Overloads Function ToString(Optional ByVal SplitWithNewLine As Boolean = True, Optional ByVal SplitWithTabs As Boolean = True) As String
-            If Groups.Count = 0 Then Return ""
-            If SplitWithNewLine = False Then SplitWithTabs = False
-
-            Dim tmp As String = "//Version=" & Version & " FileVersion=" & FileVersion & "\\"
-            For n As Integer = 0 To Groups.Count - 1
-                tmp &= vbNewLine & Groups(n).ToString(SplitWithNewLine, If(SplitWithTabs, 1, 0))
-            Next
-
-            Return tmp
-
-        End Function
-#End Region
-
-#Region "From String/File"
-        ''' <summary>
-        ''' Load the SimpleData from a file.
-        ''' </summary>
-        ''' <param name="File">The file to load.</param>
-        ''' <returns>Error if any.</returns>
-        ''' <remarks></remarks>
-        Public Function FromFile(ByVal File As String) As String
-            If Not IO.File.Exists(File) Then Return "File does not exist:" & File
-            Dim sr As New IO.StreamReader(File)
-            Dim data As String = sr.ReadToEnd
-            sr.Close()
-            Return FromString(data)
-        End Function
-        Public Function FromString(ByVal Data As String) As String
-            If Data.Length < 2 Then Return "Nothing in file."
-
-            Dim InComment As Boolean = False
-
-            Dim n As Integer
-            Do
-                Dim tmp As String = Data.Substring(n, 2)
-                If tmp = "//" Then
-                    InComment = True
-                    n += 1
-                ElseIf tmp = "\\" Then
-                    InComment = False
-                    n += 1
-
-                ElseIf Not InComment Then
-
-                    'Find the start of the group so we can get the name.
-                    Dim Start As Integer = Data.IndexOf("{", n)
-                    If Start = -1 Then
-                        If Groups.Count = 0 Then Return "Could not find any groups."
-                        Return ""
-                    End If
-
-                    'Now get the name.
-                    Dim gName As String = Data.Substring(n, Start - n).Trim()
-                    n = Start + 1
-
-                    Dim Group As New Group(gName)
-                    Groups.Add(Group)
-
-                    Dim result As String = GetGroup(Data, n, Group)
-                    If result <> "" Then
-                        Return result
-                    End If
-                    If n + 2 > Data.Length Then Return ""
-                End If
-
-
-                n += 1
-            Loop Until n >= Data.Length - 1
-
-            Return ""
-        End Function
-
-        Private Function GetGroup(ByVal Data As String, ByRef n As Integer, ByVal Group As Group) As String
-            Dim tmp As String
-            Dim InComment As Boolean = False
-            'Now lets get all of the properties from the group.
-            Do
-                If n + 2 > Data.Length Then Return "Could not find end of group: " & Group.Name
-                tmp = Data.Substring(n, 2)
-                If tmp = "//" Then
-                    InComment = True
-                    n += 1
-                ElseIf tmp = "\\" Then
-                    InComment = False
-                    n += 1
-
-
-                ElseIf Not InComment Then
-                    Dim Equals As Integer = Data.IndexOf("=", n) 'Search for the next property.
-                    Dim GroupStart As Integer = Data.IndexOf("{", n) 'Search for the NEXT group.
-                    If Equals = -1 AndAlso GroupStart = -1 Then Return "" 'If there is no more groups and properties then we are at the end of file.
-                    Dim GroupEnd As Integer = Data.IndexOf("}", n)
-                    If GroupEnd > -1 And GroupEnd < GroupStart And GroupEnd < Equals Then 'Are we at the end of this group?
-                        n = GroupEnd
-                        Return ""
-                    End If
-                    'Is the next thing a group or property?
-                    If Equals > -1 And ((Equals < GroupStart) Or GroupStart = -1) Then
-                        Dim PropName As String = Data.Substring(n, Equals - n).Trim
-                        n = Equals
-                        Dim PropEnd As Integer = Data.IndexOf(";", n)
-                        If PropEnd = -1 Then Return "Could not find end of Prop:" & PropName
-                        Dim PropValue As String = Data.Substring(n + 1, PropEnd - n - 1)
-                        n = PropEnd
-                        Group.AddValue(PropName, PropValue)
-
-                    ElseIf GroupStart > -1 Then
-                        Dim gName As String = Trim(Data.Substring(n, GroupStart - n).Trim)
-                        n = GroupStart + 1
-
-                        Dim NewGroup As New Group(gName)
-                        Group.AddGroup(NewGroup, False)
-                        GetGroup(Data, n, NewGroup)
-                    End If
-                End If
-
-                n += 1
-                If n >= Data.Length Then Return "" 'The end of the string is also the end of the group.
-            Loop Until Data.Substring(n, 1) = "}"
-            Return ""
-        End Function
-#End Region
-
-    End Class
-
-
     Public Class Group
         Public Name As String
 
-        Public Properties As New List(Of Prop)
+        Public Properties As New List(Of [Property])
         Public Groups As New List(Of Group)
 
-        Public Sub New(ByVal Name As String)
+        Public Sub New(Optional ByVal Name As String = "")
             Me.Name = Name
         End Sub
 
-#Region "Group" 'Note: To make it easyer change the group region in SimpleD first, then copy over this.
-        ''' <summary>
-        ''' Create a group.
-        ''' Will return other group if names match.
-        ''' </summary>
-        ''' <param name="Name">The name of the group.</param>
-        Public Function CreateGroup(ByVal Name As String) As Group
-            Dim tmp As Group = GetGroup(Name) 'Search for a group with the name.
-            If tmp Is Nothing Then 'If group not found then.
-                tmp = New Group(Name) 'Create a new group.
-                Groups.Add(tmp) 'Add the new group to the list.
-            End If
-            Return tmp 'Return the group.
-        End Function
-        Public Sub AddGroup(ByVal Group As Group, Optional ByVal CombineDuplicates As Boolean = False)
-            If Not CombineDuplicates Then
-                Groups.Add(Group)
-            Else
-                'First lets see if we can find a group.
-                Dim tmp As Group = GetGroup(Group.Name)
-                If tmp IsNot Nothing Then
-                    'We found a group so lets combine them.
-                    tmp.Combine(Group)
-                Else
-                    'We did not find any other groups so add it to the list.
-                    Groups.Add(Group)
-                End If
-            End If
-        End Sub
-        Public Function GetGroup(ByVal Name As String) As Group
-            Name = LCase(Name)
-            For Each Group As Group In Groups
-                If Name = LCase(Group.Name) Then
-                    Return Group
-                End If
-            Next
-            Return Nothing
-        End Function
-        Public Function GetGroupArray(ByVal Name As String) As Group()
-            Dim tmp As New List(Of Group)
-            Name = LCase(Name)
-            For Each Group As Group In Groups
-                If Name = LCase(Group.Name) Then
-                    tmp.Add(Group)
-                End If
-            Next
-            Return tmp.ToArray
-        End Function
-#End Region
+#Region "ToString"
 
-#Region "SetValue"
-        ''' <summary>
-        ''' This sets the value of a property.
-        ''' If it can not find the property it creates it.
-        ''' </summary>
-        Public Sub SetValue(ByVal Name As String, ByVal Value As String)
-            If Name = "" Or Value = "" Then Return
-            Dim tmp As Prop = Find(Name) 'Find the property.
-            If tmp = Nothing Then 'If it could not find the property then.
-                Properties.Add(New Prop(Name, Value)) 'Add the property.
-            Else
-                tmp.Value = Value 'Set the value.
-            End If
-        End Sub
-        ''' <summary>
-        ''' This sets the value of a property.
-        ''' If it can not find the property it creates it.
-        ''' Does not create if value is equal to default value.
-        ''' </summary>
-        Public Sub SetValue(ByVal Name As String, ByVal Value As String, ByVal DefaultValue As String)
-            If Name = "" Or Value = "" Then Return
-            If Value = DefaultValue Then Return 'Return if the value is the default value.
-            Dim tmp As Prop = Find(Name) 'Find the property.
-            If tmp = Nothing Then 'If it could not find the property then.
-                Properties.Add(New Prop(Name, Value)) 'Add the property.
-            Else
-                tmp.Value = Value 'Set the value.
-            End If
-        End Sub
-        ''' <summary>
-        ''' This sets the value of a property.
-        ''' If it can not find the property it creates it.
-        ''' </summary>
-        Public Sub SetValue(ByVal Control As Windows.Forms.Control)
-            Dim Value As String = GetValueFromControl(Control) 'Find the property from a object and set the value.
-            Dim tmp As Prop = Find(Control.Name) 'Find the property.
-            If tmp = Nothing Then 'If it could not find the property then.
-                Properties.Add(New Prop(Control.Name, Value)) 'Add the property.
-            Else
-                tmp.Value = Value 'Set the value.
-            End If
-        End Sub
-
-        ''' <summary>
-        ''' Creates a new property and adds it to the list.
-        ''' </summary>
-        Public Sub AddValue(ByVal Name As String, ByVal Value As String)
-            If Name = "" Then Return
-            Properties.Add(New Prop(Name, Value))
-        End Sub
-#End Region
-#Region "GetValue"
-        ''' <summary>
-        ''' Get the value from a property.
-        ''' </summary>
-        ''' <param name="Name">The name of the property to get the value from.</param>
-        Public Function GetValue(ByVal Name As String) As String
-            Return Find(Name).Value 'Find the property and return the value.
-        End Function
-        Public Function GetValueArray(ByVal Name As String) As String()
-            Dim tmp As New List(Of String)
-            For Each Prop As Prop In Properties
-                If LCase(Prop.Name) = LCase(Name) Then
-                    tmp.Add(Prop.Value)
-                End If
-            Next
-            Return tmp.ToArray
-        End Function
-        ''' <summary>
-        ''' Will only set the value if the property is found.
-        ''' </summary>
-        ''' <param name="Name"></param>
-        ''' <param name="Value"></param>
-        ''' <param name="EmptyIfNotFound">Set value to nothing, if it can't find the property.</param>
-        Public Sub GetValue(ByVal Name As String, ByRef Value As Object, Optional ByVal EmptyIfNotFound As Boolean = True)
-            Dim prop As Prop = Find(Name)
-            If prop = Nothing Then
-                If EmptyIfNotFound Then Value = Nothing
-            Else
-                Value = prop.Value 'Find the property and return the value.
-            End If
-        End Sub
-
-        ''' <summary>
-        ''' Sets the value of the control to the proprety with the same name.
-        ''' Known controls: TextBox,Label,CheckBox,RadioButton,NumericUpDown,ProgressBar
-        ''' </summary>
-        ''' <param name="Control">The control to get the property from.</param>
-        ''' <param name="Value">Returns value if control is unknown.</param>
-        Public Sub GetValue(ByRef Control As Windows.Forms.Control, ByRef Value As String)
-            Dim TempValue As String = Find(Control.Name).Value 'Find the property from the control name.
-
-            Dim obj As Object = Control
-            If TypeOf Control Is Windows.Forms.TextBox Or TypeOf Control Is Windows.Forms.Label Then
-                obj.Text = TempValue
-
-            ElseIf TypeOf Control Is Windows.Forms.CheckBox Or TypeOf Control Is Windows.Forms.RadioButton Then
-                If Not Boolean.TryParse(TempValue, obj.Checked) Then Value = TempValue
-
-            ElseIf TypeOf Control Is Windows.Forms.NumericUpDown Or TypeOf Control Is Windows.Forms.ProgressBar Then
-                If TempValue > obj.Maximum Then
-                    obj.Value = obj.Maximum
-                ElseIf TempValue < obj.Minimum Then
-                    obj.Value = obj.Minimum
-                Else
-                    obj.Value = TempValue
-                End If
-
-            Else
-                'Throw New Exception("Could not find object type.")
-                Value = TempValue
-            End If
-        End Sub
-        ''' <summary>
-        ''' Uses the name of the control to find the property value.
-        ''' </summary>
-        ''' <param name="Control"></param>
-        ''' <returns>Property value.</returns>
-        Public Function GetValue(ByVal Control As Windows.Forms.Control) As String
-            Return Find(Control.Name).Value 'Find the property from a object and return the value.
-        End Function
-#End Region
-
-        Private Function GetValueFromControl(ByVal Obj As Object) As String
-            If TypeOf Obj Is Windows.Forms.TextBox Or TypeOf Obj Is Windows.Forms.Label Then
-                Return Obj.Text
-            ElseIf TypeOf Obj Is Windows.Forms.CheckBox Or TypeOf Obj Is Windows.Forms.RadioButton Then
-                Return Obj.Checked
-            ElseIf TypeOf Obj Is Windows.Forms.NumericUpDown Or TypeOf Obj Is Windows.Forms.ProgressBar Then
-                Return Obj.Value
-            End If
-
-            'Unknown control, so lets see if we can find the right value.
-            Dim Value As String = "Could_Not_Find_Value"
-            Try 'Try and get the value.
-                Value = Obj.Value
-            Catch
-                Try 'Try and get checked.
-                    Value = Obj.Checked
-                Catch
-                    Try 'Try and get the text.
-                        Value = Obj.Text
-                    Catch
-                        Try
-                            Value = Obj.ToString
-                        Catch
-                            Throw New Exception("Could not get value from object:" & Obj.name)
-                        End Try
-                    End Try
-                End Try
-            End Try
-            Return Value
-        End Function
-
-        ''' <summary>
-        ''' Find a property from the name. returns the first property found.
-        ''' </summary>
-        ''' <param name="Name">The name of the property.</param>
-        ''' <returns>The property.</returns>
-        Public Function Find(ByVal Name As String) As Prop
-            'Very simple,  loop through each property until the names match. then return the matching property.
-            For Each Prop As Prop In Properties
-                If LCase(Prop.Name) = LCase(Name) Then
-                    Return Prop
-                End If
-            Next
-            Return Nothing
-        End Function
-        ''' <summary>
-        ''' Find a properties from the name. returns all properties found.
-        ''' </summary>
-        ''' <param name="Name">The name of the property.</param>
-        Public Function FindArray(ByVal Name As String) As Prop()
-            Dim tmp As New List(Of Prop)
-            For Each Prop As Prop In Properties
-                If LCase(Prop.Name) = LCase(Name) Then
-                    tmp.Add(Prop)
-                End If
-            Next
-            Return tmp.ToArray
-        End Function
+        Enum Style
+            None
+            Whitesmiths
+            GNU
+            BSD_Allman
+            K_R
+            GroupsOnNewLine
+        End Enum
+        Public BraceStyle As Style = Style.BSD_Allman
+        Public Tab As String = vbTab
 
         ''' <summary>
         ''' Returns a string with all the properties and sub groups.
         ''' </summary>
-        ''' <param name="SplitWithNewLine">Split properties and groups using a newline?</param>
-        ''' <param name="TabCount">Split properties and groups using tabs?
-        ''' Does not use tabs if newline is disabled.</param>
-        Public Overloads Function ToString(Optional ByVal SplitWithNewLine As Boolean = True, Optional ByVal TabCount As Integer = 1) As String
-            If Properties.Count = 0 Then Return ""
-            If TabCount < 0 Then TabCount = 0
+        ''' <param name="AddVersion">Add the version of SimpleD to start of string?</param>
+        ''' <param name="OverrideStyle">If not None then it will override BraceStyle.</param>
+        Public Overloads Function ToString(Optional ByVal AddVersion As Boolean = True, Optional ByVal OverrideStyle As Style = Style.None) As String
+            Return ToStringBase(True, -1, AddVersion, OverrideStyle)
+        End Function
 
-            'Setup spliting.
-            Dim Split As String = ""
-            If SplitWithNewLine Then
-                Split = vbNewLine & New String(vbTab, TabCount)
+        Private Function ToStringBase(ByVal IsFirst As Boolean, ByVal TabCount As Integer, ByVal AddVersion As Boolean, ByVal OverrideStyle As Style) As String
+            If Properties.Count = 0 And Groups.Count = 0 Then Return ""
+            If TabCount < -1 Then TabCount = -2 'Tab count Below -1 means use zero tabs.
+
+            Dim CurrentStyle As Style = BraceStyle
+            If OverrideStyle <> Style.None Then CurrentStyle = OverrideStyle
+
+            Dim tmp As String = ""
+
+            If AddVersion Then tmp = "SimpleD{Version=" & Version & ";FormatVersion=" & FileVersion & ";}"
+
+            'Name and start of group. Name{
+            If Not IsFirst Then
+                Select Case CurrentStyle
+                    Case Style.None, Style.K_R
+                        tmp &= Name & "{"
+                    Case Style.Whitesmiths
+                        tmp &= Name & Environment.NewLine & GetTabs(TabCount + 1) & "{"
+                    Case Style.BSD_Allman
+                        tmp &= Name & Environment.NewLine & GetTabs(TabCount) & "{"
+                    Case Style.GNU
+                        tmp &= Name & Environment.NewLine & GetTabs(TabCount) & "  {"
+                    Case Style.GroupsOnNewLine
+                        tmp &= Environment.NewLine & GetTabs(TabCount - 1) & Name & "{"
+                End Select
             End If
 
-            'Name and start of group.
-            Dim tmp As String = Name & "{"
-
-            'Add the properys from the group.
-            For n As Integer = 0 To Properties.Count - 1
-                tmp &= Split & Properties(n).Name & "=" & Properties(n).Value & ";"
-            Next
-
-            'Get all the groups in the group.
-            For Each Grp As Group In Groups
-                tmp &= Split & Grp.ToString(SplitWithNewLine, If(TabCount = 0, 0, TabCount + 1))
-            Next
+            'Groups and properties
+            Select Case CurrentStyle
+                Case Style.None, Style.GroupsOnNewLine
+                    For n As Integer = 0 To Properties.Count - 1
+                        tmp &= Properties(n).Name & "=" & Properties(n).Value & ";"
+                    Next
+                    For Each Grp As Group In Groups
+                        tmp &= Grp.ToStringBase(False, TabCount + 1, False, OverrideStyle)
+                    Next
+                Case Style.Whitesmiths, Style.BSD_Allman, Style.K_R, Style.GNU
+                    For n As Integer = 0 To Properties.Count - 1
+                        tmp &= Environment.NewLine & GetTabs(TabCount + 1) & Properties(n).Name & "=" & Properties(n).Value & ";"
+                    Next
+                    For Each Grp As Group In Groups
+                        tmp &= Environment.NewLine & GetTabs(TabCount + 1) & Grp.ToStringBase(False, TabCount + 1, False, OverrideStyle)
+                    Next
+            End Select
 
             '} end of group.
-            tmp &= If(SplitWithNewLine, vbNewLine, "") & If(TabCount - 1 > 0, New String(vbTab, TabCount - 1), "") & "}"
+            If Not IsFirst Then
+                Select Case CurrentStyle
+                    Case Style.None, Style.GroupsOnNewLine
+                        tmp &= "}"
+                    Case Style.Whitesmiths
+                        tmp &= Environment.NewLine & GetTabs(TabCount + 1) & "}"
+                    Case Style.BSD_Allman, Style.K_R
+                        tmp &= Environment.NewLine & GetTabs(TabCount) & "}"
+                    Case Style.GNU
+                        tmp &= Environment.NewLine & GetTabs(TabCount) & "  }"
+                End Select
+            End If
+
             Return tmp
         End Function
 
+        Private Function GetTabs(Count As Integer) As String
+            If Count < 1 Then Return ""
+            Dim str As String = Tab
+            For i As Integer = 2 To Count
+                str &= Tab
+            Next
+            Return str
+        End Function
+
+#End Region
+
+#Region "Parse(FromString)"
+
         ''' <summary>
-        ''' Conbines the group with this group.
+        ''' Note: It will continue loading even with errors.
         ''' </summary>
-        ''' <param name="Group">Overides all the properties with the properties in the group.</param>
-        Public Sub Combine(ByVal Group As Group)
-            For Each Prop As Prop In Group.Properties
-                SetValue(Prop.Name, Prop.Value)
-            Next
-            For Each Grp As Group In Group.Groups
-                AddGroup(Grp)
-            Next
-        End Sub
-        Overloads Shared Operator +(ByVal left As Group, ByVal right As Group) As Group
-            left.Combine(right)
-            Return left
-        End Operator
+        ''' <param name="Data">The string to parse.</param>
+        ''' <returns>Errors if any.</returns>
+        ''' <remarks></remarks>
+        Public Function FromString(ByVal Data As String, Optional ByVal AllowEqualsInValue As Boolean = False) As String
+            Return FromStringBase(True, Data, 0, AllowEqualsInValue)
+        End Function
+
+        Private Function FromStringBase(ByVal IsFirst As Boolean, ByVal Data As String, ByRef Index As Integer, ByVal AllowEqualsInValue As Boolean) As String
+            If Data = "" Then Return "Data is empty!"
+
+            'Group names can not contain { or } or //
+            'Property names can not contain // or = or ; or { or }
+            'p=g{};
+
+            Dim Results As String = "" 'Holds errors to be returned later.
+            Dim State As Byte = 0 '0 = Nothing    1 = In property   2 = In comment
+
+            Dim StartIndex As Integer = Index 'The start of the group.
+            Dim ErrorIndex As Integer = 0 'Used for error handling.
+            Dim tName As String = "" 'Group or property name
+            Dim tValue As String = ""
+            Dim LastChr As Char = " "c 'Only needed for comments because they use two chars. //
+
+            Do Until Index > Data.Length - 1
+                Dim chr As Char = Data(Index)
+
+                Select Case State
+                    Case 0 'In nothing
+
+                        Select Case chr
+                            Case "="c
+                                ErrorIndex = Index
+                                State = 1 'In property
+
+                            Case ";"c
+                                tName = ""
+                                tValue = ""
+                                Results &= " #Found end of property but no beginning at index: " & Index
+
+                            Case "{"c
+                                Index += 1
+                                Dim newGroup As New Group(tName.Trim)
+                                Results &= newGroup.FromStringBase(False, Data, Index, AllowEqualsInValue)
+                                Groups.Add(newGroup)
+                                LastChr = " "c
+                                tName = ""
+
+                            Case "}"c 'End of current group
+                                If IsFirst Then 'The first group does not have name or braces.
+                                    tName &= chr
+                                Else
+                                    Return Results
+                                End If
+
+
+                            Case "/"c
+                                If LastChr = "/"c Then
+                                    tName = ""
+                                    State = 2 'In comment
+                                    ErrorIndex = Index
+                                End If
+
+                            Case Else
+                                tName &= chr
+                        End Select
+
+
+                    Case 1 'In property
+                        If chr = ";"c Then
+                            Properties.Add(New [Property](tName.Trim, tValue))
+                            tName = ""
+                            tValue = ""
+                            State = 0
+
+                        ElseIf chr = "="c Then 'error
+                            If AllowEqualsInValue Then
+                                tValue &= chr
+                            Else
+                                Results &= "  #Missing end of property " & tName.Trim & " at index: " & ErrorIndex
+                                ErrorIndex = Index
+                                tName = ""
+                                tValue = ""
+                            End If
+                        Else
+                            tValue &= chr
+                        End If
+
+                    Case 2 'In comment
+                        If chr = "\"c And LastChr = "\"c Then
+                            State = 0
+                        End If
+
+                End Select
+
+                Index += 1
+                LastChr = chr
+            Loop
+
+            If State = 1 Then
+                Results &= " #Missing end of property " & tName.Trim & " at index: " & ErrorIndex
+            ElseIf State = 2 Then
+                Results &= " #Missing end of comment " & tName.Trim & " at index: " & ErrorIndex
+            ElseIf Not IsFirst Then
+                Results &= "  #Missing end of group " & Name.Trim & " at index: " & StartIndex
+            End If
+
+            Return Results
+        End Function
+
+        Shared Function Parse(ByVal Data As String, Optional ByVal AllowEqualsInValue As Boolean = False) As Group
+            Dim g As New Group
+            g.FromStringBase(True, Data, 0, AllowEqualsInValue)
+            Return g
+        End Function
+#End Region
+
     End Class
 
     ''' <summary>
     ''' Holds a properties name and value.
     ''' </summary>
-    Public Structure Prop
+    Public Class [Property]
         Public Name As String
         Public Value As String
         Public Sub New(ByVal Name As String, ByVal Value As String)
@@ -570,11 +302,13 @@ Namespace SimpleD
             Me.Value = Value
         End Sub
 
-        Shared Operator =(ByVal left As Prop, ByVal right As Prop) As Boolean
+        Shared Operator =(ByVal left As [Property], ByVal right As [Property]) As Boolean
+            If left Is Nothing And right Is Nothing Then Return True
+            If left Is Nothing Or right Is Nothing Then Return False
             Return left.Name = right.Name And left.Value = right.Value
         End Operator
-        Shared Operator <>(ByVal left As Prop, ByVal right As Prop) As Boolean
+        Shared Operator <>(ByVal left As [Property], ByVal right As [Property]) As Boolean
             Return Not left = right
         End Operator
-    End Structure
+    End Class
 End Namespace

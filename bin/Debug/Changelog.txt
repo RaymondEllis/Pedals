@@ -1,5 +1,5 @@
 2.04
-Upgraded: SimpleD to 0.991
+Upgraded: SimpleD to v1
 Fixed:	Selected debug item.
 
 2.03:
