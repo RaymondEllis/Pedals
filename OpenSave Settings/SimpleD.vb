@@ -24,7 +24,7 @@
 '
 'Contact:
 '   Raymond Ellis
-'   Email: RaymondEllis@live.com
+'   Email: RaymondEllis*live.com
 '   Website: https://sites.google.com/site/raymondellis89/
 #End Region
 
@@ -37,17 +37,34 @@ Imports System.Collections.Generic
 Imports Microsoft.VisualBasic
 
 Namespace SimpleD
-    Module Info
+    Public Module Info
         'What things can NOT contain.
-        '   Property names { // =
-        '   Property values ; = (Equals is allowed if specafied)
-        '   Group names { // = ;
-        Public Const Version = 1
-        Public Const FileVersion = 2
-        '1      7-18-2011
+        '   Property names { } /* =
+        '   Property values ;(is allowed if specafied) =(is allowed if specafied)
+        '   Group names { } /* = ;
+        Public Const Version As Single = 1.2
+        Public Const FileVersion As Single = 3
+        Public AllowEqualsInValue As Boolean = True
+        Public AllowSemicolonInValue As Boolean = True
+        'Public CheckIllegalChars As Boolean = True 'Should be apart of the Helper.
+        '
+        '1.2    Redo the helper class.  It needs to folow some standers.
+        'Change : The name of the first group now gets saved. (if it's not empty)
+        '
+        '1.1    3-21-2012 *Stable*
+        'Added  : Can now make a empty property by just using a semicolon. p; is now the same as p=;
+        'Change : AllowEqualsInValue is now in Info.
+        'Change : } can now end the base group. so "p=v;}p2=2;" would only parse as "p=v;" because } ended the base group.
+        'Change : Comments are now /*comment*/ (was //comment\\)
+        'Change : The brace styles are now a bit simpiler.   Uses last groups style if none is specfied. falls back to BSD_Allman if base group is none.
+        'Change : There is now NoStyle
+        'Fixed  : Did not spefi that parse is the same as fromstring.
+        'Fixed  : Empty groups now save. Fixes Issue#2 "g{p=;g2{" better.
+        '
+        '1      7-18-2011 *Stable*
         'New    : ToString now has brace styling.
         'New    : FromString(Now Parse) is now faster. (Have seen 14x better speed. Bigger strings will have a bigger difference.)
-        'New    : Can now have properties with out any groups in a file.
+        'New    : Can now have properties with out any groups in a string.
         'New    : Checks for empty data in "Group.FromString".
         'New    : Can now set what you want to use as a tab.
         'Renamed: Prop to Property
@@ -69,47 +86,184 @@ Namespace SimpleD
         Public Properties As New List(Of [Property])
         Public Groups As New List(Of Group)
 
-        Public Sub New(Optional ByVal Name As String = "")
+        Public Sub New(Optional ByVal Name As String = "", Optional braceStyle As Style = Style.None)
             Me.Name = Name
+            Me.BraceStyle = braceStyle
         End Sub
+
+#Region "Parse(FromString)"
+
+        ''' <summary>
+        ''' Does NOT clear groups/properties.
+        ''' Note: It will continue loading even with errors.
+        ''' </summary>
+        ''' <param name="Data">The string to parse.</param>
+        ''' <returns>Errors if any.</returns>
+        ''' <remarks></remarks>
+        Public Function FromString(ByVal Data As String) As String
+            Return FromStringBase(True, Data, 0)
+        End Function
+
+        Private Function FromStringBase(ByVal IsFirst As Boolean, ByVal Data As String, ByRef Index As Integer) As String
+            If Data = "" Then Return "Data is empty!"
+
+            'Names can not contain { } ; /*
+            'Property names can only contain = if AllowEqualsInValue is set to true.
+            'p=g{};
+
+
+            Dim Results As String = "" 'Holds errors to be returned later.
+            Dim State As Byte = 0 '0 = Nothing    1 = In property   2 = In comment
+
+            Dim StartIndex As Integer = Index 'The start of the group.
+            Dim ErrorIndex As Integer = 0 'Used for error handling.
+            Dim tName As String = "" 'Group or property name
+            Dim tValue As String = ""
+
+            Do Until Index > Data.Length - 1
+                Dim chr As Char = Data(Index)
+
+                Select Case State
+                    Case 0 'In nothing
+
+                        Select Case chr
+                            Case "="c
+                                ErrorIndex = Index
+                                State = 1 'In property
+
+                            Case ";"c
+                                If tName.Trim = "" Then
+                                    Results &= " #Found end of property but no name&value at index: " & Index & " Could need AllowSemicolonInValue enabled."
+                                Else
+                                    Properties.Add(New [Property](tName.Trim, ""))
+                                End If
+                                tName = ""
+                                tValue = ""
+
+                            Case "{"c 'New group
+                                Index += 1
+                                Dim newGroup As New Group(tName.Trim)
+                                Results &= newGroup.FromStringBase(False, Data, Index)
+                                Groups.Add(newGroup)
+                                tName = ""
+
+                            Case "}"c 'End of current group
+                                Return Results
+
+
+                            Case "*"c
+                                If Index - 1 >= 0 AndAlso Data(Index - 1) = "/"c Then
+                                    tName = ""
+                                    State = 2 'In comment
+                                    ErrorIndex = Index
+                                Else
+                                    tName &= chr
+                                End If
+
+                            Case Else
+                                tName &= chr
+                        End Select
+
+
+                    Case 1 'get property value
+                        If chr = ";"c Then
+                            If (AllowSemicolonInValue And Index + 1 < Data.Length) AndAlso Data(Index + 1) = ";"c Then
+                                Index += 1
+                                tValue &= chr
+                            Else
+                                Properties.Add(New [Property](tName.Trim, tValue))
+                                tName = ""
+                                tValue = ""
+                                State = 0
+                            End If
+
+
+                        ElseIf chr = "="c Then 'error
+                            If AllowEqualsInValue Then
+                                tValue &= chr
+                            Else
+                                Results &= "  #Missing end of property " & tName.Trim & " at index: " & ErrorIndex
+                                ErrorIndex = Index
+                                tName = ""
+                                tValue = ""
+                            End If
+                        Else
+                            tValue &= chr
+                        End If
+
+                    Case 2 'In comment
+                        If chr = "/"c AndAlso Data(Index - 1) = "*"c Then
+                            State = 0
+                        End If
+
+
+                End Select
+
+                Index += 1
+            Loop
+
+            If State = 1 Then
+                Results &= " #Missing end of property " & tName.Trim & " at index: " & ErrorIndex
+            ElseIf State = 2 Then
+                Results &= " #Missing end of comment " & tName.Trim & " at index: " & ErrorIndex
+            ElseIf Not IsFirst Then 'The base group does not need to be ended.
+                Results &= "  #Missing end of group " & Name.Trim & " at index: " & StartIndex
+            End If
+
+            Return Results
+        End Function
+
+        ''' <summary>
+        ''' Note: It will continue loading even with errors.
+        ''' </summary>
+        ''' <param name="Data">The string to parse.</param>
+        ''' <returns>Errors if any.</returns>
+        ''' <remarks></remarks>
+        Shared Function Parse(ByVal Data As String) As Group
+            Dim g As New Group
+            g.FromStringBase(True, Data, 0)
+            Return g
+        End Function
+#End Region
 
 #Region "ToString"
 
         Enum Style
-            None
-            Whitesmiths
-            GNU
-            BSD_Allman
-            K_R
-            GroupsOnNewLine
+            None = 0
+            NoStyle = 1
+            Whitesmiths = 2
+            GNU = 3
+            BSD_Allman = 4
+            K_R = 5
+            GroupsOnNewLine = 6
         End Enum
-        Public BraceStyle As Style = Style.BSD_Allman
+        Public BraceStyle As Style = Style.None
         Public Tab As String = vbTab
 
         ''' <summary>
         ''' Returns a string with all the properties and sub groups.
         ''' </summary>
         ''' <param name="AddVersion">Add the version of SimpleD to start of string?</param>
-        ''' <param name="OverrideStyle">If not None then it will override BraceStyle.</param>
-        Public Overloads Function ToString(Optional ByVal AddVersion As Boolean = True, Optional ByVal OverrideStyle As Style = Style.None) As String
-            Return ToStringBase(True, -1, AddVersion, OverrideStyle)
+        Public Overloads Function ToString(Optional ByVal AddVersion As Boolean = True) As String
+            Dim SaveName As Boolean = True
+            If Name = "" Then SaveName = False
+            Return ToStringBase(SaveName, -1, AddVersion, BraceStyle)
         End Function
 
-        Private Function ToStringBase(ByVal IsFirst As Boolean, ByVal TabCount As Integer, ByVal AddVersion As Boolean, ByVal OverrideStyle As Style) As String
-            If Properties.Count = 0 And Groups.Count = 0 Then Return ""
+        Private Function ToStringBase(ByVal SaveName As Boolean, ByVal TabCount As Integer, ByVal AddVersion As Boolean, ByVal braceStyle As Style) As String
             If TabCount < -1 Then TabCount = -2 'Tab count Below -1 means use zero tabs.
 
-            Dim CurrentStyle As Style = BraceStyle
-            If OverrideStyle <> Style.None Then CurrentStyle = OverrideStyle
+            If Me.BraceStyle <> Style.None Then braceStyle = Me.BraceStyle
+            If braceStyle = Style.None Then braceStyle = Style.BSD_Allman
 
             Dim tmp As String = ""
 
             If AddVersion Then tmp = "SimpleD{Version=" & Version & ";FormatVersion=" & FileVersion & ";}"
 
             'Name and start of group. Name{
-            If Not IsFirst Then
-                Select Case CurrentStyle
-                    Case Style.None, Style.K_R
+            If SaveName Then
+                Select Case braceStyle
+                    Case Style.NoStyle, Style.K_R
                         tmp &= Name & "{"
                     Case Style.Whitesmiths
                         tmp &= Name & Environment.NewLine & GetTabs(TabCount + 1) & "{"
@@ -123,27 +277,27 @@ Namespace SimpleD
             End If
 
             'Groups and properties
-            Select Case CurrentStyle
-                Case Style.None, Style.GroupsOnNewLine
+            Select Case braceStyle
+                Case Style.NoStyle, Style.GroupsOnNewLine
                     For n As Integer = 0 To Properties.Count - 1
-                        tmp &= Properties(n).Name & "=" & Properties(n).Value & ";"
+                        tmp &= Properties(n).ToString()
                     Next
                     For Each Grp As Group In Groups
-                        tmp &= Grp.ToStringBase(False, TabCount + 1, False, OverrideStyle)
+                        tmp &= Grp.ToStringBase(True, TabCount + 1, False, braceStyle)
                     Next
                 Case Style.Whitesmiths, Style.BSD_Allman, Style.K_R, Style.GNU
                     For n As Integer = 0 To Properties.Count - 1
-                        tmp &= Environment.NewLine & GetTabs(TabCount + 1) & Properties(n).Name & "=" & Properties(n).Value & ";"
+                        tmp &= Environment.NewLine & GetTabs(TabCount + 1) & Properties(n).ToString()
                     Next
                     For Each Grp As Group In Groups
-                        tmp &= Environment.NewLine & GetTabs(TabCount + 1) & Grp.ToStringBase(False, TabCount + 1, False, OverrideStyle)
+                        tmp &= Environment.NewLine & GetTabs(TabCount + 1) & Grp.ToStringBase(True, TabCount + 1, False, braceStyle)
                     Next
             End Select
 
             '} end of group.
-            If Not IsFirst Then
-                Select Case CurrentStyle
-                    Case Style.None, Style.GroupsOnNewLine
+            If SaveName Then
+                Select Case braceStyle
+                    Case Style.NoStyle, Style.GroupsOnNewLine
                         tmp &= "}"
                     Case Style.Whitesmiths
                         tmp &= Environment.NewLine & GetTabs(TabCount + 1) & "}"
@@ -168,127 +322,6 @@ Namespace SimpleD
 
 #End Region
 
-#Region "Parse(FromString)"
-
-        ''' <summary>
-        ''' Note: It will continue loading even with errors.
-        ''' </summary>
-        ''' <param name="Data">The string to parse.</param>
-        ''' <returns>Errors if any.</returns>
-        ''' <remarks></remarks>
-        Public Function FromString(ByVal Data As String, Optional ByVal AllowEqualsInValue As Boolean = False) As String
-            Return FromStringBase(True, Data, 0, AllowEqualsInValue)
-        End Function
-
-        Private Function FromStringBase(ByVal IsFirst As Boolean, ByVal Data As String, ByRef Index As Integer, ByVal AllowEqualsInValue As Boolean) As String
-            If Data = "" Then Return "Data is empty!"
-
-            'Group names can not contain { or } or //
-            'Property names can not contain // or = or ; or { or }
-            'p=g{};
-
-            Dim Results As String = "" 'Holds errors to be returned later.
-            Dim State As Byte = 0 '0 = Nothing    1 = In property   2 = In comment
-
-            Dim StartIndex As Integer = Index 'The start of the group.
-            Dim ErrorIndex As Integer = 0 'Used for error handling.
-            Dim tName As String = "" 'Group or property name
-            Dim tValue As String = ""
-            Dim LastChr As Char = " "c 'Only needed for comments because they use two chars. //
-
-            Do Until Index > Data.Length - 1
-                Dim chr As Char = Data(Index)
-
-                Select Case State
-                    Case 0 'In nothing
-
-                        Select Case chr
-                            Case "="c
-                                ErrorIndex = Index
-                                State = 1 'In property
-
-                            Case ";"c
-                                tName = ""
-                                tValue = ""
-                                Results &= " #Found end of property but no beginning at index: " & Index
-
-                            Case "{"c
-                                Index += 1
-                                Dim newGroup As New Group(tName.Trim)
-                                Results &= newGroup.FromStringBase(False, Data, Index, AllowEqualsInValue)
-                                Groups.Add(newGroup)
-                                LastChr = " "c
-                                tName = ""
-
-                            Case "}"c 'End of current group
-                                If IsFirst Then 'The first group does not have name or braces.
-                                    tName &= chr
-                                Else
-                                    Return Results
-                                End If
-
-
-                            Case "/"c
-                                If LastChr = "/"c Then
-                                    tName = ""
-                                    State = 2 'In comment
-                                    ErrorIndex = Index
-                                End If
-
-                            Case Else
-                                tName &= chr
-                        End Select
-
-
-                    Case 1 'In property
-                        If chr = ";"c Then
-                            Properties.Add(New [Property](tName.Trim, tValue))
-                            tName = ""
-                            tValue = ""
-                            State = 0
-
-                        ElseIf chr = "="c Then 'error
-                            If AllowEqualsInValue Then
-                                tValue &= chr
-                            Else
-                                Results &= "  #Missing end of property " & tName.Trim & " at index: " & ErrorIndex
-                                ErrorIndex = Index
-                                tName = ""
-                                tValue = ""
-                            End If
-                        Else
-                            tValue &= chr
-                        End If
-
-                    Case 2 'In comment
-                        If chr = "\"c And LastChr = "\"c Then
-                            State = 0
-                        End If
-
-                End Select
-
-                Index += 1
-                LastChr = chr
-            Loop
-
-            If State = 1 Then
-                Results &= " #Missing end of property " & tName.Trim & " at index: " & ErrorIndex
-            ElseIf State = 2 Then
-                Results &= " #Missing end of comment " & tName.Trim & " at index: " & ErrorIndex
-            ElseIf Not IsFirst Then
-                Results &= "  #Missing end of group " & Name.Trim & " at index: " & StartIndex
-            End If
-
-            Return Results
-        End Function
-
-        Shared Function Parse(ByVal Data As String, Optional ByVal AllowEqualsInValue As Boolean = False) As Group
-            Dim g As New Group
-            g.FromStringBase(True, Data, 0, AllowEqualsInValue)
-            Return g
-        End Function
-#End Region
-
     End Class
 
     ''' <summary>
@@ -301,6 +334,16 @@ Namespace SimpleD
             Me.Name = Name
             Me.Value = Value
         End Sub
+
+        Public Overrides Function ToString() As String
+            If Value = "" Then Return Name & ";"
+            If AllowSemicolonInValue Then
+                Dim tmpValue As String = Value.Replace(";", ";;")
+                Return Name & "=" & tmpValue & ";"
+            Else
+                Return Name & "=" & Value & ";"
+            End If
+        End Function
 
         Shared Operator =(ByVal left As [Property], ByVal right As [Property]) As Boolean
             If left Is Nothing And right Is Nothing Then Return True

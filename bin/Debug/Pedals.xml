@@ -56,31 +56,38 @@ Pedals
 	<summary>
  If an axis is less then or equals to SwitchOn then turn the switch on.
  </summary>
-</member><member name="M:Pedals.SimpleD.Group.ToString(System.Boolean,Pedals.SimpleD.Group.Style)">
+</member><member name="M:Pedals.SimpleD.Group.FromString(System.String)">
 	<summary>
- Returns a string with all the properties and sub groups.
+ Does NOT clear groups/properties.
+ Note: It will continue loading even with errors.
  </summary>
-	<param name="AddVersion">Add the version of SimpleD to start of string?</param>
-	<param name="OverrideStyle">If not None then it will override BraceStyle.</param>
-</member><member name="M:Pedals.SimpleD.Group.FromString(System.String,System.Boolean)">
+	<param name="Data">The string to parse.</param>
+	<returns>Errors if any.</returns>
+	<remarks></remarks>
+</member><member name="M:Pedals.SimpleD.Group.Parse(System.String)">
 	<summary>
  Note: It will continue loading even with errors.
  </summary>
 	<param name="Data">The string to parse.</param>
 	<returns>Errors if any.</returns>
 	<remarks></remarks>
+</member><member name="M:Pedals.SimpleD.Group.ToString(System.Boolean)">
+	<summary>
+ Returns a string with all the properties and sub groups.
+ </summary>
+	<param name="AddVersion">Add the version of SimpleD to start of string?</param>
 </member><member name="T:Pedals.SimpleD.Property">
 	<summary>
  Holds a properties name and value.
  </summary>
-</member><member name="M:Pedals.SimpleD.Group.#ctor(System.String,System.Boolean,System.Boolean)">
+</member><member name="M:Pedals.SimpleD.Group.#ctor(System.String,System.Boolean)">
 	<summary>
  Load from string.
  </summary>
 	<param name="Data"></param>
 	<param name="FromFile">If set to true then it will load from the file specfied in data</param>
 	<remarks></remarks>
-</member><member name="M:Pedals.SimpleD.Group.FromFile(System.String,System.Boolean)">
+</member><member name="M:Pedals.SimpleD.Group.FromFile(System.String)">
 	<summary>
  Load the SimpleData from a file.
  </summary>
